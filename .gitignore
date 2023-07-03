@@ -1,0 +1,18 @@
+source/node_modules/
+source/.expo*
+source/npm-debug.*
+source/*.jks
+source/*.p8
+source/*.p12
+source/*.key
+source/*.mobileprovision
+source/*.orig.*
+source/web-build/
+
+# macOS
+source/.DS_Store
+
+# Ignoring dev files
+.vscode/
+*/package-lock.json
+*/yarn-error.log
