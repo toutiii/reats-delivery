@@ -7,6 +7,13 @@ export default all_constants = {
             home: "Home",
             pending: "En attente",
             delivery: "Livraison",
-        }
-    }
+        },
+    },
+    drawercontent: {
+    stats: "Stats",
+    account: "Compte",
+    delivery: "Livraison",
+    login: "Connexion",
+    logout: "Déconnexion",
+    },
 }

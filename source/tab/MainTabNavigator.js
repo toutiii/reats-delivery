@@ -37,11 +37,19 @@ export default function MainTabNavigator() {
             return <MaterialIcons name={iconName} size={size} color={color} />;
           }
         },
+        tabBarButton: [
+          "SimpleView"
+        ].includes(route.name)
+          ? () => {
+              return null;
+            }
+          : undefined,
       })}
     >
       <Tab.Screen name={all_constants.tab.main_tab_navigator.home} component={HomeView} />
       <Tab.Screen name={all_constants.tab.main_tab_navigator.pending} component={SimpleView}/>
       <Tab.Screen name={all_constants.tab.main_tab_navigator.delivery} component={SimpleView}/>
+      <Tab.Screen name="SimpleView" component={SimpleView}/>
     </Tab.Navigator>
   );
 }
