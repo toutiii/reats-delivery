@@ -34,6 +34,7 @@
     "react-native-dropdown-select-list": "2.0.4",
     "react-native-flatlist-slider": "^1.0.5",
     "react-native-gesture-handler": "~2.8.0",
+    "react-native-gifted-charts": "1.2.42",
     "react-native-modal": "13.0.1",
     "react-native-pager-view": "6.0.1",
     "react-native-paper": "5.5.2",
@@ -52,6 +53,9 @@
     "@babel/plugin-proposal-unicode-property-regex": "^7.16.7",
     "babel-eslint": "^10.1.0",
     "eslint": "^8.23.0"
+  },
+  "resolutions": {
+    "react-native-svg": "13.4.0"
   },
   "private": true
 }
