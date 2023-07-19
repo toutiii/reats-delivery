@@ -1,12 +1,49 @@
 import React, { Component } from "react";
-import { Text, View, ScrollView, Image } from "react-native";
+import {
+  Text,
+  View,
+  ScrollView,
+  Image,
+  FlatList,
+  ActivityIndicator,
+} from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { FontAwesome5 } from "@expo/vector-icons";
 import HorizontalLine from "../components/HorizontalLine";
 import { BarChart } from "react-native-gifted-charts";
+import { getDeliveryData } from "../helpers/delivery_helpers";
 import styles_home_view from "../styles/styles-home-view";
+import Delivery from "../components/Delivery";
 
 export default class HomeView extends Component {
+  intervalID;
+  constructor(props) {
+    super(props);
+    this.state = {
+      refreshing: false,
+      listdata: [],
+      isFetching: false,
+    };
+  }
+
+  componentDidMount() {
+    this.fetchData();
+    this.intervalID = setInterval(this.fetchData.bind(this), 1000000);
+  }
+
+  componentWillUnmount() {
+    clearInterval(this.intervalID);
+  }
+
+  async fetchData() {
+    this.setState({ isFetching: true });
+    let newData = await getDeliveryData();
+    this.setState({
+      listdata: newData.data,
+      isFetching: false,
+    });
+  }
+
   render() {
     const barData = [
       {
@@ -76,83 +113,33 @@ export default class HomeView extends Component {
                 <Text style={{ fontSize: 20 }}>Activité Récente</Text>
               </View>
             </View>
-            <ScrollView style={{ flex: 1 }} horizontal={true}>
-              <View style={styles_home_view.container_order}>
-                <View style={styles_home_view.container_order_image}>
-                  <Image
-                    style={{ flex: 1, borderRadius: 15 }}
-                    source={{
-                      uri: "https://img-3.journaldesfemmes.fr/M_bbWpTVNekL5O_MLzQ4dyInmJU=/750x/smart/1c9fe4d4419047f18efc37134a046e5a/recipe-jdf/1001383.jpg",
-                    }}
-                  />
+            <View style={{ flex: 1 }}>
+              {this.state.isFetching ? (
+                <View
+                  style={{
+                    flex: 1,
+                    justifyContent: "center",
+                    aspectRatio: 2.15,
+                  }}
+                >
+                  <ActivityIndicator size="large" color="tomato" />
                 </View>
-                <View style={styles_home_view.container_order_text}>
-                  <View style={{ flex: 1 }}>
-                    <Text style={styles_home_view.order_title}>
-                      N °de commande
-                    </Text>
-                  </View>
-                  <View style={{ flex: 2 }}>
-                    <Text style={styles_home_view.order_text_color}>
-                      Temps de livraison : 15 min
-                    </Text>
-                    <Text style={styles_home_view.order_text_color}>
-                      gain : 5,00€
-                    </Text>
-                  </View>
-                </View>
-              </View>
-              <View style={styles_home_view.container_order}>
-                <View style={styles_home_view.container_order_image}>
-                  <Image
-                    style={{ flex: 1, borderRadius: 15 }}
-                    source={{
-                      uri: "https://img-3.journaldesfemmes.fr/M_bbWpTVNekL5O_MLzQ4dyInmJU=/750x/smart/1c9fe4d4419047f18efc37134a046e5a/recipe-jdf/1001383.jpg",
-                    }}
-                  />
-                </View>
-                <View style={styles_home_view.container_order_text}>
-                  <View style={{ flex: 1 }}>
-                    <Text style={styles_home_view.order_title}>
-                      N °de commande
-                    </Text>
-                  </View>
-                  <View style={{ flex: 2 }}>
-                    <Text style={styles_home_view.order_text_color}>
-                      Temps de livraison : 15 min
-                    </Text>
-                    <Text style={styles_home_view.order_text_color}>
-                      gain : 5,00€
-                    </Text>
-                  </View>
-                </View>
-              </View>
-              <View style={styles_home_view.container_order}>
-                <View style={styles_home_view.container_order_image}>
-                  <Image
-                    style={{ flex: 1, borderRadius: 15 }}
-                    source={{
-                      uri: "https://img-3.journaldesfemmes.fr/M_bbWpTVNekL5O_MLzQ4dyInmJU=/750x/smart/1c9fe4d4419047f18efc37134a046e5a/recipe-jdf/1001383.jpg",
-                    }}
-                  />
-                </View>
-                <View style={styles_home_view.container_order_text}>
-                  <View style={{ flex: 1 }}>
-                    <Text style={styles_home_view.order_title}>
-                      N °de commande
-                    </Text>
-                  </View>
-                  <View style={{ flex: 2 }}>
-                    <Text style={styles_home_view.order_text_color}>
-                      Temps de livraison : 15 min
-                    </Text>
-                    <Text style={styles_home_view.order_text_color}>
-                      gain : 5,00€
-                    </Text>
-                  </View>
-                </View>
-              </View>
-            </ScrollView>
+              ) : (
+                <FlatList
+                  horizontal={true}
+                  data={this.state.listdata}
+                  renderItem={({ item }) => (
+                    <Delivery
+                      id={item.id}
+                      delivery_number={item.delivery_number}
+                      delivery_amount={item.delivery_amount}
+                      delivery_time={item.delivery_time}
+                      photo={item.photo}
+                    />
+                  )}
+                />
+              )}
+            </View>
           </View>
           <HorizontalLine width="75%" line_color="tomato" />
           <View style={styles_home_view.container_dashboard}>
