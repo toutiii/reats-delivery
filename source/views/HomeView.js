@@ -11,9 +11,10 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { FontAwesome5 } from "@expo/vector-icons";
 import HorizontalLine from "../components/HorizontalLine";
 import { BarChart } from "react-native-gifted-charts";
-import { getDeliveryData } from "../helpers/delivery_helpers";
+import { getHomeViewData } from "../helpers/delivery_helpers";
 import styles_home_view from "../styles/styles-home-view";
 import Delivery from "../components/Delivery";
+import all_constants from "../constants";
 
 export default class HomeView extends Component {
   intervalID;
@@ -22,6 +23,8 @@ export default class HomeView extends Component {
     this.state = {
       refreshing: false,
       listdata: [],
+      bardata: [],
+      balancedata: [],
       isFetching: false,
     };
   }
@@ -37,55 +40,16 @@ export default class HomeView extends Component {
 
   async fetchData() {
     this.setState({ isFetching: true });
-    let newData = await getDeliveryData();
+    let newData = await getHomeViewData();
     this.setState({
-      listdata: newData.data,
+      listdata: newData.data.delivery_data,
+      bardata: newData.data.bardata,
+      balancedata: newData.data.balance,
       isFetching: false,
     });
   }
 
   render() {
-    const barData = [
-      {
-        value: 2,
-        frontColor: "#006DFF",
-        gradientColor: "#009FFF",
-        label: "Lun",
-      },
-
-      {
-        value: 3,
-        frontColor: "#006DFF",
-        gradientColor: "#009FFF",
-        label: "Mar",
-      },
-
-      {
-        value: 4,
-        frontColor: "#006DFF",
-        gradientColor: "#009FFF",
-        label: "Mer",
-      },
-
-      {
-        value: 5,
-        frontColor: "#006DFF",
-        gradientColor: "#009FFF",
-        label: "Jed",
-      },
-      {
-        value: 6,
-        frontColor: "#006DFF",
-        gradientColor: "#009FFF",
-        label: "Ven",
-      },
-      {
-        value: 7,
-        frontColor: "#006DFF",
-        gradientColor: "#009FFF",
-        label: "Sam",
-      },
-    ];
     return (
       <SafeAreaView style={{ flex: 1, backgroundColor: "white" }}>
         <View style={styles_home_view.container}>
@@ -97,10 +61,16 @@ export default class HomeView extends Component {
                 </View>
                 <View style={styles_home_view.container_card_text}>
                   <View style={{ flex: 1 }}>
-                    <Text style={{ fontSize: 28 }}>20,00 EUR</Text>
+                    <Text style={{ fontSize: 28 }}>
+                      {this.state.balancedata}
+                      {` `}
+                      {all_constants.homeview.currency}
+                    </Text>
                   </View>
                   <View style={{ flex: 1 }}>
-                    <Text style={{ fontSize: 20 }}>Solde</Text>
+                    <Text style={{ fontSize: 20 }}>
+                      {all_constants.homeview.balance}
+                    </Text>
                   </View>
                 </View>
               </View>
@@ -110,7 +80,9 @@ export default class HomeView extends Component {
           <View style={styles_home_view.container_delivery}>
             <View style={styles_home_view.delivery_title}>
               <View style={{ margin: 15 }}>
-                <Text style={{ fontSize: 20 }}>Activité Récente</Text>
+                <Text style={{ fontSize: 20 }}>
+                  {all_constants.homeview.title_delivery}
+                </Text>
               </View>
             </View>
             <View style={{ flex: 1 }}>
@@ -144,17 +116,19 @@ export default class HomeView extends Component {
           <HorizontalLine width="75%" line_color="tomato" />
           <View style={styles_home_view.container_dashboard}>
             <View>
-              <Text style={styles_home_view.dasboard_title}>Statistique</Text>
+              <Text style={styles_home_view.dasboard_title}>
+                {all_constants.homeview.title_stats}
+              </Text>
               <View style={styles_home_view.container_barchart}>
                 <View style={{ alignItems: "center" }}>
                   <Text style={styles_home_view.barchart_title}>
-                    Hebdomadaire
+                    {all_constants.homeview.title_barchart}
                   </Text>
                 </View>
 
                 <View style={styles_home_view.barchart}>
                   <BarChart
-                    data={barData}
+                    data={this.state.bardata}
                     barWidth={16}
                     initialSpacing={10}
                     barBorderRadius={4}

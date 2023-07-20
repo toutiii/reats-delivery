@@ -1,6 +1,7 @@
 import React from "react";
 import { Text, View, Image } from "react-native";
 import styles_home_view from "../styles/styles-home-view";
+import all_constants from "../constants";
 
 export default function Delivery({ ...props }) {
   return (
@@ -21,10 +22,14 @@ export default function Delivery({ ...props }) {
         </View>
         <View style={{ flex: 2 }}>
           <Text style={styles_home_view.order_text_color}>
-            Temps de livraison : {props.delivery_time} min
+            {all_constants.delivery.infos.time}
+            {` `}
+            {props.delivery_time} min
           </Text>
           <Text style={styles_home_view.order_text_color}>
-            gain : {props.delivery_amount}€
+            {all_constants.delivery.infos.amount}
+            {` `}
+            {props.delivery_amount}€
           </Text>
         </View>
       </View>

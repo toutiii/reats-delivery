@@ -2,18 +2,33 @@ import { Dimensions } from "react-native";
 
 let all_constants;
 export default all_constants = {
-    tab : {
-        main_tab_navigator: {
-            home: "Home",
-            pending: "En attente",
-            delivery: "Livraison",
-        },
+  tab: {
+    main_tab_navigator: {
+      home: "Home",
+      pending: "En attente",
+      delivery: "Livraison",
     },
-    drawercontent: {
+  },
+  drawercontent: {
     stats: "Stats",
     account: "Compte",
     delivery: "Livraison",
     login: "Connexion",
     logout: "Déconnexion",
+  },
+  delivery: {
+    infos: {
+      number: "Commande N°",
+      amount: "Gain :",
+      time: "Temp de livraison :",
     },
-}
+    money: "20,00",
+  },
+  homeview: {
+    title_delivery: "Activité Récente",
+    title_stats: "Statistique",
+    title_barchart: "Hebdomadaire",
+    currency: "EUR",
+    balance: "Solde",
+  },
+};
