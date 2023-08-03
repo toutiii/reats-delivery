@@ -19,7 +19,6 @@ export default all_constants = {
   delivery: {
     infos: {
       number: "Commande N°",
-      amount: "Gain :",
       time: "Temp de livraison :",
     },
     money: "20,00",
@@ -31,4 +30,13 @@ export default all_constants = {
     currency: "EUR",
     balance: "Solde",
   },
+
+  order: {
+    infos: {
+      dishe: "plats",
+    },
+  },
+  currency_symbol: " €",
+  win: "Gain :",
+  time: "min",
 };

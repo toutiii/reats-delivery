@@ -1,9 +1,11 @@
-import {Ionicons, MaterialIcons} from "@expo/vector-icons";
+import { Ionicons, MaterialIcons } from "@expo/vector-icons";
 import React from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import HomeView from "../views/HomeView";
 import SimpleView from "../views/SimpleView";
 import all_constants from "../constants";
+import OrderFlatlistStackNavigator from "../stack/OrderFlatlistStackNavigator";
+
 const Tab = createBottomTabNavigator();
 
 export default function MainTabNavigator() {
@@ -17,39 +19,40 @@ export default function MainTabNavigator() {
         tabBarIcon: ({ focused, color, size }) => {
           let iconName;
           if (route.name === all_constants.tab.main_tab_navigator.home) {
-            iconName = focused
-            ? "home"
-            : "home-outline";
+            iconName = focused ? "home" : "home-outline";
             return <Ionicons name={iconName} size={size} color={color} />;
           } else if (
             route.name === all_constants.tab.main_tab_navigator.pending
           ) {
-            iconName = focused
-            ? "hourglass"
-            : "hourglass-outline";
+            iconName = focused ? "hourglass" : "hourglass-outline";
             return <Ionicons name={iconName} size={size} color={color} />;
           } else if (
             route.name === all_constants.tab.main_tab_navigator.delivery
           ) {
-            iconName = focused
-            ? "delivery-dining"
-            : "delivery-dining";
+            iconName = focused ? "delivery-dining" : "delivery-dining";
             return <MaterialIcons name={iconName} size={size} color={color} />;
           }
         },
-        tabBarButton: [
-          "SimpleView"
-        ].includes(route.name)
+        tabBarButton: ["SimpleView"].includes(route.name)
           ? () => {
               return null;
             }
           : undefined,
       })}
     >
-      <Tab.Screen name={all_constants.tab.main_tab_navigator.home} component={HomeView} />
-      <Tab.Screen name={all_constants.tab.main_tab_navigator.pending} component={SimpleView}/>
-      <Tab.Screen name={all_constants.tab.main_tab_navigator.delivery} component={SimpleView}/>
-      <Tab.Screen name="SimpleView" component={SimpleView}/>
+      <Tab.Screen
+        name={all_constants.tab.main_tab_navigator.home}
+        component={HomeView}
+      />
+      <Tab.Screen
+        name={all_constants.tab.main_tab_navigator.pending}
+        component={OrderFlatlistStackNavigator}
+      />
+      <Tab.Screen
+        name={all_constants.tab.main_tab_navigator.delivery}
+        component={SimpleView}
+      />
+      <Tab.Screen name="SimpleView" component={SimpleView} />
     </Tab.Navigator>
   );
 }

@@ -24,12 +24,13 @@ export default function Delivery({ ...props }) {
           <Text style={styles_home_view.order_text_color}>
             {all_constants.delivery.infos.time}
             {` `}
-            {props.delivery_time} min
+            {props.delivery_time} {all_constants.time}
           </Text>
           <Text style={styles_home_view.order_text_color}>
-            {all_constants.delivery.infos.amount}
+            {all_constants.win}
             {` `}
-            {props.delivery_amount}€
+            {props.delivery_amount}
+            {all_constants.currency_symbol}
           </Text>
         </View>
       </View>
