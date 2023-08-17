@@ -54,6 +54,7 @@ export default function OrderFlatList(props) {
               onPress={() => {
                 props.navigation.navigate("FlatlistStackNavigatorOrderView", {
                   item: item,
+                  dishe: getDishQuantity(item.dishes),
                 });
               }}
               underlayColor="#ffd700"

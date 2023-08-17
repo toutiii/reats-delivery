@@ -1,7 +1,7 @@
 import React from "react";
 import { createStackNavigator } from "@react-navigation/stack";
 import OrderFlatList from "../flatlist/OrderFlatList";
-import SimpleView from "../views/SimpleView";
+import OrderView from "../views/OrderView";
 const Stack = createStackNavigator();
 
 export default function OrderFlatlistStackNavigator() {
@@ -17,7 +17,7 @@ export default function OrderFlatlistStackNavigator() {
       />
       <Stack.Screen
         name="FlatlistStackNavigatorOrderView"
-        component={SimpleView}
+        component={OrderView}
         options={{
           headerTitle: "",
         }}

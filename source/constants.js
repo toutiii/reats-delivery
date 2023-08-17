@@ -39,4 +39,16 @@ export default all_constants = {
   currency_symbol: " €",
   win: "Gain :",
   time: "min",
+  colors: {
+    inputBorderColor: "#ffd700",
+  },
+  screen: {
+    width: Dimensions.get("window").width,
+    height: Dimensions.get("window").height,
+  },
+  orderview: {
+    command: "Commandé le ",
+    time: "Temps estimé",
+    take: "Prendre en charge",
+  },
 };

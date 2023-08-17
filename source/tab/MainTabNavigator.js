@@ -5,6 +5,7 @@ import HomeView from "../views/HomeView";
 import SimpleView from "../views/SimpleView";
 import all_constants from "../constants";
 import OrderFlatlistStackNavigator from "../stack/OrderFlatlistStackNavigator";
+import OrderView from "../views/OrderView";
 
 const Tab = createBottomTabNavigator();
 
@@ -33,7 +34,7 @@ export default function MainTabNavigator() {
             return <MaterialIcons name={iconName} size={size} color={color} />;
           }
         },
-        tabBarButton: ["SimpleView"].includes(route.name)
+        tabBarButton: ["SimpleView", "OrderView"].includes(route.name)
           ? () => {
               return null;
             }
@@ -52,6 +53,7 @@ export default function MainTabNavigator() {
         name={all_constants.tab.main_tab_navigator.delivery}
         component={SimpleView}
       />
+      <Tab.Screen name={"OrderView"} component={OrderView} />
       <Tab.Screen name="SimpleView" component={SimpleView} />
     </Tab.Navigator>
   );
