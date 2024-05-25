@@ -6,19 +6,19 @@ import { MainDrawerNavigator } from "./drawer/MainDrawerNavigator";
 const Stack = createStackNavigator();
 
 export default class App extends Component {
-  render() {
-    return (
-      <SafeAreaView style={{ flex: 1 }}>
-        <NavigationContainer>
-          <Stack.Navigator initialRouteName="MainTabNavigator">
-          <Stack.Screen
-              name="MainDrawerNavigator"
-              component={MainDrawerNavigator}
-              options={{ headerShown: false }}
-            />
-          </Stack.Navigator>
-        </NavigationContainer>
-        </SafeAreaView>
-    );
-  }
+    render() {
+        return (
+            <SafeAreaView style={{ flex: 1 }}>
+                <NavigationContainer>
+                    <Stack.Navigator initialRouteName="MainTabNavigator">
+                        <Stack.Screen
+                            name="MainDrawerNavigator"
+                            component={MainDrawerNavigator}
+                            options={{ headerShown: false }}
+                        />
+                    </Stack.Navigator>
+                </NavigationContainer>
+            </SafeAreaView>
+        );
+    }
 }
