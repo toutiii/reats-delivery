@@ -14,22 +14,11 @@ export default function Delivery({ ...props }) {
                     }}
                 />
             </View>
-            <View style={styles_home_view.container_order_text}>
-                <View style={{ flex: 1 }}>
-                    <Text style={styles_home_view.order_title}>
-                        {props.delivery_number}
-                    </Text>
-                </View>
-                <View style={{ flex: 2 }}>
-                    <Text style={styles_home_view.order_text_color}>
-                        {all_constants.delivery.infos.time} {props.delivery_time}{" "}
-                        {all_constants.time}
-                    </Text>
-                    <Text style={styles_home_view.order_text_color}>
-                        {all_constants.win} {props.delivery_amount}
-                        {all_constants.currency_symbol}
-                    </Text>
-                </View>
+
+            <View style={{ flex: 1, alignItems: "center" }}>
+                <Text style={styles_home_view.order_title}>
+                    {all_constants.delivery.infos.number} {props.delivery_number}
+                </Text>
             </View>
         </View>
     );

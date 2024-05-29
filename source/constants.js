@@ -16,12 +16,12 @@ let all_constants = {
     delivery: {
         infos: {
             number: "Commande N°",
-            time: "Temp de livraison :",
+            time: "Temps de livraison :",
         },
         money: "20,00",
     },
     homeview: {
-        title_delivery: "Activité Récente",
+        title_delivery: "Dernières livraisons",
         title_stats: "Statistique",
         title_barchart: "Hebdomadaire",
         currency: "EUR",
