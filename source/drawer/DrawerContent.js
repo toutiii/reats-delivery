@@ -8,7 +8,6 @@ import React from "react";
 import { StyleSheet, TouchableOpacity, View } from "react-native";
 import {
     ActivityIndicator,
-    Avatar,
     Drawer,
     Text,
     Title,
@@ -72,12 +71,7 @@ export default function DrawerContent(props) {
                                     onPress={() => {
                                         props.navigation.toggleDrawer();
                                     }}
-                                >
-                                    <Avatar.Image
-                                        source={require("../images/mum_test.jpg")}
-                                        size={60}
-                                    />
-                                </TouchableOpacity>
+                                ></TouchableOpacity>
                                 <Title style={styles.title}>
                 Bonjour{" "}
                                     {userData["personal_infos_section"]["data"]["firstname"]}

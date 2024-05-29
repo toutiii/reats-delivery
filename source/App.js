@@ -3,6 +3,8 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import { MainDrawerNavigator } from "./drawer/MainDrawerNavigator";
+import LoginForm from "./forms/LoginForm";
+
 const Stack = createStackNavigator();
 
 export default class App extends Component {
@@ -10,10 +12,15 @@ export default class App extends Component {
         return (
             <SafeAreaView style={{ flex: 1 }}>
                 <NavigationContainer>
-                    <Stack.Navigator initialRouteName="MainTabNavigator">
+                    <Stack.Navigator initialRouteName="LoginForm">
                         <Stack.Screen
                             name="MainDrawerNavigator"
                             component={MainDrawerNavigator}
+                            options={{ headerShown: false }}
+                        />
+                        <Stack.Screen
+                            name="LoginForm"
+                            component={LoginForm}
                             options={{ headerShown: false }}
                         />
                     </Stack.Navigator>
