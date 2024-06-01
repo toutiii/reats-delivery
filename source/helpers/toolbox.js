@@ -117,3 +117,11 @@ export function buildReadableAddress(address) {
     readableAddress = readableAddress.replace("null ", "");
     return readableAddress;
 }
+
+export function getDeliveryRadius() {
+    return [
+        { label: "5 KM", value: "5" },
+        { label: "10 KM", value: "10" },
+        { label: "15 KM", value: "15" },
+    ];
+}

@@ -18,7 +18,6 @@ import {
     getItemFromSecureStore,
 } from "../helpers/toolbox";
 import { CommonActions } from "@react-navigation/native";
-import { callBackEnd } from "../api/callBackend";
 
 const getInitialErrorsState = (fieldKeys) => {
     const errors_state = {};
@@ -283,29 +282,44 @@ export default function Form({ ...props }) {
         setSubmitting(false);
     };
 
-    const getTownFromPostalCode = async (postalCode) => {
-        fieldsObject["town"].selectValues.length = 0;
-        const townResults = await callBackEnd(
-            new FormData(),
-            `https://geo.api.gouv.fr/communes?codePostal=${postalCode}`,
-            "GET",
-        );
+    const searchTownByName = async (townFirstChars) => {
+        let dataset = [
+        ];
 
-        if (townResults.length === 0) {
-            console.log("No towns for postal code ", postalCode);
-            return;
+        try {
+            if (townFirstChars.length < 3) {
+                console.log("Town name too short");
+                return dataset;
+            }
+            // eslint-disable-next-line max-len
+            const response = await fetch(
+                `https://geo.api.gouv.fr/communes?nom=${townFirstChars}&fields=departement&boost=population&limit=5`,
+                {
+                    method: "GET",
+                },
+            );
+
+            const townResults = await response.json();
+            console.log("Town results: ", townResults);
+
+            if (townResults.length === 0) {
+                console.log(`No towns with name ${townFirstChars}`);
+                return dataset;
+            }
+
+            for (let i = 0; i < townResults.length; i++) {
+                let tempObject = townResults[i];
+                dataset.push({
+                    id: tempObject.code,
+                    title: tempObject.nom,
+                });
+            }
+
+            console.log("Dataset: ", dataset);
+            return dataset;
+        } catch (error) {
+            console.error("Fetching town data failed", error);
         }
-
-        for (let i = 0; i < townResults.length; i++) {
-            let tempObject = townResults[i];
-            fieldsObject["town"].selectValues.push({
-                label: tempObject.nom,
-                value: tempObject.nom,
-            });
-        }
-
-        setReloadScreen(true);
-        console.log(fieldsObject["town"]);
     };
 
     useEffect(() => {
@@ -486,7 +500,7 @@ export default function Form({ ...props }) {
                                     onConfirmPressed={() => {
                                         setStateShowAlert(false);
                                     }}
-                                    getTownFromPostalCode={getTownFromPostalCode}
+                                    searchTownByName={searchTownByName}
                                 />
                             );
                         })}

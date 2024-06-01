@@ -8,18 +8,18 @@ import {
     TouchableWithoutFeedback,
     View,
 } from "react-native";
+
 import styles_field from "../styles/styles-field";
 import all_constants from "../constants";
 import RNPickerSelect from "react-native-picker-select";
 import styles_home_view from "../styles/styles-home-view";
 import * as ImagePicker from "expo-image-picker";
-import { MultipleSelectList } from "react-native-dropdown-select-list";
-import { getDaysOfWeek } from "../helpers/toolbox";
 import CustomButton from "../components/CustomButton";
 import FormLabelModal from "../modals/FormLabelModal";
 import CustomAlert from "./CustomAlert";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import moment from "moment";
+import { AutocompleteDropdown } from "react-native-autocomplete-dropdown";
 
 export default function FormField({ ...props }) {
     const [
@@ -29,10 +29,6 @@ export default function FormField({ ...props }) {
     const [
         picUri,
         setPicUri
-    ] = useState(null);
-    const [
-        town,
-        setTown
     ] = useState(null);
     const [
         labelModalState,
@@ -50,22 +46,17 @@ export default function FormField({ ...props }) {
         mode,
         setMode
     ] = useState("date");
+
     const [
-    // eslint-disable-next-line no-unused-vars
-        selected,
-        setSelected,
+        town,
+        setTown
     ] = useState("");
 
     const [
-        postalCode,
-        setPostalCode
-    ] = useState(props.newItem.postal_code);
-
-    const [
-        postalCodehasBeenUpdated,
-        setPostalCodeHasBeenUpdated
-    ] =
-    useState(false);
+        autoCompleteValues,
+        setAutoCompleteValues
+    ] = useState([
+    ]);
 
     const showDatepicker = () => {
         showMode("date");
@@ -94,27 +85,16 @@ export default function FormField({ ...props }) {
         props.newItem
     ]);
 
-    useEffect(() => {
-        if (props.fieldName === "town") {
-            setTown(props.newItem["town"]);
-            props.getTownFromPostalCode(props.newItem["postal_code"]);
-        }
-    }, [
-    ]);
+    const fetchTown = async () => {
+        const newAutoCompleteValues = await props.searchTownByName(town);
+        setAutoCompleteValues(newAutoCompleteValues);
+    };
 
     useEffect(() => {
-        console.log(postalCodehasBeenUpdated);
-        if (
-            postalCodehasBeenUpdated &&
-      postalCode !== undefined &&
-      postalCode.length === all_constants.max_length.form.postal_code
-        ) {
-            props.onChangeText("town", null);
-            setTown(null); // Reset the selected town
-            props.getTownFromPostalCode(postalCode);
-        }
+        console.log("town: ", town);
+        fetchTown();
     }, [
-        postalCode
+        town
     ]);
 
     const options = {
@@ -251,13 +231,7 @@ export default function FormField({ ...props }) {
                             style={styles_field.textinput}
                             value={props.value}
                             onChangeText={(text) => {
-                                props.onChangeText(props.fieldName, text),
-                                props.fieldName == "postal_code"
-                                    ? setPostalCode(text)
-                                    : "";
-                                props.fieldName == "postal_code"
-                                    ? setPostalCodeHasBeenUpdated(true)
-                                    : "";
+                                props.onChangeText(props.fieldName, text);
                             }}
                             maxLength={props.field.maxLength}
                             multiline={props.field.type === all_constants.field_type.textarea}
@@ -304,12 +278,10 @@ export default function FormField({ ...props }) {
                     <RNPickerSelect
                         useNativeAndroidPickerStyle={false}
                         placeholder={props.field.placeholder}
-                        value={town}
+                        value={props.newItem.delivery_radius}
                         onValueChange={(value) => {
-                            if (value !== town && !postalCodehasBeenUpdated) {
-                                setTown(value);
-                            }
-                            props.onChangeText("town", value);
+                            //setDeliveryRadius(value);
+                            props.onChangeText("delivery_radius", value);
                         }}
                         items={props.field.selectValues}
                         textInputProps={{
@@ -324,33 +296,35 @@ export default function FormField({ ...props }) {
                 </View>
             )}
 
-            {props.field.type === all_constants.field_type.select_picker
-                ? (
-                    <View style={{ flex: 1 }}>
-                        <MultipleSelectList
-                            setSelected={setSelected}
-                            data={getDaysOfWeek()}
-                            boxStyles={styles_field.dropdown_box_container}
-                            dropdownStyles={styles_field.dropdown_container}
-                            placeholder={
-                                props.value === null ||
-              !props.value ||
-              props.value.length === 0
-                                    ? (
-                                        <Text style={{ color: "darkgrey" }}>
-                                            {props.field.placeholder}
-                                        </Text>
-                                    )
-                                    : (
-                                        <Text style={{ color: "black" }}>{props.value}</Text>
-                                    )
+            {props.field.type === all_constants.field_type.autocomplete &&
+        props.fieldName == "town" && (
+                <View style={styles_field.textinput}>
+                    <AutocompleteDropdown
+                        clearOnFocus={false}
+                        closeOnBlur={true}
+                        closeOnSubmit={false}
+                        showChevron={false}
+                        showClear={false}
+                        onChangeText={(text) => {
+                            setTown(text);
+                        }}
+                        initialValue={props.newItem.town}
+                        onSelectItem={(townObject) => {
+                            if (townObject !== null) {
+                                props.onChangeText(props.fieldName, townObject.title);
                             }
-                        />
-                    </View>
-                )
-                : (
-                    <View></View>
-                )}
+                        }}
+                        dataSet={autoCompleteValues}
+                        textInputProps={{
+                            autoCorrect: false,
+                            style: {
+                                backgroundColor: "white",
+                            },
+                        }}
+                    />
+                </View>
+            )}
+
             {props.field.type === all_constants.field_type.image && (
                 <View style={styles_field.button_container}>
                     <View style={{ flex: 2 }}>

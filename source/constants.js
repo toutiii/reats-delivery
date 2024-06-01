@@ -8,6 +8,26 @@ let all_constants = {
     colors: {
         inputBorderColor: "#ffd700",
     },
+    custom_alert: {
+        homeview: {
+            online_title: "Passer en ligne ?",
+            offline_title: "Passer hors ligne ?",
+            cancel_text: "ANNULER",
+            go_online: "Vous pourrez à nouveau recevoir des livraisons.",
+            go_offline: "ATTENTION, vous ne pourrez plus recevoir de livraisons !",
+            logout_title: "DÉCONNEXION",
+            logout_message: "Souhaitez-vous vous déconnecter ?",
+            delete_account: "SUPPRIMER",
+            keep_account: "CONSERVER",
+        },
+        form: {
+            title: "ATTENTION",
+            message: "Quitter le formulaire et revenir en arrière ?",
+            delete_account_title: "ATTENTION SUPPRESSION DU COMPTE !",
+            delete_account_message:
+        "Souhaitez vous vraiment supprimer votre compte ? Attention toutes vos données seront perdues.",
+        },
+    },
     drawercontent: {
         stats: "Stats",
         account: "Compte",
@@ -42,6 +62,7 @@ let all_constants = {
         select: "select",
         select_picker: "select_picker",
         date_picker: "date_picker",
+        autocomplete: "autocomplete",
     },
     label: {
         form: {
@@ -53,11 +74,12 @@ let all_constants = {
                 street_number: "Numéro",
                 street_name: "Rue",
                 address_complement: "Complément d'adresse",
-                postal_code: "Code postal",
-                town: "Ville",
+                town: "Ville de livraison",
                 image: "Photo de profil",
                 delete_account: "SUPPRIMER MON COMPTE",
                 delete_address: "SUPPRIMER CETTE ADRESSE",
+                delivery_radius: "Zone de livraison",
+                siret: "Numéro de SIRET",
             },
         },
     },
@@ -70,7 +92,6 @@ let all_constants = {
             street_number: 20,
             street_name: 100,
             address_complement: 100,
-            postal_code: 5,
             town: 100,
         },
     },
@@ -116,11 +137,14 @@ let all_constants = {
                 street_number: "Numéro de rue",
                 street_name: "Ex: rue René Cassin",
                 address_complement: "Complément d'adresse",
-                postal_code: "Votre code postal",
                 town: "Votre ville",
                 firstname: "Votre prénom",
                 lastname: "Votre nom de famille",
-                phone: "Votre numéro de téléphone",
+                phone: "Ex: 0612345678",
+                delivery_radius: {
+                    label: "Choisissez votre zone de livraison",
+                    value: null,
+                },
             },
         },
     },
@@ -133,6 +157,30 @@ let all_constants = {
             home: "Home",
             pending: "En attente",
             delivery: "Livraison",
+        },
+    },
+    validators: {
+        max_text_length: 30,
+        max_description_length: 200,
+        global: {
+            field: "Le champ ",
+            is_empty: " est vide.",
+            invalid_char: " est invalide. Veuillez enlever le ",
+            invalid_price: " est invalide. Exemple: 13.90",
+            invalid_postal_code: " est invalide. Exemple: 91100.",
+            phone_mismatch:
+        "Les deux numéros de téléphone saisis doivent être identiques.",
+        },
+
+        includes: {
+            phone: "téléphone",
+            siret: "siret",
+        },
+
+        settings: {
+            char: " caractères.",
+            phone_format_error: " doit contenir exactement 10 chiffres sans espace.",
+            siret_format_error: " doit contenir exactement 14 chiffres sans espace.",
         },
     },
 };
