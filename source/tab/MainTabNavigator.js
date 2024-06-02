@@ -5,6 +5,7 @@ import HomeView from "../views/HomeView";
 import SimpleView from "../views/SimpleView";
 import all_constants from "../constants";
 import OrderFlatlistStackNavigator from "../stack/OrderFlatlistStackNavigator";
+import SettingsPersonalInformationForm from "../forms/SettingsPersonalInformationForm";
 
 const Tab = createBottomTabNavigator();
 
@@ -40,7 +41,8 @@ export default function MainTabNavigator() {
                     }
                 },
                 tabBarButton: [
-                    "SimpleView"
+                    "SimpleView",
+                    "SettingsPersonalInformationForm",
                 ].includes(route.name)
                     ? () => {
                         return null;
@@ -61,6 +63,10 @@ export default function MainTabNavigator() {
                 component={SimpleView}
             />
             <Tab.Screen name="SimpleView" component={SimpleView} />
+            <Tab.Screen
+                name="SettingsPersonalInformationForm"
+                component={SettingsPersonalInformationForm}
+            />
         </Tab.Navigator>
     );
 }

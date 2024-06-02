@@ -39,7 +39,12 @@ export function validateField(validators, value, fieldLabel, objectToValidate) {
 }
 
 export function checkValueIsDefined(value, fieldLabel) {
-    if (typeof value === "undefined" || value === null) {
+    if (
+        typeof value === "undefined" ||
+    value === null ||
+    value === "" ||
+    value === "null"
+    ) {
         return (
             all_constants.validators.global.field +
       fieldLabel.toLowerCase() +

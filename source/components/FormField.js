@@ -56,6 +56,10 @@ export default function FormField({ ...props }) {
         autoCompleteValues,
         setAutoCompleteValues
     ] = useState([
+        {
+            id: "1",
+            title: props.newItem.town,
+        },
     ]);
 
     const showDatepicker = () => {
@@ -288,9 +292,12 @@ export default function FormField({ ...props }) {
                     <RNPickerSelect
                         useNativeAndroidPickerStyle={false}
                         placeholder={props.field.placeholder}
-                        value={props.newItem.delivery_radius}
+                        value={
+                            props.newItem.delivery_radius
+                                ? props.newItem.delivery_radius.toString()
+                                : null
+                        }
                         onValueChange={(value) => {
-                            //setDeliveryRadius(value);
                             props.onChangeText("delivery_radius", value);
                         }}
                         items={props.field.selectValues}
@@ -318,7 +325,7 @@ export default function FormField({ ...props }) {
                         onChangeText={(text) => {
                             setTown(text);
                         }}
-                        initialValue={props.newItem.town}
+                        initialValue={"1"}
                         onSelectItem={(townObject) => {
                             if (townObject !== null) {
                                 props.onChangeText(props.fieldName, townObject.title);

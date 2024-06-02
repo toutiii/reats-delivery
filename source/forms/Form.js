@@ -322,7 +322,7 @@ export default function Form({ ...props }) {
                 let tempObject = townResults[i];
                 dataset.push({
                     id: tempObject.code,
-                    title: tempObject.nom,
+                    title: tempObject.nom + " (" + tempObject.departement.code + ")",
                 });
             }
 

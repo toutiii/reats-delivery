@@ -29,11 +29,50 @@ let all_constants = {
         },
     },
     drawercontent: {
-        stats: "Stats",
-        account: "Compte",
-        delivery: "Livraison",
-        login: "Connexion",
         logout: "Déconnexion",
+        hello: "Bonjour ",
+        settings: "Mes paramètres",
+        drawer_item: {
+            label: {
+                account: "Mon compte",
+                stats: "Mes statistiques",
+                history: "Mes livraisons",
+            },
+            delivery_history: {
+                title: "Mes anciennes livraisons",
+                no_results: "Aucune livraison trouvée.",
+                infos: {
+                    number: "Commande N°",
+                    status: "Statut:",
+                    owner: "Passée par",
+                    amount: "Total de la commande: ",
+                    quantity: "Nombre d'item(s): ",
+                    content: "Cette commande contient: ",
+                    ordered_label: "le",
+                    approved_label: "Commande acceptée le",
+                    delivered_label: "Commande livrée le",
+                    price: "Prix à l'unité(€): ",
+                    dish_total: "Total: ",
+                    ordered: "Commandé le ",
+                    item: "item(s)",
+                },
+                status: {
+                    delivered: "Livrée",
+                },
+            },
+        },
+        button: {
+            labels: {
+                add_address: "AJOUTER UNE ADRESSE",
+                delete_address: "SUPPRIMER CETTE ADRESSE",
+            },
+        },
+        form: {
+            title: "ATTENTION",
+            messages: {
+                remove_address_warning: "Supprimer définitivement cette adresse ?",
+            },
+        },
     },
     delivery: {
         infos: {

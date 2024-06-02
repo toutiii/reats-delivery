@@ -45,3 +45,11 @@ export function getDeliveryRadius() {
         { label: "15 KM", value: "15" },
     ];
 }
+
+export function extractTownName(townWithCode) {
+    const openParenIndex = townWithCode.indexOf(" (");
+    if (openParenIndex !== -1) {
+        return townWithCode.substring(0, openParenIndex).trim();
+    }
+    return null;
+}

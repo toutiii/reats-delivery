@@ -1,5 +1,5 @@
 import { apiBaseUrl, apiKeyBackend, appOriginHeader, port } from "../env";
-import { getItemFromSecureStore } from "../helpers/toolbox";
+import { extractTownName, getItemFromSecureStore } from "../helpers/toolbox";
 import { setItemAsync } from "expo-secure-store";
 
 export async function callBackEnd(
@@ -238,10 +238,12 @@ export async function callBackendWithFormDataForDelivers(
     access,
     apiKeyBackend,
 ) {
-    console.log(data);
-    console.log(url);
-    console.log(method);
     let formData = new FormData();
+    data.town = extractTownName(data.town);
+
+    if (method === "POST") {
+        access = null;
+    }
 
     if (method === "DELETE") {
         url += userIDForDeliveryApp + "/";
@@ -268,7 +270,6 @@ export async function callBackendWithFormDataForDelivers(
     ];
 
     if (method === "PATCH") {
-        form_keys.pop();
         url += userIDForDeliveryApp + "/";
     }
 
