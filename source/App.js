@@ -7,6 +7,7 @@ import { AutocompleteDropdownContextProvider } from "react-native-autocomplete-d
 
 import SignupForm from "./forms/SignupForm";
 import LoginForm from "./forms/LoginForm";
+import OTPView from "./views/OTPView";
 
 const Stack = createStackNavigator();
 
@@ -20,6 +21,11 @@ export default class App extends Component {
                             <Stack.Screen
                                 name="MainDrawerNavigator"
                                 component={MainDrawerNavigator}
+                                options={{ headerShown: false }}
+                            />
+                            <Stack.Screen
+                                name="OTPView"
+                                component={OTPView}
                                 options={{ headerShown: false }}
                             />
                             <Stack.Screen

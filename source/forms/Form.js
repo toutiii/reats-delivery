@@ -192,10 +192,11 @@ export default function Form({ ...props }) {
         fadeOut();
 
         try {
-            const userIDDeliveryApp =
-        await getItemFromSecureStore("userIDDeliveryApp");
-            const accessTokenDeliveryApp = await getItemFromSecureStore(
-                "accessTokenDeliveryApp",
+            const userIDForDeliveryApp = await getItemFromSecureStore(
+                "userIDForDeliveryApp",
+            );
+            const accessTokenForDeliveryApp = await getItemFromSecureStore(
+                "accessTokenForDeliveryApp",
             );
             const apiKey = props.useApiKey
                 ? apiKeyBackend
@@ -210,8 +211,8 @@ export default function Form({ ...props }) {
                     props.method,
                     props.useItemID
                         ? newItem.id
-                        : userIDDeliveryApp,
-                    accessTokenDeliveryApp,
+                        : userIDForDeliveryApp,
+                    accessTokenForDeliveryApp,
                     apiKey,
                 );
             }
@@ -237,17 +238,18 @@ export default function Form({ ...props }) {
         setErrorMessage("");
         fadeOut();
         try {
-            const userIDDeliveryApp =
-        await getItemFromSecureStore("userIDDeliveryApp");
-            const accessTokenDeliveryApp = await getItemFromSecureStore(
-                "accessTokenDeliveryApp",
+            const userIDForDeliveryApp = await getItemFromSecureStore(
+                "userIDForDeliveryApp",
+            );
+            const accessTokenForDeliveryApp = await getItemFromSecureStore(
+                "accessTokenForDeliveryApp",
             );
             const result = await props.action(
                 newItem,
                 props.url,
                 "DELETE",
-                userIDDeliveryApp,
-                accessTokenDeliveryApp,
+                userIDForDeliveryApp,
+                accessTokenForDeliveryApp,
             );
             result.ok
                 ? setShowAlertDeleteAccountSuccess(true)
@@ -267,15 +269,15 @@ export default function Form({ ...props }) {
         setErrorMessage("");
         fadeOut();
         try {
-            const accessTokenDeliveryApp = await getItemFromSecureStore(
-                "accessTokenDeliveryApp",
+            const accessTokenForDeliveryApp = await getItemFromSecureStore(
+                "accessTokenForDeliveryApp",
             );
             const result = await props.action(
                 newItem,
                 props.url,
                 "DELETE",
                 newItem.id,
-                accessTokenDeliveryApp,
+                accessTokenForDeliveryApp,
             );
             result.ok
                 ? setStateShowAlert(true)
@@ -440,8 +442,8 @@ export default function Form({ ...props }) {
                             confirmButtonColor="green"
                             cancelText={all_constants.custom_alert.delete_account}
                             onConfirmPressed={() => {
-                                deleteItemFromSecureStore("accessTokenDeliveryApp");
-                                deleteItemFromSecureStore("userIDDeliveryApp");
+                                deleteItemFromSecureStore("accessTokenForDeliveryApp");
+                                deleteItemFromSecureStore("userIDForDeliveryApp");
                                 setRedirectTologinView(true);
                                 setShowAlertDeleteAccountSuccess(false);
                             }}

@@ -6,7 +6,7 @@ export async function callBackEnd(
     data,
     url,
     method,
-    accessTokenDeliveryApp,
+    accessTokenForDeliveryApp,
     useFormData,
     apiKey,
 ) {
@@ -14,16 +14,16 @@ export async function callBackEnd(
     console.log(data);
     console.log(url);
     console.log(method);
-    console.log(accessTokenDeliveryApp);
+    console.log(accessTokenForDeliveryApp);
     console.log(useFormData);
     console.log(apiKey);
     console.log("====================IN CALL BACK END====================");
 
     if (
         apiKey !== null &&
-    accessTokenDeliveryApp !== null &&
+    accessTokenForDeliveryApp !== null &&
     apiKey !== undefined &&
-    accessTokenDeliveryApp !== undefined
+    accessTokenForDeliveryApp !== undefined
     ) {
         console.error(
             "You can't use both APIKey and access token in the same request.",
@@ -31,7 +31,7 @@ export async function callBackEnd(
         return { ok: false };
     }
 
-    if (apiKey === null && accessTokenDeliveryApp === null) {
+    if (apiKey === null && accessTokenForDeliveryApp === null) {
         console.error("You need to specify at least an access token or an APIKey.");
         return { ok: false };
     }
@@ -39,8 +39,8 @@ export async function callBackEnd(
     let response = "";
     let headers = { Accept: "application/json" };
 
-    if (accessTokenDeliveryApp !== null) {
-        headers["Authorization"] = accessTokenDeliveryApp;
+    if (accessTokenForDeliveryApp !== null) {
+        headers["Authorization"] = accessTokenForDeliveryApp;
     }
 
     if (apiKey !== null) {
@@ -83,7 +83,7 @@ export async function callBackEnd(
         ) {
             await renewAccessToken();
             const newAccessToken = await getItemFromSecureStore(
-                "accessTokenDeliveryApp",
+                "accessTokenForDeliveryApp",
             );
             if (method === "GET") {
                 response = await fetch(url, {
@@ -114,7 +114,7 @@ export async function callBackEnd(
             ) {
                 await renewTokenPair();
                 const accessTokenFromNewPair = await getItemFromSecureStore(
-                    "accessTokenDeliveryApp",
+                    "accessTokenForDeliveryApp",
                 );
                 if (method === "GET") {
                     response = await fetch(url, {
@@ -152,10 +152,12 @@ export async function callBackEnd(
 export async function renewAccessToken() {
     console.log("=======================================");
     let url = `${apiBaseUrl}:${port}/api/v1/token/refresh/`;
-    const refreshToken = await getItemFromSecureStore("refreshToken");
+    const refreshTokenForDeliveryApp = await getItemFromSecureStore(
+        "refreshTokenForDeliveryApp",
+    );
 
     let formData = new FormData();
-    formData.append("refresh", refreshToken);
+    formData.append("refresh", refreshTokenForDeliveryApp);
 
     console.log(formData);
     console.log(url);
@@ -169,7 +171,10 @@ export async function renewAccessToken() {
     console.log(JSON.stringify(response));
 
     if (response.ok) {
-        await setItemAsync("accessTokenDeliveryApp", `Bearer ${response.access}`);
+        await setItemAsync(
+            "accessTokenForDeliveryApp",
+            `Bearer ${response.access}`,
+        );
     }
     console.log("=======================================");
 }
@@ -198,9 +203,12 @@ export async function renewTokenPair() {
     console.log(JSON.stringify(response));
 
     if (response.ok) {
-        await setItemAsync("refreshToken", `${response.token.refresh}`);
         await setItemAsync(
-            "accessTokenDeliveryApp",
+            "refreshTokenForDeliveryApp",
+            `${response.token.refresh}`,
+        );
+        await setItemAsync(
+            "accessTokenForDeliveryApp",
             `Bearer ${response.token.access}`,
         );
     }
@@ -226,7 +234,7 @@ export async function callBackendWithFormDataForDelivers(
     data,
     url,
     method,
-    userIDDeliveryApp,
+    userIDForDeliveryApp,
     access,
     apiKeyBackend,
 ) {
@@ -236,7 +244,7 @@ export async function callBackendWithFormDataForDelivers(
     let formData = new FormData();
 
     if (method === "DELETE") {
-        url += userIDDeliveryApp + "/";
+        url += userIDForDeliveryApp + "/";
         return callBackEnd(formData, url, method, access);
     }
 
@@ -261,7 +269,7 @@ export async function callBackendWithFormDataForDelivers(
 
     if (method === "PATCH") {
         form_keys.pop();
-        url += userIDDeliveryApp + "/";
+        url += userIDForDeliveryApp + "/";
     }
 
     for (let i = 0; i < form_keys.length; i++) {
