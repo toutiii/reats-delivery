@@ -6,7 +6,7 @@ export async function callBackEnd(
     data,
     url,
     method,
-    accessToken,
+    accessTokenDeliveryApp,
     useFormData,
     apiKey,
 ) {
@@ -14,16 +14,16 @@ export async function callBackEnd(
     console.log(data);
     console.log(url);
     console.log(method);
-    console.log(accessToken);
+    console.log(accessTokenDeliveryApp);
     console.log(useFormData);
     console.log(apiKey);
     console.log("====================IN CALL BACK END====================");
 
     if (
         apiKey !== null &&
-    accessToken !== null &&
+    accessTokenDeliveryApp !== null &&
     apiKey !== undefined &&
-    accessToken !== undefined
+    accessTokenDeliveryApp !== undefined
     ) {
         console.error(
             "You can't use both APIKey and access token in the same request.",
@@ -31,7 +31,7 @@ export async function callBackEnd(
         return { ok: false };
     }
 
-    if (apiKey === null && accessToken === null) {
+    if (apiKey === null && accessTokenDeliveryApp === null) {
         console.error("You need to specify at least an access token or an APIKey.");
         return { ok: false };
     }
@@ -39,8 +39,8 @@ export async function callBackEnd(
     let response = "";
     let headers = { Accept: "application/json" };
 
-    if (accessToken !== null) {
-        headers["Authorization"] = accessToken;
+    if (accessTokenDeliveryApp !== null) {
+        headers["Authorization"] = accessTokenDeliveryApp;
     }
 
     if (apiKey !== null) {
@@ -82,7 +82,9 @@ export async function callBackEnd(
       response.error_code === "token_not_valid"
         ) {
             await renewAccessToken();
-            const newAccessToken = await getItemFromSecureStore("accessToken");
+            const newAccessToken = await getItemFromSecureStore(
+                "accessTokenDeliveryApp",
+            );
             if (method === "GET") {
                 response = await fetch(url, {
                     method: method,
@@ -111,8 +113,9 @@ export async function callBackEnd(
         response.error_code === "token_not_valid"
             ) {
                 await renewTokenPair();
-                const accessTokenFromNewPair =
-          await getItemFromSecureStore("accessToken");
+                const accessTokenFromNewPair = await getItemFromSecureStore(
+                    "accessTokenDeliveryApp",
+                );
                 if (method === "GET") {
                     response = await fetch(url, {
                         method: method,
@@ -166,7 +169,7 @@ export async function renewAccessToken() {
     console.log(JSON.stringify(response));
 
     if (response.ok) {
-        await setItemAsync("accessToken", `Bearer ${response.access}`);
+        await setItemAsync("accessTokenDeliveryApp", `Bearer ${response.access}`);
     }
     console.log("=======================================");
 }
@@ -196,57 +199,12 @@ export async function renewTokenPair() {
 
     if (response.ok) {
         await setItemAsync("refreshToken", `${response.token.refresh}`);
-        await setItemAsync("accessToken", `Bearer ${response.token.access}`);
+        await setItemAsync(
+            "accessTokenDeliveryApp",
+            `Bearer ${response.token.access}`,
+        );
     }
     console.log("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
-}
-
-export async function callBackendWithFormDataForCustomers(
-    data,
-    url,
-    method,
-    userID,
-    access,
-    apiKeyBackend,
-) {
-    console.log(data);
-    console.log(url);
-    console.log(method);
-    let formData = new FormData();
-
-    if (method === "DELETE") {
-        url += userID + "/";
-        return callBackEnd(formData, url, method, access);
-    }
-
-    if (data.photo !== undefined && data.photo.startsWith("file:///")) {
-        const fileName = data.photo.split("/").pop();
-        const fileExtension = fileName.split(".").pop();
-        formData.append("photo", {
-            uri: data.photo,
-            name: fileName,
-            type: `image/${fileExtension}`,
-        });
-    }
-
-    let form_keys = [
-        "firstname",
-        "lastname",
-        "phone"
-    ];
-
-    if (method === "PATCH") {
-        form_keys.pop();
-        url += userID + "/";
-    }
-
-    for (let i = 0; i < form_keys.length; i++) {
-        if (data[form_keys[i]] !== undefined) {
-            formData.append(form_keys[i], data[form_keys[i]]);
-        }
-    }
-
-    return callBackEnd(formData, url, method, access, true, apiKeyBackend);
 }
 
 export async function callBackEndForAuthentication(
@@ -264,11 +222,11 @@ export async function callBackEndForAuthentication(
     return callBackEnd(formData, url, method, null, true, apiKeyBackend);
 }
 
-export async function callBackendWithFormDataForAddresses(
+export async function callBackendWithFormDataForDelivers(
     data,
     url,
     method,
-    item_id,
+    userIDDeliveryApp,
     access,
     apiKeyBackend,
 ) {
@@ -276,33 +234,40 @@ export async function callBackendWithFormDataForAddresses(
     console.log(url);
     console.log(method);
     let formData = new FormData();
-    let form_keys = [
-        "address_complement",
-        "customer",
-        "postal_code",
-        "street_name",
-        "street_number",
-        "town",
-    ];
 
     if (method === "DELETE") {
-        url += item_id + "/";
+        url += userIDDeliveryApp + "/";
         return callBackEnd(formData, url, method, access);
     }
 
-    if (item_id !== undefined && item_id !== null) {
-        method = "PUT";
-        url += item_id + "/";
+    if (data.photo !== undefined && data.photo.startsWith("file:///")) {
+        const fileName = data.photo.split("/").pop();
+        const fileExtension = fileName.split(".").pop();
+        formData.append("photo", {
+            uri: data.photo,
+            name: fileName,
+            type: `image/${fileExtension}`,
+        });
+    }
+
+    let form_keys = [
+        "firstname",
+        "lastname",
+        "phone",
+        "siret",
+        "town",
+        "delivery_radius",
+    ];
+
+    if (method === "PATCH") {
+        form_keys.pop();
+        url += userIDDeliveryApp + "/";
     }
 
     for (let i = 0; i < form_keys.length; i++) {
         if (data[form_keys[i]] !== undefined) {
             formData.append(form_keys[i], data[form_keys[i]]);
         }
-    }
-
-    if (method === "POST") {
-        formData.append("customer", await getItemFromSecureStore("userID"));
     }
 
     return callBackEnd(formData, url, method, access, true, apiKeyBackend);

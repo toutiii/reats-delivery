@@ -181,19 +181,26 @@ export default function Form({ ...props }) {
         setErrorMessage("");
         setValidationErrors(getInitialErrorsState(fieldKeys, props));
         const errors = validateFields(props.fields, newItem);
+
         if (Object.keys(errors).length !== 0) {
             setSubmitting(false);
             setStateShowAlert(true);
             setNoErrorsFound(true);
             return setValidationErrors(errors);
         }
+
         fadeOut();
+
         try {
-            const userID = await getItemFromSecureStore("userID");
-            const accessToken = await getItemFromSecureStore("accessToken");
+            const userIDDeliveryApp =
+        await getItemFromSecureStore("userIDDeliveryApp");
+            const accessTokenDeliveryApp = await getItemFromSecureStore(
+                "accessTokenDeliveryApp",
+            );
             const apiKey = props.useApiKey
                 ? apiKeyBackend
                 : null;
+
             if (props.login) {
                 result = await props.action(newItem, props.url, props.method, apiKey);
             } else {
@@ -203,8 +210,8 @@ export default function Form({ ...props }) {
                     props.method,
                     props.useItemID
                         ? newItem.id
-                        : userID,
-                    accessToken,
+                        : userIDDeliveryApp,
+                    accessTokenDeliveryApp,
                     apiKey,
                 );
             }
@@ -230,14 +237,17 @@ export default function Form({ ...props }) {
         setErrorMessage("");
         fadeOut();
         try {
-            const userID = await getItemFromSecureStore("userID");
-            const accessToken = await getItemFromSecureStore("accessToken");
+            const userIDDeliveryApp =
+        await getItemFromSecureStore("userIDDeliveryApp");
+            const accessTokenDeliveryApp = await getItemFromSecureStore(
+                "accessTokenDeliveryApp",
+            );
             const result = await props.action(
                 newItem,
                 props.url,
                 "DELETE",
-                userID,
-                accessToken,
+                userIDDeliveryApp,
+                accessTokenDeliveryApp,
             );
             result.ok
                 ? setShowAlertDeleteAccountSuccess(true)
@@ -257,13 +267,15 @@ export default function Form({ ...props }) {
         setErrorMessage("");
         fadeOut();
         try {
-            const accessToken = await getItemFromSecureStore("accessToken");
+            const accessTokenDeliveryApp = await getItemFromSecureStore(
+                "accessTokenDeliveryApp",
+            );
             const result = await props.action(
                 newItem,
                 props.url,
                 "DELETE",
                 newItem.id,
-                accessToken,
+                accessTokenDeliveryApp,
             );
             result.ok
                 ? setStateShowAlert(true)
@@ -283,14 +295,11 @@ export default function Form({ ...props }) {
     };
 
     const searchTownByName = async (townFirstChars) => {
+        console.log("Searching town by name: ", townFirstChars);
         let dataset = [
         ];
 
         try {
-            if (townFirstChars.length < 3) {
-                console.log("Town name too short");
-                return dataset;
-            }
             // eslint-disable-next-line max-len
             const response = await fetch(
                 `https://geo.api.gouv.fr/communes?nom=${townFirstChars}&fields=departement&boost=population&limit=5`,
@@ -340,7 +349,7 @@ export default function Form({ ...props }) {
                         confirmButtonColor="green"
                         showCancelButton={true}
                         cancelButtonColor="red"
-                        cancelText={all_constants.custom_alert.cancel_text}
+                        cancelText={all_constants.messages.cancel}
                         onConfirmPressed={() => {
                             setShowAlertCancel(false);
                             props.navigation.goBack();
@@ -431,8 +440,8 @@ export default function Form({ ...props }) {
                             confirmButtonColor="green"
                             cancelText={all_constants.custom_alert.delete_account}
                             onConfirmPressed={() => {
-                                deleteItemFromSecureStore("accessToken");
-                                deleteItemFromSecureStore("userID");
+                                deleteItemFromSecureStore("accessTokenDeliveryApp");
+                                deleteItemFromSecureStore("userIDDeliveryApp");
                                 setRedirectTologinView(true);
                                 setShowAlertDeleteAccountSuccess(false);
                             }}

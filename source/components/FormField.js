@@ -92,7 +92,17 @@ export default function FormField({ ...props }) {
 
     useEffect(() => {
         console.log("town: ", town);
-        fetchTown();
+        if (town.length > 2) {
+            const timer = setTimeout(() => {
+                fetchTown();
+            }, 1000);
+            return () => {
+                clearTimeout(timer);
+            };
+        } else {
+            setAutoCompleteValues([
+            ]);
+        }
     }, [
         town
     ]);
