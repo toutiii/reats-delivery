@@ -27,6 +27,10 @@ let all_constants = {
             delete_account_message:
         "Souhaitez vous vraiment supprimer votre compte ? Attention toutes vos données seront perdues.",
         },
+        sign_out_title: "DÉCONNEXION",
+        sign_out_message: "Souhaitez-vous vous déconnecter ?",
+        sign_out_confirm_text: "OUI",
+        sign_out_cancel_text: "NON",
     },
     drawercontent: {
         logout: "Déconnexion",
