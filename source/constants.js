@@ -195,6 +195,31 @@ let all_constants = {
         width: Dimensions.get("window").width,
         height: Dimensions.get("window").height,
     },
+    stats: {
+        labels: {
+            start: "Date de début",
+            end: "Date de fin",
+        },
+        kilometers: "KM",
+        custom_alerts: {
+            title: "Information",
+            error_title: "Erreur",
+            messages: {
+                balance: "Votre solde cumulé sur la période demandée.",
+                delivery_count:
+          "Nombre de livraisons effectuées sur la période demandée.",
+                delivery_mean_time: "Temps moyen de livraison sur la période demandée.",
+                delivery_total_km: "Distance totale parcourue sur la période demandée.",
+                both_dates_mandatory:
+          "Merci de renseigner une date de début et une date de fin.",
+            },
+            units: {
+                seconds: "s",
+                minutes: "min",
+                hours: "h",
+            },
+        },
+    },
     tab: {
         main_tab_navigator: {
             home: "Home",

@@ -156,7 +156,7 @@ export default function DrawerContent(props) {
                                     )}
                                     label={all_constants.drawercontent.drawer_item.label.stats}
                                     onPress={() => {
-                                        props.navigation.navigate("SimpleView");
+                                        props.navigation.navigate("StatsView");
                                     }}
                                 />
                                 <DrawerItem
