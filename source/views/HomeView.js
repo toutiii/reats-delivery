@@ -1,10 +1,8 @@
 import React, { Component } from "react";
-import { Text, View, FlatList, ActivityIndicator } from "react-native";
+import { Text, View } from "react-native";
 import { FontAwesome5 } from "@expo/vector-icons";
 import HorizontalLine from "../components/HorizontalLine";
-import { getHomeViewData } from "../helpers/delivery_helpers";
 import styles_home_view from "../styles/styles-home-view";
-import Delivery from "../components/Delivery";
 import all_constants from "../constants";
 
 export default class HomeView extends Component {
@@ -22,26 +20,6 @@ export default class HomeView extends Component {
             ],
             isFetching: false,
         };
-    }
-
-    componentDidMount() {
-        this.fetchData();
-        this.intervalID = setInterval(this.fetchData.bind(this), 1000000);
-    }
-
-    componentWillUnmount() {
-        clearInterval(this.intervalID);
-    }
-
-    async fetchData() {
-        this.setState({ isFetching: true });
-        let newData = await getHomeViewData();
-        this.setState({
-            listdata: newData.data.delivery_data,
-            bardata: newData.data.bardata,
-            balancedata: newData.data.balance,
-            isFetching: false,
-        });
     }
 
     render() {
@@ -81,46 +59,6 @@ export default class HomeView extends Component {
                             </Text>
                         </View>
                     </View>
-
-                    {this.state.isFetching
-                        ? (
-                            <View
-                                style={{
-                                    flex: 1,
-                                    justifyContent: "center",
-                                }}
-                            >
-                                <ActivityIndicator size="large" color="tomato" />
-                            </View>
-                        )
-                        : (
-                            <View style={{ flex: 1 }}>
-                                <FlatList
-                                    data={this.state.listdata}
-                                    ItemSeparatorComponent={
-                                        <View
-                                            style={{
-                                                justifyContent: "center",
-                                                alignItems: "center",
-                                                backgroundColor: "#C8C8C8",
-                                                height: 2.5,
-                                                marginLeft: "10%",
-                                                marginRight: "10%",
-                                            }}
-                                        />
-                                    }
-                                    renderItem={({ item }) => (
-                                        <Delivery
-                                            id={item.id}
-                                            delivery_number={item.delivery_number}
-                                            delivery_amount={item.delivery_amount}
-                                            delivery_time={item.delivery_time}
-                                            photo={item.photo}
-                                        />
-                                    )}
-                                />
-                            </View>
-                        )}
                 </View>
             </View>
         );

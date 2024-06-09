@@ -169,7 +169,7 @@ export default function DrawerContent(props) {
                                     )}
                                     label={all_constants.drawercontent.drawer_item.label.history}
                                     onPress={() => {
-                                        props.navigation.navigate("SimpleView");
+                                        props.navigation.navigate("DeliveryHistory");
                                     }}
                                 />
                             </Drawer.Section>

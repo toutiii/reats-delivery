@@ -3,45 +3,37 @@ import { StyleSheet } from "react-native";
 let styles_order = StyleSheet.create({
     container: {
         flex: 1,
-        margin: "6%",
+        alignItems: "center",
+    },
+    order_button_container: {
+        flex: 1,
+        aspectRatio: 16 / 9,
+        paddingTop: "3%",
+        paddingLeft: "2%",
+        paddingRight: "2%",
+    },
+    order_number: {
+        flex: 1,
+        justifyContent: "center",
+        alignItems: "center",
+    },
+    order_element: {
+        flex: 1,
+        paddingLeft: "5%",
+    },
+    row_element: {
         flexDirection: "row",
-        borderWidth: 1,
-        borderRadius: 20,
     },
-    container_element_image: {
-        flex: 1,
-        flexDirection: "column",
-        alignItems: "center",
-        justifyContent: "flex-start",
-        padding: "3%",
+    order_text: {
+        fontSize: 15,
+        paddingBottom: "6%",
     },
-    container_element_card: {
-        flex: 1,
-        flexDirection: "column",
-        padding: "3%",
-    },
-    card_text_container: {
+    icon_element: {
         flex: 1,
     },
-    image: {
-        flex: 1,
-        height: 100,
-        width: "75%",
-        margin: "3%",
-    },
-    card: {
-        flex: 1,
-        margin: "3%",
-        alignItems: "center",
-        shadowOpacity: 0.2,
-        borderRadius: 10,
-        elevation: 3,
-        shadowOffset: { width: 1, height: 1 },
-        shadowColor: "#333",
-        shadowRadius: 2,
-        backgroundColor: "whitesmoke",
-        height: 100,
+    order_status_text_style: {
+        flex: 5,
+        alignItems: "flex-start",
     },
 });
-
 export default styles_order;

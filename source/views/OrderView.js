@@ -1,77 +1,189 @@
-import React from "react";
-import { Image, Text, View } from "react-native";
+import React, { Component } from "react";
+import { View, Text } from "react-native";
+import styles_order_view from "../styles/styles-order-view";
 import all_constants from "../constants";
 import CustomButton from "../components/CustomButton";
-import styles_order_view from "../styles/styles-order-view";
-export default function OrderView({ ...props }) {
-    return (
-        <View style={styles_order_view.container}>
-            <View style={{ flex: 3 }}>
-                <View style={{ flex: 1, flexDirection: "row", alignItems: "flex-end" }}>
-                    <View style={styles_order_view.container_image}>
-                        <Image
-                            source={{ uri: props.route.params.item.order_owner_profil }}
-                            style={styles_order_view.image}
-                        />
-                    </View>
-                    <View style={{ flex: 1 }}>
-                        <Text style={{ fontSize: 50 }}>
-                            {props.route.params.item.order_owner}
-                        </Text>
-                    </View>
-                </View>
-                <View style={{ margin: "3%" }}>
-                    <Text style={{ textAlign: "center" }}>
-                        {props.route.params.item.order_address}
-                    </Text>
-                </View>
+import DishModal from "../modals/DishModal.js";
+import {
+    AntDesign,
+    FontAwesome,
+    MaterialIcons,
+    MaterialCommunityIcons,
+} from "@expo/vector-icons";
+import moment from "moment";
+import "moment/locale/fr"; // Import French locale
+import { buildReadableAddress } from "../helpers/toolbox";
+
+export default class OrderView extends Component {
+    constructor(props) {
+        super(props);
+        moment.locale("fr");
+        this.state = {
+            modalVisible: false,
+        };
+    }
+
+    iconSize = 25;
+
+    onPressShowModal = () => {
+        this.setState({ modalVisible: true });
+    };
+
+    onPressCloseModal = () => {
+        this.setState({ modalVisible: false });
+    };
+
+    render() {
+        return (
+            <View style={{ flex: 1, backgroundColor: "white" }}>
+                {this.state.modalVisible && (
+                    <DishModal
+                        state={this.state.modalVisible}
+                        onPressCloseModal={this.onPressCloseModal}
+                        modal_data={this.props.route.params.item.items}
+                    />
+                )}
                 <View
-                    style={{ borderBottomWidth: 1, alignSelf: "center", width: "75%" }}
-                >
-                    <Text style={styles_order_view.text}>
-                        {all_constants.orderview.time} {props.route.params.item.order_time}{" "}
-                        {all_constants.time}
-                    </Text>
-                </View>
-                <View>
-                    <Text style={styles_order_view.text}>
-                        {props.route.params.item.order_number}
-                    </Text>
-                </View>
-            </View>
-            <View style={styles_order_view.element_container}>
-                <View style={styles_order_view.horizontalline}>
-                    <Text style={styles_order_view.text}>
-                        {props.route.params.dishe} {all_constants.order.infos.dishe}
-                    </Text>
-                </View>
-                <View style={styles_order_view.horizontalline}>
-                    <Text style={styles_order_view.text}>
-                        {all_constants.orderview.command}
-                        {props.route.params.item.order_date}
-                    </Text>
-                </View>
-                <View style={styles_order_view.element_center}>
-                    <Text style={styles_order_view.text}>
-                        {all_constants.win}
-                        {props.route.params.item.order_price}
-                    </Text>
-                </View>
-            </View>
-            <View style={styles_order_view.element_center}>
-                <CustomButton
-                    label={all_constants.orderview.take}
-                    height={50}
-                    border_width={3}
-                    font_size={17}
-                    backgroundColor={"green"}
-                    label_color={"white"}
-                    button_width={all_constants.screen.width - 40}
-                    onPress={() => {
-                        console.log("PRESSED");
+                    style={{
+                        flex: 3,
+                        backgroundColor: "white",
                     }}
-                />
+                >
+                    <View style={{ flex: 1, alignItems: "center" }}>
+                        <View style={{ flex: 1 }}>
+                            <Text
+                                style={{
+                                    fontSize: 25,
+                                    fontWeight: "bold",
+                                    textAlign: "center",
+                                }}
+                            >
+                                {
+                                    all_constants.drawercontent.drawer_item.orders_history.infos
+                                        .number
+                                }
+                                {this.props.route.params.item.id}
+                            </Text>
+                        </View>
+
+                        <View style={styles_order_view.order_item_info}>
+                            <View style={{ flex: 1 }}>
+                                <FontAwesome name="money" size={this.iconSize} color="black" />
+                            </View>
+                            <View style={{ flex: 6 }}>
+                                <Text style={{ fontSize: 17 }}>
+                                    {
+                                        all_constants.drawercontent.drawer_item.orders_history.infos
+                                            .amount
+                                    }{" "}
+                                    {this.props.route.params.item.order_amount}{" "}
+                                    {all_constants.currency_symbol}
+                                </Text>
+                            </View>
+                        </View>
+                        {this.props.route.params.item.status ===
+              all_constants.drawercontent.drawer_item.orders_history
+                  .original_status.delivered && (
+                            <View style={styles_order_view.order_item_info}>
+                                <View style={{ flex: 1 }}>
+                                    <AntDesign
+                                        name="checkcircle"
+                                        size={this.iconSize}
+                                        color="green"
+                                    />
+                                </View>
+                                <View style={{ flex: 6 }}>
+                                    <Text style={{ fontSize: 17 }}>
+                                        {
+                                            all_constants.drawercontent.drawer_item.orders_history
+                                                .status.delivered
+                                        }{" "}
+                                        {moment(this.props.route.params.item.delivery_date).format(
+                                            "dddd DD MMM YYYY à HH[h]mm",
+                                        )}
+                                    </Text>
+                                </View>
+                            </View>
+                        )}
+                        {this.props.route.params.item.status ===
+              all_constants.drawercontent.drawer_item.orders_history
+                  .original_status.cancelled_by_cooker && (
+                            <View style={styles_order_view.order_item_info}>
+                                <View style={{ flex: 1 }}>
+                                    <MaterialIcons
+                                        name="cancel"
+                                        size={this.iconSize}
+                                        color="red"
+                                    />
+                                </View>
+                                <View style={{ flex: 6 }}>
+                                    <Text style={{ fontSize: 17 }}>
+                                        {
+                                            all_constants.drawercontent.drawer_item.orders_history
+                                                .status.cancelled_by_cooker
+                                        }{" "}
+                                        {moment(this.props.route.params.item.modified).format(
+                                            "dddd DD MMM YYYY à HH[h]mm",
+                                        )}
+                                    </Text>
+                                </View>
+                            </View>
+                        )}
+
+                        {this.props.route.params.item.status ===
+              all_constants.drawercontent.drawer_item.orders_history
+                  .original_status.cancelled_by_customer && (
+                            <View style={styles_order_view.order_item_info}>
+                                <View style={{ flex: 1 }}>
+                                    <MaterialIcons
+                                        name="cancel"
+                                        size={this.iconSize}
+                                        color="red"
+                                    />
+                                </View>
+                                <View style={{ flex: 6 }}>
+                                    <Text style={{ fontSize: 17 }}>
+                                        {
+                                            all_constants.drawercontent.drawer_item.orders_history
+                                                .status.cancelled_by_customer
+                                        }{" "}
+                                        {moment(this.props.route.params.item.modified).format(
+                                            "dddd DD MMM YYYY à HH[h]mm",
+                                        )}
+                                    </Text>
+                                </View>
+                            </View>
+                        )}
+
+                        <View style={styles_order_view.order_item_info}>
+                            <View style={{ flex: 1 }}>
+                                <MaterialCommunityIcons
+                                    name="google-maps"
+                                    size={this.iconSize}
+                                    color="black"
+                                />
+                            </View>
+                            <View style={{ flex: 6 }}>
+                                <Text style={{ fontSize: 17 }}>
+                                    {buildReadableAddress(this.props.route.params.item.address)}
+                                </Text>
+                            </View>
+                        </View>
+                    </View>
+                </View>
+                <View style={{ flex: 1, alignItems: "center" }}>
+                    <CustomButton
+                        label={all_constants.modal.dish_modal.show}
+                        backgroundColor="darkgrey"
+                        height={50}
+                        border_width={3}
+                        border_radius={30}
+                        font_size={17}
+                        onPress={this.onPressShowModal}
+                        label_color="white"
+                    />
+                </View>
             </View>
-        </View>
-    );
+        );
+    }
 }

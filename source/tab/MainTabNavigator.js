@@ -4,9 +4,9 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import HomeView from "../views/HomeView";
 import SimpleView from "../views/SimpleView";
 import all_constants from "../constants";
-import OrderFlatlistStackNavigator from "../stack/OrderFlatlistStackNavigator";
 import SettingsPersonalInformationForm from "../forms/SettingsPersonalInformationForm";
 import StatsView from "../views/StatsView";
+import DeliveryHistoryStack from "../stack/DeliveryHistoryStack";
 
 const Tab = createBottomTabNavigator();
 
@@ -42,6 +42,7 @@ export default function MainTabNavigator() {
                     }
                 },
                 tabBarButton: [
+                    "DeliveryHistory",
                     "SimpleView",
                     "SettingsPersonalInformationForm",
                     "StatsView",
@@ -57,10 +58,6 @@ export default function MainTabNavigator() {
                 component={HomeView}
             />
             <Tab.Screen
-                name={all_constants.tab.main_tab_navigator.pending}
-                component={OrderFlatlistStackNavigator}
-            />
-            <Tab.Screen
                 name={all_constants.tab.main_tab_navigator.delivery}
                 component={SimpleView}
             />
@@ -70,6 +67,7 @@ export default function MainTabNavigator() {
                 component={SettingsPersonalInformationForm}
             />
             <Tab.Screen name="StatsView" component={StatsView} />
+            <Tab.Screen name="DeliveryHistory" component={DeliveryHistoryStack} />
         </Tab.Navigator>
     );
 }

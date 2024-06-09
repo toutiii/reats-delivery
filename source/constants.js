@@ -5,6 +5,11 @@ let all_constants = {
     currency_symbol: " €",
     win: "Gain :",
     time: "min",
+    cart: {
+        button: {
+            close: "FERMER",
+        },
+    },
     colors: {
         inputBorderColor: "#ffd700",
     },
@@ -62,6 +67,41 @@ let all_constants = {
                 },
                 status: {
                     delivered: "Livrée",
+                },
+            },
+            orders_history: {
+                title: "Mes anciennes livraisons",
+                no_results: "Aucune livraison trouvée.",
+                infos: {
+                    number: "Commande N°",
+                    status: "Statut:",
+                    owner: "Passée par",
+                    amount: "Total de la commande: ",
+                    quantity: "Nombre d'item(s): ",
+                    content: "Cette commande contient: ",
+                    ordered_label: "le",
+                    canceled_label: "Annulée le",
+                    approved_label: "Commande acceptée le",
+                    delivered_label: "Commande livrée le",
+                    picking_label: "Ramassage prévu le",
+                    price: "Prix à l'unité(€): ",
+                    dish_total: "Total: ",
+                    ordered: "Commandé le ",
+                    item: "item(s)",
+                },
+                status: {
+                    ordered: "Commandée",
+                    canceled: "Annulée",
+                    delivered: "Livrée",
+                    pending: "En attente de prise en charge",
+                    approved: "Acceptée",
+                    cancelled_by_customer: "Vous avez annulé cette commande",
+                    cancelled_by_cooker: "Le cuisinier a annulé cette commande",
+                },
+                original_status: {
+                    cancelled_by_customer: "cancelled_by_customer",
+                    cancelled_by_cooker: "cancelled_by_cooker",
+                    delivered: "delivered",
                 },
             },
         },
@@ -172,6 +212,12 @@ let all_constants = {
         "Vous allez recevoir dans quelques instants un code par SMS que vous devrez renseigner dans le prochain écran.",
             otp_message_login:
         "Si vous avez déjà créé un compte, un code de connexion vous sera envoyé par SMS dans quelques instants.",
+        },
+    },
+    modal: {
+        dish_modal: {
+            hide: "FERMER",
+            show: "AFFICHER LES PLATS",
         },
     },
     placeholders: {
