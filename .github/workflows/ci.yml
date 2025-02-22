@@ -41,19 +41,28 @@ jobs:
     outputs:
       deployment_type: ${{ steps.set_deployment_type.outputs.deployment_type }}
     steps:
-      - name: Check PR Title
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Fetch PR Title
         id: set_deployment_type
+        env:
+          PR_TITLE: ${{ github.event.pull_request.title }}
         run: |
-          PR_TITLE="${{ github.event.pull_request.title }}"
+          echo "PR Title: $PR_TITLE"
           PR_TITLE_LOWER=$(echo "$PR_TITLE" | tr '[:upper:]' '[:lower:]')
 
           if [[ "$PR_TITLE_LOWER" == *"[ota]"* ]]; then
             echo "deployment_type=ota" >> $GITHUB_ENV
+            echo "Detected OTA Update"
           elif [[ "$PR_TITLE_LOWER" == *"[build]"* ]]; then
             echo "deployment_type=build" >> $GITHUB_ENV
+            echo "Detected Full Build"
           else
             echo "deployment_type=none" >> $GITHUB_ENV
+            echo "No deployment triggered"
           fi
+
 
   deploy_ota:
     needs: detect_deployment_type
