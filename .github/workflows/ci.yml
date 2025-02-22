@@ -68,5 +68,10 @@ jobs:
     runs-on: ubuntu-latest
     if: needs.detect_deployment_type.outputs.deployment_type == 'build' && github.event_name == 'push' && (github.ref == 'refs/heads/develop' || github.ref == 'refs/heads/staging' || github.ref == 'refs/heads/main')
     steps:
-      - name: Build App
+      - name: Build App for Staging
+        if: github.ref == 'refs/heads/staging'
+        run: eas build --profile preview --platform all
+
+      - name: Build App for Production
+        if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/develop'
         run: eas build --profile production --platform all
