@@ -3,7 +3,7 @@ import frFrLocale from "date-fns/locale/fr";
 import * as SecureStore from "expo-secure-store";
 import "moment/locale/fr"; // Import French locale
 
-console.log("Hello from toolbox.js");
+console.log("Helloo from toolbox.js");
 
 export function getDeliveryDateInfo(dateObject, wantedFormat) {
     let formattedDeliveryDate = format(dateObject, wantedFormat, {
