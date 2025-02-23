@@ -54,6 +54,7 @@ jobs:
           else
             echo "No deployment required for this branch."
             exit 0
+          fi
 
       - name: Suggest Squash Commit Message
         run: |
@@ -70,7 +71,7 @@ jobs:
 
           gh pr edit $PR_NUMBER --body "**Suggested Commit Message:**\n$COMMIT_MESSAGE"
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.MY_GITHUB_TOKEN }}
 
   deploy_ota:
     name: OTA Update
