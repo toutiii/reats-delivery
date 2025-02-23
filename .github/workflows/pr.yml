@@ -52,8 +52,8 @@ jobs:
             echo "deployment_type=build" >> $GITHUB_ENV
             echo "deployment_type=build" >> $GITHUB_OUTPUT
           else
-            echo "deployment_type=none" >> $GITHUB_ENV
-            echo "deployment_type=none" >> $GITHUB_OUTPUT
+            echo "No deployment required for this branch."
+            exit 0
 
       - name: Suggest Squash Commit Message
         run: |
