@@ -99,13 +99,6 @@ jobs:
           eas-version: latest
           token: ${{ secrets.EXPO_TOKEN }}
 
-      - name: Ensure EAS Project is Configured
-        working-directory: source
-        run: |
-          if [ ! -f "eas.json" ]; then
-            eas init --id ${{ secrets.EAS_PROJECT_ID }} --non-interactive
-          fi
-
       - name: Deploy OTA Update
         working-directory: source
         run: |
@@ -153,13 +146,6 @@ jobs:
         with:
           eas-version: latest
           token: ${{ secrets.EXPO_TOKEN }}
-
-      - name: Ensure EAS Project is Configured
-        working-directory: source
-        run: |
-          if [ ! -f "eas.json" ]; then
-            eas init --id ${{ secrets.EAS_PROJECT_ID }} --non-interactive
-          fi
 
       - name: Build App
         working-directory: source
