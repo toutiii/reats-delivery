@@ -89,6 +89,7 @@ jobs:
           cache: yarn
 
       - name: Install dependencies
+        working-directory: source
         run: yarn install --frozen-lockfile
 
       - name: Setup Expo
@@ -134,6 +135,7 @@ jobs:
           cache: yarn
 
       - name: Install dependencies
+        working-directory: source
         run: yarn install --frozen-lockfile
 
       - name: Setup Expo
