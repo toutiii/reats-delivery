@@ -64,6 +64,7 @@ jobs:
         run: |
           PR_NUMBER=${{ github.event.number }}
           BRANCH_NAME="${{ github.head_ref }}"
+          PR_TITLE="${{ github.event.pull_request.title }}"
 
           if [[ "$BRANCH_NAME" == feature/ota/* ]]; then
             COMMIT_MESSAGE="[OTA] Merge PR #$PR_NUMBER"
@@ -73,6 +74,7 @@ jobs:
             COMMIT_MESSAGE="Merge PR #$PR_NUMBER"
           fi
 
+          COMMIT_MESSAGE="$COMMIT_MESSAGE - $PR_TITLE"
           gh pr edit $PR_NUMBER --body "**Suggested Commit Message:**\n$COMMIT_MESSAGE"
           echo "Suggested commit message: $COMMIT_MESSAGE"
         env:
