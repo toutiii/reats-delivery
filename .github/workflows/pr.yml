@@ -87,7 +87,6 @@ jobs:
         with:
           node-version: 18
           cache: yarn
-          cache-dependency-path: source/yarn.lock
 
       - name: Install dependencies
         working-directory: source
@@ -100,6 +99,7 @@ jobs:
           token: ${{ secrets.EXPO_TOKEN }}
 
       - name: Deploy OTA Update
+        working-directory: source
         run: |
           eas update --auto --branch pr-${{ github.event.number }}
 
@@ -134,7 +134,6 @@ jobs:
         with:
           node-version: 18
           cache: yarn
-          cache-dependency-path: source/yarn.lock
 
       - name: Install dependencies
         working-directory: source
@@ -147,6 +146,7 @@ jobs:
           token: ${{ secrets.EXPO_TOKEN }}
 
       - name: Build App
+        working-directory: source
         run: |
           eas build --platform all --profile preview --non-interactive
 
