@@ -87,6 +87,7 @@ jobs:
         with:
           node-version: 18
           cache: yarn
+          cache-dependency-path: source/yarn.lock
 
       - name: Install dependencies
         working-directory: source
@@ -133,6 +134,7 @@ jobs:
         with:
           node-version: 18
           cache: yarn
+          cache-dependency-path: source/yarn.lock
 
       - name: Install dependencies
         working-directory: source
