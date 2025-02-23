@@ -108,7 +108,7 @@ jobs:
         run: |
           UPDATE_URL=$(eas update --auto --branch pr-${{ github.event.number }} | grep -o 'https://expo.dev/.*')
           echo "UPDATE_URL=$UPDATE_URL" >> $GITHUB_ENV
-  
+
       - name: Install QR Code Generator
         run: sudo apt-get install -y qrencode
 
@@ -116,7 +116,6 @@ jobs:
         run: |
           echo "Scan this QR code to test: $UPDATE_URL"
           echo "$UPDATE_URL" | qrencode -o qrcode.png
-
 
       - name: Upload QR Code
         uses: actions/upload-artifact@v4
