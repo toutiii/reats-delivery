@@ -39,6 +39,9 @@ jobs:
     needs: lint  # Ensure linting passes first
     outputs:
       deployment_type: ${{ steps.set_deployment_type.outputs.deployment_type }}
+    permissions:
+      pull-requests: write  # Ensure this job can modify PRs
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
