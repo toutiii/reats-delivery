@@ -5,6 +5,10 @@ on:
     branches:
       - main
 
+permissions:
+  pull-requests: write  # Allows commenting on PRs
+  contents: read        # Allows reading repo contents
+
 jobs:
   lint:
     name: Run Linting
