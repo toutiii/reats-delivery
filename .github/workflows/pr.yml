@@ -106,16 +106,17 @@ jobs:
       - name: Deploy OTA Update
         working-directory: source
         run: |
-          eas update --auto --branch pr-${{ github.event.number }}
-
+          UPDATE_URL=$(eas update --auto --branch pr-${{ github.event.number }} | grep -o 'https://expo.dev/.*')
+          echo "UPDATE_URL=$UPDATE_URL" >> $GITHUB_ENV
+  
       - name: Install QR Code Generator
         run: sudo apt-get install -y qrencode
 
       - name: Generate QR Code for Expo Go
         run: |
-          QR_CODE_URL="https://expo.dev/update/pr-${{ github.event.number }}"
-          echo "Scan this QR code to test: $QR_CODE_URL"
-          echo "$QR_CODE_URL" | qrencode -o qrcode.png
+          echo "Scan this QR code to test: $UPDATE_URL"
+          echo "$UPDATE_URL" | qrencode -o qrcode.png
+
 
       - name: Upload QR Code
         uses: actions/upload-artifact@v4
