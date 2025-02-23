@@ -104,6 +104,9 @@ jobs:
         run: |
           eas update --auto --branch pr-${{ github.event.number }}
 
+      - name: Install QR Code Generator
+        run: sudo apt-get install -y qrencode
+
       - name: Generate QR Code for Expo Go
         run: |
           QR_CODE_URL="https://expo.dev/update/pr-${{ github.event.number }}"
