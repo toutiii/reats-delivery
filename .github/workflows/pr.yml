@@ -74,6 +74,7 @@ jobs:
           fi
 
           gh pr edit $PR_NUMBER --body "**Suggested Commit Message:**\n$COMMIT_MESSAGE"
+          echo "Suggested commit message: $COMMIT_MESSAGE"
         env:
           GITHUB_TOKEN: ${{ secrets.MY_GITHUB_TOKEN }}
 
@@ -157,10 +158,24 @@ jobs:
       - name: Build App
         working-directory: source
         run: |
-          eas build --platform all --profile preview --non-interactive
+          BUILD_URL=$(eas build --platform all --profile preview --non-interactive | grep -o 'https://expo.dev/.*')
+          echo "BUILD_URL=$BUILD_URL" >> $GITHUB_ENV
 
-      - name: Upload Build Artifact
+      - name: Install QR Code Generator
+        run: sudo apt-get install -y qrencode
+
+      - name: Generate QR Code for Expo Go
+        run: |
+          echo "Scan this QR code to test: $BUILD_URL"
+          echo "$BUILD_URL" | qrencode -o qrcode.png
+
+      - name: Upload QR Code
         uses: actions/upload-artifact@v4
         with:
-          name: eas-build
-          path: build-output/
+          name: expo-qr-code
+          path: qrcode.png
+
+      - name: Comment QR Code on PR
+        uses: thollander/actions-comment-pull-request@v2
+        with:
+          message: "🚀 **Preview Ready!** Scan this QR code to test: ![QR Code](https://github.com/${{ github.repository }}/actions/artifacts/${{ github.run_id }}/expo-qr-code/qrcode.png)"
