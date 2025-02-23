@@ -5,6 +5,10 @@ on:
     branches:
       - main
 
+permissions:
+  pull-requests: write  # Allows commenting on PRs
+  contents: read        # Allows reading repo contents
+
 jobs:
   lint:
     name: Run Linting
@@ -35,6 +39,9 @@ jobs:
     needs: lint  # Ensure linting passes first
     outputs:
       deployment_type: ${{ steps.set_deployment_type.outputs.deployment_type }}
+    permissions:
+      pull-requests: write  # Ensure this job can modify PRs
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -60,6 +67,7 @@ jobs:
         run: |
           PR_NUMBER=${{ github.event.number }}
           BRANCH_NAME="${{ github.head_ref }}"
+          PR_TITLE="${{ github.event.pull_request.title }}"
 
           if [[ "$BRANCH_NAME" == feature/ota/* ]]; then
             COMMIT_MESSAGE="[OTA] Merge PR #$PR_NUMBER"
@@ -69,7 +77,9 @@ jobs:
             COMMIT_MESSAGE="Merge PR #$PR_NUMBER"
           fi
 
-          gh pr edit $PR_NUMBER --body "**Suggested Commit Message:**\n$COMMIT_MESSAGE"
+          COMMIT_MESSAGE="$COMMIT_MESSAGE - $PR_TITLE"
+          gh pr edit $PR_NUMBER --body "**Suggested Commit Message:**\n$COMMIT_MESSAGE" --repo ${{ github.repository }}
+          echo "Suggested commit message: $COMMIT_MESSAGE"
         env:
           GITHUB_TOKEN: ${{ secrets.MY_GITHUB_TOKEN }}
 
@@ -87,8 +97,10 @@ jobs:
         with:
           node-version: 18
           cache: yarn
+          cache-dependency-path: source/yarn.lock
 
       - name: Install dependencies
+        working-directory: source
         run: yarn install --frozen-lockfile
 
       - name: Setup Expo
@@ -98,14 +110,18 @@ jobs:
           token: ${{ secrets.EXPO_TOKEN }}
 
       - name: Deploy OTA Update
+        working-directory: source
         run: |
-          eas update --auto --branch pr-${{ github.event.number }}
+          UPDATE_URL=$(eas update --auto --branch pr-${{ github.event.number }} | grep -o 'https://expo.dev/.*')
+          echo "UPDATE_URL=$UPDATE_URL" >> $GITHUB_ENV
+
+      - name: Install QR Code Generator
+        run: sudo apt-get install -y qrencode
 
       - name: Generate QR Code for Expo Go
         run: |
-          QR_CODE_URL="https://expo.dev/update/pr-${{ github.event.number }}"
-          echo "Scan this QR code to test: $QR_CODE_URL"
-          echo "$QR_CODE_URL" | qrencode -o qrcode.png
+          echo "Scan this QR code to test: $UPDATE_URL"
+          echo "$UPDATE_URL" | qrencode -o qrcode.png
 
       - name: Upload QR Code
         uses: actions/upload-artifact@v4
@@ -132,8 +148,10 @@ jobs:
         with:
           node-version: 18
           cache: yarn
+          cache-dependency-path: source/yarn.lock
 
       - name: Install dependencies
+        working-directory: source
         run: yarn install --frozen-lockfile
 
       - name: Setup Expo
@@ -143,11 +161,26 @@ jobs:
           token: ${{ secrets.EXPO_TOKEN }}
 
       - name: Build App
+        working-directory: source
         run: |
-          eas build --platform all --profile preview --non-interactive
+          BUILD_URL=$(eas build --platform all --profile preview --non-interactive | grep -o 'https://expo.dev/.*')
+          echo "BUILD_URL=$BUILD_URL" >> $GITHUB_ENV
 
-      - name: Upload Build Artifact
+      - name: Install QR Code Generator
+        run: sudo apt-get install -y qrencode
+
+      - name: Generate QR Code for Expo Go
+        run: |
+          echo "Scan this QR code to test: $BUILD_URL"
+          echo "$BUILD_URL" | qrencode -o qrcode.png
+
+      - name: Upload QR Code
         uses: actions/upload-artifact@v4
         with:
-          name: eas-build
-          path: build-output/
+          name: expo-qr-code
+          path: qrcode.png
+
+      - name: Comment QR Code on PR
+        uses: thollander/actions-comment-pull-request@v2
+        with:
+          message: "🚀 **Preview Ready!** Scan this QR code to test: ![QR Code](https://github.com/${{ github.repository }}/actions/artifacts/${{ github.run_id }}/expo-qr-code/qrcode.png)"
