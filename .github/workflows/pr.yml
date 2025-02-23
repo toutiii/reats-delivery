@@ -78,7 +78,7 @@ jobs:
           fi
 
           COMMIT_MESSAGE="$COMMIT_MESSAGE - $PR_TITLE"
-          gh pr edit $PR_NUMBER --body "**Suggested Commit Message:**\n$COMMIT_MESSAGE"
+          gh pr edit $PR_NUMBER --body "**Suggested Commit Message:**\n$COMMIT_MESSAGE" --repo ${{ github.repository }}
           echo "Suggested commit message: $COMMIT_MESSAGE"
         env:
           GITHUB_TOKEN: ${{ secrets.MY_GITHUB_TOKEN }}
