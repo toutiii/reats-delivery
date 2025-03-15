@@ -17,14 +17,11 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-      - name: Extract Branch Name
+
+      - name: Extract merged branch name
         id: extract
         run: |
-          if [[ "${{ github.event_name }}" == "pull_request" ]]; then
-            BRANCH_NAME="${{ github.event.pull_request.head.ref }}"
-          else
-            BRANCH_NAME=$(git log -1 --pretty=%D | grep -oE 'origin/[^,]+' | cut -d'/' -f2-)
-          fi
+          BRANCH_NAME=${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}}
           echo "Extracted branch name: $BRANCH_NAME"
           echo "branch=$BRANCH_NAME" >> $GITHUB_OUTPUT
 
