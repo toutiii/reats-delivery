@@ -9,9 +9,27 @@ permissions:
   contents: write  # Needed for tagging the commit
 
 jobs:
+  extract_branch_name:
+    name: Extract Branch Name
+    runs-on: ubuntu-latest
+    outputs:
+      branch: ${{ steps.extract.outputs.branch }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Extract Branch Name
+        id: extract
+        shell: bash
+        run: |
+          BRANCH_NAME="${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}}"
+          echo "Extracted branch name: $BRANCH_NAME"
+          echo "branch=$BRANCH_NAME" >> $GITHUB_OUTPUT
+
   detect_deployment_type:
     name: Detect Deployment Type
     runs-on: ubuntu-latest
+    needs: extract_branch_name  # Ensure we extract the branch first
     outputs:
       deployment_type: ${{ steps.set_deployment_type.outputs.deployment_type }}
     steps:
@@ -22,7 +40,7 @@ jobs:
         id: set_deployment_type
         run: |
           # Fetch the branch name that was merged
-          BRANCH_NAME=$(jq -r .pull_request.head.ref "$GITHUB_EVENT_PATH")
+          BRANCH_NAME="${{ needs.extract_branch_name.outputs.branch }}"
           echo "Merged branch: $BRANCH_NAME"
 
           if [[ "$BRANCH_NAME" == feature/ota/* ]]; then
