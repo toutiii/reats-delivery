@@ -9,24 +9,6 @@ permissions:
   contents: write  # Needed for tagging the commit
 
 jobs:
-  extract_branch_name:
-    name: Extract Branch Name
-    runs-on: ubuntu-latest
-    outputs:
-      branch: ${{ steps.extract.outputs.branch }}
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Extract merged branch name
-        id: extract
-        run: |
-          MERGE_COMMIT_MESSAGE=$(git log --format=%B -n 1 "${GITHUB_SHA}")
-          echo "Merge commit message: $MERGE_COMMIT_MESSAGE"
-          BRANCH_NAME=$(echo "$MERGE_COMMIT_MESSAGE" | grep -oP '(?<=from ).*' | awk -F/ '{print $NF}')
-          echo "Extracted branch name: $BRANCH_NAME"
-          echo "branch=$BRANCH_NAME" >> $GITHUB_OUTPUT
-
   detect_deployment_type:
     name: Detect Deployment Type
     runs-on: ubuntu-latest
