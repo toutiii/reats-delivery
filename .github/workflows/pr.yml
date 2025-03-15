@@ -1,4 +1,4 @@
-name: PR Deployment
+name: PR CI
 
 on:
   pull_request:
@@ -6,12 +6,11 @@ on:
       - main
 
 permissions:
-  pull-requests: write  # Allows commenting on PRs
-  contents: read        # Allows reading repo contents
+  contents: read  # Allows reading repo contents
 
 jobs:
   lint:
-    name: Run Linting
+    name: Run ESLint
     runs-on: ubuntu-latest
 
     steps:
@@ -29,158 +28,6 @@ jobs:
         working-directory: source
         run: yarn install --frozen-lockfile
 
-      - name: Run ESLint (Check Mode)
+      - name: Run ESLint
         working-directory: source
         run: yarn eslint .
-
-  detect_deployment_type:
-    name: Detect Deployment Type
-    runs-on: ubuntu-latest
-    needs: lint  # Ensure linting passes first
-    outputs:
-      deployment_type: ${{ steps.set_deployment_type.outputs.deployment_type }}
-    permissions:
-      pull-requests: write  # Ensure this job can modify PRs
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Detect Deployment Type from Branch Name
-        id: set_deployment_type
-        run: |
-          BRANCH_NAME="${{ github.head_ref }}"
-          echo "Source branch: $BRANCH_NAME"
-
-          if [[ "$BRANCH_NAME" == feature/ota/* ]]; then
-            echo "deployment_type=ota" >> $GITHUB_ENV
-            echo "deployment_type=ota" >> $GITHUB_OUTPUT
-          elif [[ "$BRANCH_NAME" == feature/build/* ]]; then
-            echo "deployment_type=build" >> $GITHUB_ENV
-            echo "deployment_type=build" >> $GITHUB_OUTPUT
-          else
-            echo "No deployment required for this branch."
-            exit 0
-          fi
-
-      - name: Suggest Squash Commit Message
-        run: |
-          PR_NUMBER=${{ github.event.number }}
-          BRANCH_NAME="${{ github.head_ref }}"
-          PR_TITLE="${{ github.event.pull_request.title }}"
-
-          if [[ "$BRANCH_NAME" == feature/ota/* ]]; then
-            COMMIT_MESSAGE="[OTA] Merge PR #$PR_NUMBER"
-          elif [[ "$BRANCH_NAME" == feature/build/* ]]; then
-            COMMIT_MESSAGE="[BUILD] Merge PR #$PR_NUMBER"
-          else
-            COMMIT_MESSAGE="Merge PR #$PR_NUMBER"
-          fi
-
-          COMMIT_MESSAGE="$COMMIT_MESSAGE - $PR_TITLE"
-          gh pr edit $PR_NUMBER --body "**Suggested Commit Message:**\n$COMMIT_MESSAGE" --repo ${{ github.repository }}
-          echo "Suggested commit message: $COMMIT_MESSAGE"
-        env:
-          GITHUB_TOKEN: ${{ secrets.MY_GITHUB_TOKEN }}
-
-  deploy_ota:
-    name: OTA Update
-    needs: detect_deployment_type
-    runs-on: ubuntu-latest
-    if: needs.detect_deployment_type.outputs.deployment_type == 'ota'
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: 18
-          cache: yarn
-          cache-dependency-path: source/yarn.lock
-
-      - name: Install dependencies
-        working-directory: source
-        run: yarn install --frozen-lockfile
-
-      - name: Setup Expo
-        uses: expo/expo-github-action@v8
-        with:
-          eas-version: latest
-          token: ${{ secrets.EXPO_TOKEN }}
-
-      - name: Deploy OTA Update
-        working-directory: source
-        run: |
-          UPDATE_URL=$(eas update --auto --branch pr-${{ github.event.number }} | grep -o 'https://expo.dev/.*')
-          echo "UPDATE_URL=$UPDATE_URL" >> $GITHUB_ENV
-
-      - name: Install QR Code Generator
-        run: sudo apt-get install -y qrencode
-
-      - name: Generate QR Code for Expo Go
-        run: |
-          echo "Scan this QR code to test: $UPDATE_URL"
-          echo "$UPDATE_URL" | qrencode -o qrcode.png
-
-      - name: Upload QR Code
-        uses: actions/upload-artifact@v4
-        with:
-          name: expo-qr-code
-          path: qrcode.png
-
-      - name: Comment QR Code on PR
-        uses: thollander/actions-comment-pull-request@v2
-        with:
-          message: "🚀 **Preview Ready!** Scan this QR code with Expo Go to test: ![QR Code](https://github.com/${{ github.repository }}/actions/artifacts/${{ github.run_id }}/expo-qr-code/qrcode.png)"
-
-  deploy_build:
-    name: Full Build
-    needs: detect_deployment_type
-    runs-on: ubuntu-latest
-    if: needs.detect_deployment_type.outputs.deployment_type == 'build'
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: 18
-          cache: yarn
-          cache-dependency-path: source/yarn.lock
-
-      - name: Install dependencies
-        working-directory: source
-        run: yarn install --frozen-lockfile
-
-      - name: Setup Expo
-        uses: expo/expo-github-action@v8
-        with:
-          eas-version: latest
-          token: ${{ secrets.EXPO_TOKEN }}
-
-      - name: Build App
-        working-directory: source
-        run: |
-          BUILD_URL=$(eas build --platform all --profile preview --non-interactive | grep -o 'https://expo.dev/.*')
-          echo "BUILD_URL=$BUILD_URL" >> $GITHUB_ENV
-
-      - name: Install QR Code Generator
-        run: sudo apt-get install -y qrencode
-
-      - name: Generate QR Code for Expo Go
-        run: |
-          echo "Scan this QR code to test: $BUILD_URL"
-          echo "$BUILD_URL" | qrencode -o qrcode.png
-
-      - name: Upload QR Code
-        uses: actions/upload-artifact@v4
-        with:
-          name: expo-qr-code
-          path: qrcode.png
-
-      - name: Comment QR Code on PR
-        uses: thollander/actions-comment-pull-request@v2
-        with:
-          message: "🚀 **Preview Ready!** Scan this QR code to test: ![QR Code](https://github.com/${{ github.repository }}/actions/artifacts/${{ github.run_id }}/expo-qr-code/qrcode.png)"
