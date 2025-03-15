@@ -119,7 +119,7 @@ jobs:
       - name: Build App
         working-directory: source
         run: |
-          BUILD_URL=$(eas build --platform all --profile preview --non-interactive | grep -o 'https://expo.dev/.*')
+          BUILD_URL=$(eas build --platform all --profile preview --non-interactive --verbose | grep -o 'https://expo.dev/.*')
           echo "BUILD_URL=$BUILD_URL" >> $GITHUB_ENV
 
       - name: Install QR Code Generator
