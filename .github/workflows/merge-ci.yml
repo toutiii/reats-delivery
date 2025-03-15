@@ -37,6 +37,7 @@ jobs:
             echo "No deployment required."
             echo "deployment_type=none" >> $GITHUB_ENV
             echo "deployment_type=none" >> $GITHUB_OUTPUT
+          fi
 
   deploy_ota:
     name: Deploy OTA Update
