@@ -21,8 +21,7 @@ jobs:
       - name: Extract merged branch name
         id: extract
         run: |
-          ${{ github.event }} > event.json
-          cat event.json
+          echo "${{ github.event }}"
           BRANCH_NAME=${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}}
           echo "Extracted branch name: $BRANCH_NAME"
           echo "branch=$BRANCH_NAME" >> $GITHUB_OUTPUT
