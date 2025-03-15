@@ -15,16 +15,16 @@ jobs:
     outputs:
       branch: ${{ steps.extract.outputs.branch }}
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Extract Branch Name
-        id: extract
-        shell: bash
-        run: |
-          BRANCH_NAME="${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}}"
-          echo "Extracted branch name: $BRANCH_NAME"
-          echo "branch=$BRANCH_NAME" >> $GITHUB_OUTPUT
+    - name: Extract Branch Name
+      id: extract
+      run: |
+        if [[ "${{ github.event_name }}" == "pull_request" ]]; then
+          BRANCH_NAME="${{ github.event.pull_request.head.ref }}"
+        else
+          BRANCH_NAME=$(git log -1 --pretty=%D | grep -oE 'origin/[^,]+' | cut -d'/' -f2-)
+        fi
+        echo "Extracted branch name: $BRANCH_NAME"
+        echo "branch=$BRANCH_NAME" >> $GITHUB_OUTPUT
 
   detect_deployment_type:
     name: Detect Deployment Type
