@@ -22,7 +22,7 @@ jobs:
         id: set_deployment_type
         run: |
           # Fetch the branch name that was merged
-          BRANCH_NAME=$(git log -1 --pretty=%D | grep -oE 'origin/[^,]+' | cut -d'/' -f2-)
+          BRANCH_NAME=$(jq -r .pull_request.head.ref "$GITHUB_EVENT_PATH")
           echo "Merged branch: $BRANCH_NAME"
 
           if [[ "$BRANCH_NAME" == feature/ota/* ]]; then
