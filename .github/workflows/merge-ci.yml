@@ -6,7 +6,7 @@ on:
       - main
 
 permissions:
-  contents: write  # Needed for tagging the commit
+  contents: write  # Needed for tagging commits if needed
 
 jobs:
   detect_deployment_type:
@@ -14,6 +14,7 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       deployment_type: ${{ steps.extract_deployment_type.outputs.deployment_type }}
+
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
@@ -37,7 +38,7 @@ jobs:
             echo "deployment_type=build" >> $GITHUB_ENV
             echo "deployment_type=build" >> $GITHUB_OUTPUT
           else
-            echo "No deployment required."
+            echo "No deployment required"
             echo "deployment_type=none" >> $GITHUB_ENV
             echo "deployment_type=none" >> $GITHUB_OUTPUT
           fi
@@ -71,26 +72,10 @@ jobs:
 
       - name: Deploy OTA Update
         working-directory: source
-        run: |
-          UPDATE_URL=$(eas update --auto --branch main | grep -o 'https://expo.dev/.*')
-          echo "UPDATE_URL=$UPDATE_URL" >> $GITHUB_ENV
+        run: eas update --auto --branch main
 
-      - name: Install QR Code Generator
-        run: sudo apt-get install -y qrencode
-
-      - name: Generate QR Code for Expo Go
-        run: |
-          echo "Scan this QR code to test: $UPDATE_URL"
-          echo "$UPDATE_URL" | qrencode -o qrcode.png
-
-      - name: Upload QR Code
-        uses: actions/upload-artifact@v4
-        with:
-          name: expo-qr-code
-          path: qrcode.png
-
-  deploy_build:
-    name: Deploy Full Build
+  deploy_android:
+    name: Build & Submit Android
     needs: detect_deployment_type
     runs-on: ubuntu-latest
     if: needs.detect_deployment_type.outputs.deployment_type == 'build'
@@ -116,13 +101,11 @@ jobs:
           eas-version: latest
           token: ${{ secrets.EXPO_TOKEN }}
 
-      - name: Build App
+      - name: Build Android App
         working-directory: source
-        run: |
-          echo "Starting EAS build..."
-          eas build --platform all --profile preview --non-interactive
+        run: eas build --platform android --profile preview --non-interactive
 
-      - name: Submit to Google Play Store (Android)
+      - name: Submit to Google Play
         working-directory: source
         env:
           EAS_NO_VCS: 1
@@ -131,3 +114,34 @@ jobs:
         run: |
           echo "$GOOGLE_SERVICE_ACCOUNT_JSON" > service-account.json
           eas submit --platform android --profile internal --non-interactive --key service-account.json
+
+  deploy_ios:
+    name: Build iOS App
+    needs: detect_deployment_type
+    runs-on: ubuntu-latest
+    if: needs.detect_deployment_type.outputs.deployment_type == 'build'
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+          cache: yarn
+          cache-dependency-path: source/yarn.lock
+
+      - name: Install dependencies
+        working-directory: source
+        run: yarn install --frozen-lockfile
+
+      - name: Setup Expo
+        uses: expo/expo-github-action@v8
+        with:
+          eas-version: latest
+          token: ${{ secrets.EXPO_TOKEN }}
+
+      - name: Build iOS App
+        working-directory: source
+        run: eas build --platform ios --profile testflight --non-interactive
