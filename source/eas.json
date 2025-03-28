@@ -23,6 +23,7 @@
   },
   "submit": {
     "production": {},
-    "testflight": {}
+    "testflight": {},
+    "internal": {}
   }
 }
