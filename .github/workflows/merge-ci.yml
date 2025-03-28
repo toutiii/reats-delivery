@@ -135,3 +135,13 @@ jobs:
         with:
           name: expo-qr-code
           path: qrcode.png
+
+      - name: Submit to Google Play Store (Android)
+        working-directory: source
+        env:
+          EAS_NO_VCS: 1
+          EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
+          GOOGLE_SERVICE_ACCOUNT_JSON: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_JSON }}
+        run: |
+          echo "$GOOGLE_SERVICE_ACCOUNT_JSON" > service-account.json
+          eas submit --platform android --profile internal --non-interactive --key service-account.json
