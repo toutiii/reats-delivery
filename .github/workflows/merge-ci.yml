@@ -120,34 +120,7 @@ jobs:
         working-directory: source
         run: |
           echo "Starting EAS build..."
-          eas build --platform all --profile preview --non-interactive > build_output.txt
-
-          echo "Build output:"
-          cat build_output.txt
-
-          BUILD_URL=$(grep -o 'https://expo.dev/[^[:space:]]*' build_output.txt || true)
-          echo "Extracted BUILD_URL: $BUILD_URL"
-
-          if [ -z "$BUILD_URL" ]; then
-            echo "ERROR: Could not extract build URL."
-            exit 1
-          fi
-
-          echo "BUILD_URL=$BUILD_URL" >> $GITHUB_ENV
-
-      - name: Install QR Code Generator
-        run: sudo apt-get install -y qrencode
-
-      - name: Generate QR Code for Expo Go
-        run: |
-          echo "Scan this QR code to test: $BUILD_URL"
-          echo "$BUILD_URL" | qrencode -o qrcode.png
-
-      - name: Upload QR Code
-        uses: actions/upload-artifact@v4
-        with:
-          name: expo-qr-code
-          path: qrcode.png
+          eas build --platform all --profile preview --non-interactive
 
       - name: Submit to Google Play Store (Android)
         working-directory: source
