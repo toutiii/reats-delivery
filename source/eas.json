@@ -15,8 +15,10 @@
       "autoIncrement": true
     },
     "testflight": {
-      "distribution": "internal",
-      "autoIncrement": true
+      "distribution": "store",
+      "ios": {
+        "simulator": false
+      }
     }
   },
   "submit": {
