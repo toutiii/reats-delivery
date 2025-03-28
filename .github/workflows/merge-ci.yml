@@ -111,9 +111,7 @@ jobs:
           EAS_NO_VCS: 1
           EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
           GOOGLE_SERVICE_ACCOUNT_JSON: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_JSON }}
-        run: |
-          echo "$GOOGLE_SERVICE_ACCOUNT_JSON" > service-account.json
-          eas submit --platform android --profile internal --non-interactive
+        run: eas submit --platform android --profile internal --non-interactive
   deploy_ios:
     name: Build iOS App
     needs: detect_deployment_type
