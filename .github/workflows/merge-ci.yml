@@ -75,7 +75,7 @@ jobs:
         run: eas update --auto --branch main
 
   deploy_android:
-    name: Build & Submit Android
+    name: Deploy Android Build
     needs: detect_deployment_type
     runs-on: ubuntu-latest
     if: needs.detect_deployment_type.outputs.deployment_type == 'build'
@@ -83,6 +83,9 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+
+      - name: Install jq
+        run: sudo apt-get update && sudo apt-get install -y jq
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -103,18 +106,20 @@ jobs:
 
       - name: Build Android App
         working-directory: source
-        run: eas build --platform android --profile preview --non-interactive --wait
+        run: |
+          eas build --platform android --profile preview --non-interactive --json > android_build.json
+          echo "ANDROID_BUILD_ID=$(jq -r '.id' android_build.json)" >> $GITHUB_ENV
 
-      - name: Submit to Google Play
+      - name: Submit Android App to Play Store
         working-directory: source
         env:
-          EAS_NO_VCS: 1
           EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
           GOOGLE_SERVICE_ACCOUNT_JSON: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_JSON }}
-        run: eas submit --platform android --profile preview --non-interactive --latest
+        run: |
+          eas submit --platform android --profile preview --non-interactive --id $ANDROID_BUILD_ID
 
   deploy_ios:
-    name: Build iOS App
+    name: Deploy iOS Build
     needs: detect_deployment_type
     runs-on: ubuntu-latest
     if: needs.detect_deployment_type.outputs.deployment_type == 'build'
@@ -122,6 +127,9 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+
+      - name: Install jq
+        run: sudo apt-get update && sudo apt-get install -y jq
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -142,4 +150,14 @@ jobs:
 
       - name: Build iOS App
         working-directory: source
-        run: eas build --platform ios --profile testflight --non-interactive
+        run: |
+          eas build --platform ios --profile testflight --non-interactive --json > ios_build.json
+          echo "IOS_BUILD_ID=$(jq -r '.id' ios_build.json)" >> $GITHUB_ENV
+
+      - name: Submit iOS App to TestFlight
+        working-directory: source
+        env:
+          EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
+          APPLE_APP_SPECIFIC_PASSWORD: ${{ secrets.APPLE_APP_SPECIFIC_PASSWORD }}
+        run: |
+          eas submit --platform ios --profile testflight --non-interactive --id $IOS_BUILD_ID
