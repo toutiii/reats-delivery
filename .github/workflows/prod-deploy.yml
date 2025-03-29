@@ -42,8 +42,9 @@ jobs:
 
       - name: Extract iOS Build ID
         id: extract_ios_build_id
+        working-directory: source
         run: |
-          IOS_BUILD_ID=$(jq -r '.[0].id' source/ios_build.json)
+          IOS_BUILD_ID=$(jq -r '.[0].id' ios_build.json)
           echo "IOS_BUILD_ID=$IOS_BUILD_ID" >> $GITHUB_ENV
 
       - name: Submit iOS App to App Store Connect
