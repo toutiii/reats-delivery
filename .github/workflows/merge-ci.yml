@@ -108,7 +108,7 @@ jobs:
         working-directory: source
         run: |
           eas build --platform android --profile preview --non-interactive --json > android_build.json
-          echo "ANDROID_BUILD_ID=$(jq -r '.id' android_build.json)" >> $GITHUB_ENV
+          echo "ANDROID_BUILD_ID=$(jq -r '.[0].id' android_build.json)" >> $GITHUB_ENV
 
       - name: Submit Android App to Play Store
         working-directory: source
@@ -152,7 +152,7 @@ jobs:
         working-directory: source
         run: |
           eas build --platform ios --profile testflight --non-interactive --json > ios_build.json
-          echo "IOS_BUILD_ID=$(jq -r '.id' ios_build.json)" >> $GITHUB_ENV
+          echo "IOS_BUILD_ID=$(jq -r '.[0].id' ios_build.json)" >> $GITHUB_ENV
 
       - name: Submit iOS App to TestFlight
         working-directory: source
