@@ -114,9 +114,7 @@ jobs:
         working-directory: source
         env:
           EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
-          GOOGLE_SERVICE_ACCOUNT_JSON: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_JSON }}
-        run: |
-          eas submit --platform android --profile preview --non-interactive --id $ANDROID_BUILD_ID
+        run: eas submit --platform android --profile preview --non-interactive --id $ANDROID_BUILD_ID
 
   deploy_ios:
     name: Deploy iOS Build
@@ -158,6 +156,4 @@ jobs:
         working-directory: source
         env:
           EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
-          APPLE_APP_SPECIFIC_PASSWORD: ${{ secrets.APPLE_APP_SPECIFIC_PASSWORD }}
-        run: |
-          eas submit --platform ios --profile testflight --non-interactive --id $IOS_BUILD_ID
+        run: eas submit --platform ios --profile testflight --non-interactive --id $IOS_BUILD_ID
