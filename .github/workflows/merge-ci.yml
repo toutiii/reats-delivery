@@ -103,7 +103,7 @@ jobs:
 
       - name: Build Android App
         working-directory: source
-        run: eas build --platform android --profile preview --non-interactive
+        run: eas build --platform android --profile preview --non-interactive --wait
 
       - name: Submit to Google Play
         working-directory: source
