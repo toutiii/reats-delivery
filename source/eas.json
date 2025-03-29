@@ -16,7 +16,6 @@
     },
     "testflight": {
       "distribution": "store",
-      "ascAppId": "6743959127",
       "ios": {
         "simulator": false
       }
@@ -24,7 +23,9 @@
   },
   "submit": {
     "production": {},
-    "testflight": {},
+    "testflight": {
+      "ascAppId": "6743959127"
+    },
     "internal": {},
     "preview": {}
   }
