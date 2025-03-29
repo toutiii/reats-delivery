@@ -1,0 +1,55 @@
+name: Deploy to Production
+
+on:
+  push:
+    tags:
+      - 'v*'  # Triggers only on version tags like v1.0.0
+
+permissions:
+  contents: read
+
+jobs:
+  ios_production_deploy:
+    name: Deploy iOS to App Store Connect
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+          cache: yarn
+          cache-dependency-path: source/yarn.lock
+
+      - name: Install dependencies
+        working-directory: source
+        run: yarn install --frozen-lockfile
+
+      - name: Setup Expo
+        uses: expo/expo-github-action@v8
+        with:
+          eas-version: latest
+          token: ${{ secrets.EXPO_TOKEN }}
+
+      - name: Build iOS App for Production
+        working-directory: source
+        run: |
+          echo "Starting iOS production build..."
+          eas build --platform ios --profile production --non-interactive --json > ios_build.json
+
+      - name: Extract iOS Build ID
+        id: extract_ios_build_id
+        run: |
+          IOS_BUILD_ID=$(jq -r '.[0].id' source/ios_build.json)
+          echo "IOS_BUILD_ID=$IOS_BUILD_ID" >> $GITHUB_ENV
+
+      - name: Submit iOS App to App Store Connect
+        working-directory: source
+        env:
+          EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
+          IOS_BUILD_ID: ${{ steps.extract_ios_build_id.outputs.ios_build_id }}
+        run: |
+          eas submit --platform ios --profile production --non-interactive --id $IOS_BUILD_ID
