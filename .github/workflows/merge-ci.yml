@@ -78,7 +78,7 @@ jobs:
     name: Deploy Android Build
     needs: detect_deployment_type
     runs-on: ubuntu-latest
-    if: needs.detect_deployment_type.outputs.deployment_type == 'build'
+    if: false
 
     steps:
       - name: Checkout code
