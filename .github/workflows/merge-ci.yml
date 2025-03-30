@@ -47,6 +47,10 @@ jobs:
     name: Deploy OTA Update
     needs: detect_deployment_type
     runs-on: ubuntu-latest
+    env:
+      ENV: "staging"
+      EXPO_PUBLIC_STAGING_API_BASE_URL: "https://api-staging.reats.net"
+      EXPO_PUBLIC_STAGING_API_KEY: ${{ secrets.EXPO_PUBLIC_STAGING_API_KEY }}
     if: needs.detect_deployment_type.outputs.deployment_type == 'ota'
 
     steps:
@@ -78,6 +82,10 @@ jobs:
     name: Deploy Android Build
     needs: detect_deployment_type
     runs-on: ubuntu-latest
+    env:
+      ENV: "staging"
+      EXPO_PUBLIC_STAGING_API_BASE_URL: "https://api-staging.reats.net"
+      EXPO_PUBLIC_STAGING_API_KEY: ${{ secrets.EXPO_PUBLIC_STAGING_API_KEY }}
     if: false
 
     steps:
@@ -120,6 +128,10 @@ jobs:
     name: Deploy iOS Build
     needs: detect_deployment_type
     runs-on: ubuntu-latest
+    env:
+      ENV: "staging"
+      EXPO_PUBLIC_STAGING_API_BASE_URL: "https://api-staging.reats.net"
+      EXPO_PUBLIC_STAGING_API_KEY: ${{ secrets.EXPO_PUBLIC_STAGING_API_KEY }}
     if: needs.detect_deployment_type.outputs.deployment_type == 'build'
 
     steps:

@@ -11,7 +11,7 @@ import styles_order from "../styles/styles-order.js";
 import all_constants from "../constants.js";
 import Order from "../components/Order.js";
 import { getItemFromSecureStore } from "../helpers/toolbox";
-import { apiBaseUrl, port } from "../env.js";
+import { apiBaseUrl } from "../env.js";
 import { callBackEnd } from "../api/callBackend.js";
 
 export default function DeliveryHistoryFlatList({ ...props }) {
@@ -46,7 +46,7 @@ export default function DeliveryHistoryFlatList({ ...props }) {
         const access = await getItemFromSecureStore("accessToken");
         const result = await callBackEnd(
             new FormData(),
-            `${apiBaseUrl}:${port}/api/v1/delivers-history/`,
+            `${apiBaseUrl}/api/v1/delivers-history/`,
             "GET",
             access,
         );

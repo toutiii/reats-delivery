@@ -4,10 +4,6 @@
     "appVersionSource": "remote"
   },
   "build": {
-    "development": {
-      "developmentClient": true,
-      "distribution": "internal"
-    },
     "preview": {
       "distribution": "internal"
     },
@@ -29,11 +25,6 @@
       }
     },
     "testflight": {
-      "ios": {
-        "ascAppId": "6743959127"
-      }
-    },
-    "internal": {
       "ios": {
         "ascAppId": "6743959127"
       }

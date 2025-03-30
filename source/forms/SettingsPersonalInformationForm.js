@@ -8,7 +8,7 @@ import {
 } from "../validators/common_validators";
 import { checkNumericFormat } from "../validators/settingsform_validators";
 import { callBackendWithFormDataForDelivers } from "../api/callBackend";
-import { apiBaseUrl, port } from "../env";
+import { apiBaseUrl } from "../env";
 import { getDeliveryRadius } from "../helpers/toolbox";
 
 export default function SettingsPersonalInformationForm({ ...props }) {
@@ -17,7 +17,7 @@ export default function SettingsPersonalInformationForm({ ...props }) {
             <View style={{ flex: 2 }}>
                 <Form
                     action={callBackendWithFormDataForDelivers}
-                    url={`${apiBaseUrl}:${port}/api/v1/delivers/`}
+                    url={`${apiBaseUrl}/api/v1/delivers/`}
                     method={"PATCH"}
                     navigation={props.navigation}
                     refreshDataStateChanger={props.route.params.refreshDataStateChanger}

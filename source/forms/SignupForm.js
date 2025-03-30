@@ -10,7 +10,7 @@ import {
 import { checkNumericFormat } from "../validators/settingsform_validators";
 import { callBackendWithFormDataForDelivers } from "../api/callBackend";
 import CustomAlert from "../components/CustomAlert";
-import { apiBaseUrl, port } from "../env";
+import { apiBaseUrl } from "../env";
 import { getDeliveryRadius } from "../helpers/toolbox";
 
 export default function SignupForm({ ...props }) {
@@ -70,7 +70,7 @@ export default function SignupForm({ ...props }) {
                 <Form
                     action={callBackendWithFormDataForDelivers}
                     useApiKey={true}
-                    url={`${apiBaseUrl}:${port}/api/v1/delivers/`}
+                    url={`${apiBaseUrl}/api/v1/delivers/`}
                     method={"POST"}
                     navigation={props.navigation}
                     afterSubmit={handleResult}
