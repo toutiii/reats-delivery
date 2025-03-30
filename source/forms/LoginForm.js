@@ -6,7 +6,7 @@ import { checkValueIsDefined } from "../validators/common_validators";
 import { checkNumericFormat } from "../validators/settingsform_validators";
 import { callBackEndForAuthentication } from "../api/callBackend";
 import CustomAlert from "../components/CustomAlert";
-import { apiBaseUrl, port } from "../env";
+import { apiBaseUrl } from "../env";
 
 export default function LoginForm({ ...props }) {
     const [
@@ -57,7 +57,7 @@ export default function LoginForm({ ...props }) {
                 <Form
                     action={callBackEndForAuthentication}
                     useApiKey={true}
-                    url={`${apiBaseUrl}:${port}/api/v1/customers/auth/`}
+                    url={`${apiBaseUrl}/api/v1/customers/auth/`}
                     method={"POST"}
                     navigation={props.navigation}
                     afterSubmit={handleResult}

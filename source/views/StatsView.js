@@ -6,7 +6,7 @@ import { MaterialIcons } from "@expo/vector-icons";
 import all_constants from "../constants";
 import CustomAlert from "../components/CustomAlert";
 import { getItemFromSecureStore } from "../helpers/toolbox";
-import { apiBaseUrl, port } from "../env";
+import { apiBaseUrl } from "../env";
 import { callBackEnd } from "../api/callBackend";
 import CustomButton from "../components/CustomButton";
 import { ActivityIndicator, Text } from "react-native-paper";
@@ -93,7 +93,7 @@ export default function StatsView() {
 
     async function fetchStatsData() {
         const access = await getItemFromSecureStore("accessTokenForDeliveryApp");
-        const baseUrl = `${apiBaseUrl}:${port}/api/v1/delivers-stats/`;
+        const baseUrl = `${apiBaseUrl}/api/v1/delivers-stats/`;
         const url =
       baseUrl +
       `?start_date=${encodeURIComponent(originalStartDate)}` +

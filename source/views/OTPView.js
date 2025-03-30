@@ -9,7 +9,7 @@ import CustomAlert from "../components/CustomAlert";
 import { CommonActions } from "@react-navigation/native";
 import { CountdownCircleTimer } from "react-native-countdown-circle-timer";
 import * as SecureStore from "expo-secure-store";
-import { apiBaseUrl, apiKeyBackend, port } from "../env";
+import { apiBaseUrl, apiKeyBackend } from "../env";
 
 export default function OTPView({ ...props }) {
     const [
@@ -92,7 +92,7 @@ export default function OTPView({ ...props }) {
         data.append("phone", props.route.params.item.phone);
         const result = await callBackEnd(
             data,
-            `${apiBaseUrl}:${port}/api/v1/delivers/otp-verify/`,
+            `${apiBaseUrl}/api/v1/delivers/otp-verify/`,
             "POST",
             null,
             true,
@@ -127,7 +127,7 @@ export default function OTPView({ ...props }) {
         data.append("phone", props.route.params.item.phone);
         const result = await callBackEnd(
             data,
-            `${apiBaseUrl}:${port}/api/v1/token/`,
+            `${apiBaseUrl}/api/v1/token/`,
             "POST",
             null,
             true,
@@ -186,7 +186,7 @@ export default function OTPView({ ...props }) {
         await sleep(1000);
         const result = await callBackEnd(
             data,
-            `${apiBaseUrl}:${port}/api/v1/delivers/otp/ask/`,
+            `${apiBaseUrl}/api/v1/delivers/otp/ask/`,
             "POST",
             null,
             true,

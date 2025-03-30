@@ -1,4 +1,4 @@
-import { apiBaseUrl, apiKeyBackend, appOriginHeader, port } from "../env";
+import { apiBaseUrl, apiKeyBackend, appOriginHeader } from "../env";
 import { extractTownName, getItemFromSecureStore } from "../helpers/toolbox";
 import { setItemAsync } from "expo-secure-store";
 
@@ -151,7 +151,7 @@ export async function callBackEnd(
 
 export async function renewAccessToken() {
     console.log("=======================================");
-    let url = `${apiBaseUrl}:${port}/api/v1/token/refresh/`;
+    let url = `${apiBaseUrl}/api/v1/token/refresh/`;
     const refreshTokenForDeliveryApp = await getItemFromSecureStore(
         "refreshTokenForDeliveryApp",
     );
@@ -182,7 +182,7 @@ export async function renewAccessToken() {
 export async function renewTokenPair() {
     console.log("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
     console.log("Renewing token pair...");
-    let url = `${apiBaseUrl}:${port}/api/v1/token/`;
+    let url = `${apiBaseUrl}/api/v1/token/`;
 
     let formData = new FormData();
     const phoneNumber = await getItemFromSecureStore("phoneNumber");

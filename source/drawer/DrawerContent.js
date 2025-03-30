@@ -12,7 +12,7 @@ import {
 import Animated from "react-native-reanimated";
 import all_constants from "../constants";
 import { getItemFromSecureStore } from "../helpers/toolbox";
-import { apiBaseUrl, port } from "../env";
+import { apiBaseUrl } from "../env";
 import { callBackEnd } from "../api/callBackend";
 import { CommonActions } from "@react-navigation/native";
 import CustomAlert from "../components/CustomAlert";
@@ -53,7 +53,7 @@ export default function DrawerContent(props) {
         const access = await getItemFromSecureStore("accessTokenForDeliveryApp");
         const result = await callBackEnd(
             new FormData(),
-            `${apiBaseUrl}:${port}/api/v1/delivers/${userID}/`,
+            `${apiBaseUrl}/api/v1/delivers/${userID}/`,
             "GET",
             access,
         );
