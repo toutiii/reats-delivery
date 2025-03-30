@@ -43,17 +43,10 @@ jobs:
         run: |
           echo "Starting iOS production build..."
           eas build --platform ios --profile production --non-interactive --json > ios_build.json
-
-      - name: Extract iOS Build ID
-        id: extract_ios_build_id
-        working-directory: source
-        run: |
-          IOS_BUILD_ID=$(jq -r '.[0].id' ios_build.json)
-          echo "IOS_BUILD_ID=$IOS_BUILD_ID" >> $GITHUB_ENV
+          echo "IOS_BUILD_ID=$(jq -r '.[0].id' ios_build.json)" >> $GITHUB_ENV
 
       - name: Submit iOS App to App Store Connect
         working-directory: source
         env:
           EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
-          IOS_BUILD_ID: ${{ steps.extract_ios_build_id.outputs.ios_build_id }}
         run: eas submit --platform ios --profile production --non-interactive --id $IOS_BUILD_ID
