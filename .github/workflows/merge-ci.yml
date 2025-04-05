@@ -76,7 +76,7 @@ jobs:
 
       - name: Deploy OTA Update
         working-directory: source
-        run: eas update --auto --branch main
+        run: eas update --auto --branch staging
 
   deploy_android:
     name: Deploy Android Build
