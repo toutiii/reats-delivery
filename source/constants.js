@@ -3,8 +3,6 @@ import { Dimensions } from "react-native";
 
 let all_constants = {
     currency_symbol: " €",
-    win: "Gain :",
-    time: "min",
     cart: {
         button: {
             close: "FERMER",
