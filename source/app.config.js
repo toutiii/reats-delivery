@@ -49,5 +49,11 @@ export default ({ config }) => {
             appOriginHeader: process.env.EXPO_PUBLIC_APP_ORIGIN,
         },
         owner: "tout_it",
+        updates: {
+            url: "https://u.expo.dev/6df1673a-3c4d-4188-b913-b619a786ee34",
+        },
+        runtimeVersion: {
+            policy: "appVersion",
+        },
     };
 };
