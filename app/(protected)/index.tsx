@@ -20,8 +20,23 @@ import {
   FormControlLabelText,
 } from "@/components/ui/form-control";
 import { Heading } from "@/components/ui/heading";
-import { AlertCircleIcon, CheckIcon, InfoIcon } from "@/components/ui/icon";
+import {
+  AddIcon, AlertCircleIcon, CheckIcon,
+  CloseIcon,
+  GlobeIcon, Icon, InfoIcon, PlayIcon,
+  SettingsIcon
+} from "@/components/ui/icon";
 import { Input, InputField } from "@/components/ui/input";
+import { Menu, MenuItem, MenuItemLabel } from "@/components/ui/menu";
+import {
+  Modal,
+  ModalBackdrop,
+  ModalBody,
+  ModalCloseButton,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+} from "@/components/ui/modal";
 import { Text } from "@/components/ui/text";
 import { VStack } from '@/components/ui/vstack';
 import React from "react";
@@ -31,6 +46,7 @@ import { SafeAreaView } from "react-native";
 export default function HomeScreen() {
   const [isInvalid, setIsInvalid] = React.useState(false)
   const [inputValue, setInputValue] = React.useState("")
+  const [showModal, setShowModal] = React.useState(false)
 
   const handleSubmit = () => {
     if (inputValue.length < 6) {
@@ -77,7 +93,7 @@ export default function HomeScreen() {
               <FormControlLabel>
                 <FormControlLabelText>My input</FormControlLabelText>
               </FormControlLabel>
-              <Input className="my-1" size={'lg'}>
+              <Input className="my-1" size={'lg'} variant='rounded'>
                 <InputField
                   type='text'
                   placeholder="placeholder test"
@@ -101,8 +117,88 @@ export default function HomeScreen() {
               <ButtonText>Submit</ButtonText>
             </Button>
           </VStack>
-
-          <Text>Phone</Text>
+          <Center>
+            <Menu
+              placement="top"
+              offset={5}
+              disabledKeys={["Settings"]}
+              trigger={({ ...triggerProps }) => {
+                return (
+                  <Button {...triggerProps}>
+                    <ButtonText>Menu</ButtonText>
+                  </Button>
+                )
+              }}
+            >
+              <MenuItem key="Add account" textValue="Add account">
+                <Icon as={AddIcon} size="sm" className="mr-2" />
+                <MenuItemLabel size="sm">Add account</MenuItemLabel>
+              </MenuItem>
+              <MenuItem key="Community" textValue="Community">
+                <Icon as={GlobeIcon} size="sm" className="mr-2" />
+                <MenuItemLabel size="sm">Community</MenuItemLabel>
+              </MenuItem>
+              <MenuItem key="Plugins" textValue="Plugins">
+                <Icon as={PlayIcon} size="sm" className="mr-2" />
+                <MenuItemLabel size="sm">Plugins</MenuItemLabel>
+              </MenuItem>
+              <MenuItem key="Settings" textValue="Settings">
+                <Icon as={SettingsIcon} size="sm" className="mr-2" />
+                <MenuItemLabel size="sm">Settings</MenuItemLabel>
+              </MenuItem>
+            </Menu>
+          </Center>
+          <Center>
+            <Button onPress={() => setShowModal(true)}>
+              <ButtonText>Show Modal</ButtonText>
+            </Button>
+            <Modal
+              isOpen={showModal}
+              onClose={() => {
+                setShowModal(false)
+              }}
+              size="md"
+            >
+              <ModalBackdrop />
+              <ModalContent>
+                <ModalHeader>
+                  <Heading size="md" className="text-typography-950">
+                    Test modal
+                  </Heading>
+                  <ModalCloseButton>
+                    <Icon
+                      as={CloseIcon}
+                      size="md"
+                      className="stroke-background-400 group-[:hover]/modal-close-button:stroke-background-700 group-[:active]/modal-close-button:stroke-background-900 group-[:focus-visible]/modal-close-button:stroke-background-900"
+                    />
+                  </ModalCloseButton>
+                </ModalHeader>
+                <ModalBody>
+                  <Text size="sm" className="text-typography-500">
+                    Lorem ipsum dolor sit, amet consectetur adipisicing elit. Rem dolores hic voluptatibus dicta aspernatur impedit omnis quia voluptates aliquid, officiis debitis eius doloribus numquam labore odit vero est? Reiciendis, distinctio!
+                  </Text>
+                </ModalBody>
+                <ModalFooter>
+                  <Button
+                    variant="outline"
+                    action="secondary"
+                    onPress={() => {
+                      setShowModal(false)
+                    }}
+                  >
+                    <ButtonText>Cancel</ButtonText>
+                  </Button>
+                  <Button
+                    onPress={() => {
+                      setShowModal(false)
+                    }}
+                  >
+                    <ButtonText>Explore</ButtonText>
+                  </Button>
+                </ModalFooter>
+              </ModalContent>
+            </Modal>
+          </Center>
         </VStack>
       </SafeAreaView>
     </ThemedView>
