@@ -1,20 +1,20 @@
 'use client';
 import { createAlert } from '@gluestack-ui/alert';
-import { View, Text } from 'react-native';
+import { PrimitiveIcon, UIIcon } from '@gluestack-ui/icon';
+import type { VariantProps } from '@gluestack-ui/nativewind-utils';
 import { tva } from '@gluestack-ui/nativewind-utils/tva';
 import {
-  withStyleContext,
   useStyleContext,
+  withStyleContext,
 } from '@gluestack-ui/nativewind-utils/withStyleContext';
-import React from 'react';
 import { cssInterop } from 'nativewind';
-import type { VariantProps } from '@gluestack-ui/nativewind-utils';
-import { PrimitiveIcon, UIIcon } from '@gluestack-ui/icon';
+import React from 'react';
+import { Text, View } from 'react-native';
 
 const SCOPE = 'ALERT';
 
 const alertStyle = tva({
-  base: 'items-center py-3 px-4 rounded-md flex-row gap-2 border-outline-100',
+  base: 'items-center py-3 px-4 rounded-md flex-row gap-2 border-outline-100 font-body',
 
   variants: {
     action: {
@@ -242,4 +242,5 @@ Alert.displayName = 'Alert';
 AlertText.displayName = 'AlertText';
 AlertIcon.displayName = 'AlertIcon';
 
-export { Alert, AlertText, AlertIcon };
+export { Alert, AlertIcon, AlertText };
+
