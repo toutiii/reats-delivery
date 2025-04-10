@@ -1,74 +1,111 @@
-import { Image, StyleSheet, Platform } from 'react-native';
+import { ThemedView } from "@/components/ThemedView";
+import { Alert, AlertIcon, AlertText } from '@/components/ui/alert';
+import { Button, ButtonText } from "@/components/ui/button";
+import { Center } from "@/components/ui/center";
+import {
+  Checkbox,
+  CheckboxIcon,
+  CheckboxIndicator,
+  CheckboxLabel,
+} from "@/components/ui/checkbox";
+import { Divider } from "@/components/ui/divider";
+import {
+  FormControl,
+  FormControlError,
+  FormControlErrorIcon,
+  FormControlErrorText,
+  FormControlHelper,
+  FormControlHelperText,
+  FormControlLabel,
+  FormControlLabelText,
+} from "@/components/ui/form-control";
+import { Heading } from "@/components/ui/heading";
+import { AlertCircleIcon, CheckIcon, InfoIcon } from "@/components/ui/icon";
+import { Input, InputField } from "@/components/ui/input";
+import { Text } from "@/components/ui/text";
+import { VStack } from '@/components/ui/vstack';
+import React from "react";
+import { SafeAreaView } from "react-native";
 
-import { HelloWave } from '@/components/HelloWave';
-import ParallaxScrollView from '@/components/ParallaxScrollView';
-import { ThemedText } from '@/components/ThemedText';
-import { ThemedView } from '@/components/ThemedView';
 
 export default function HomeScreen() {
+  const [isInvalid, setIsInvalid] = React.useState(false)
+  const [inputValue, setInputValue] = React.useState("")
+
+  const handleSubmit = () => {
+    if (inputValue.length < 6) {
+      setIsInvalid(true)
+    } else {
+      setIsInvalid(false)
+    }
+  }
   return (
-    <ParallaxScrollView
-      headerBackgroundColor={{ light: '#A1CEDC', dark: '#1D3D47' }}
-      headerImage={
-        <Image
-          source={require('@/assets/images/partial-react-logo.png')}
-          style={styles.reactLogo}
-        />
-      }>
-      <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">Welcome!</ThemedText>
-        <HelloWave />
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 1: Try it</ThemedText>
-        <ThemedText>
-          Edit <ThemedText type="defaultSemiBold">app/(protected)/index.tsx</ThemedText> to see changes.
-          Press{' '}
-          <ThemedText type="defaultSemiBold">
-            {Platform.select({
-              ios: 'cmd + d',
-              android: 'cmd + m',
-              web: 'F12'
-            })}
-          </ThemedText>{' '}
-          to open developer tools.
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 2: Explore</ThemedText>
-        <ThemedText>
-          Tap the Explore tab to learn more about what's included in this starter app.
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 3: Get a fresh start</ThemedText>
-        <ThemedText>
-          When you're ready, run{' '}
-          <ThemedText type="defaultSemiBold">npm run reset-project</ThemedText> to get a fresh{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> directory. This will move the current{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> to{' '}
-          <ThemedText type="defaultSemiBold">app-example</ThemedText>.
-        </ThemedText>
-      </ThemedView>
-    </ParallaxScrollView>
+    <ThemedView>
+      <SafeAreaView>
+        <VStack className="px-5" space='lg'>
+          <Text>Hello</Text>
+          <Button size="md" variant="solid" action="primary">
+            <ButtonText>Hello World!</ButtonText>
+          </Button>
+          <Heading>I am a Heading</Heading>
+          <Center>
+            <Text className="font-semibold">Easy</Text>
+            <Divider className="my-0.5" />
+            <Text className="font-semibold">Difficult</Text>
+          </Center>
+
+          <Alert action='info' variant="solid">
+            <AlertIcon as={InfoIcon} />
+            <AlertText>Description of alert!</AlertText>
+          </Alert>
+
+          <Checkbox size="md" isInvalid={false} isDisabled={false} value='true'>
+            <CheckboxIndicator>
+              <CheckboxIcon as={CheckIcon} />
+            </CheckboxIndicator>
+            <CheckboxLabel>Test checkbox</CheckboxLabel>
+          </Checkbox>
+
+          <VStack className="w-full rounded-md border border-background-200 p-4">
+            <FormControl
+              isInvalid={isInvalid}
+              size="md"
+              isDisabled={false}
+              isReadOnly={false}
+              isRequired={false}
+            >
+              <FormControlLabel>
+                <FormControlLabelText>My input</FormControlLabelText>
+              </FormControlLabel>
+              <Input className="my-1" size={'lg'}>
+                <InputField
+                  type='text'
+                  placeholder="placeholder test"
+                  value={inputValue}
+                  onChangeText={(text) => setInputValue(text)}
+                />
+              </Input>
+              <FormControlHelper>
+                <FormControlHelperText>
+                  Must be atleast 6 characters.
+                </FormControlHelperText>
+              </FormControlHelper>
+              <FormControlError>
+                <FormControlErrorIcon as={AlertCircleIcon} />
+                <FormControlErrorText>
+                  Atleast 6 characters are required.
+                </FormControlErrorText>
+              </FormControlError>
+            </FormControl>
+            <Button className="w-fit self-end mt-4" size="md" onPress={handleSubmit}>
+              <ButtonText>Submit</ButtonText>
+            </Button>
+          </VStack>
+
+          <Text>Phone</Text>
+        </VStack>
+      </SafeAreaView>
+    </ThemedView>
   );
 }
 
-const styles = StyleSheet.create({
-  titleContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 8,
-  },
-  stepContainer: {
-    gap: 8,
-    marginBottom: 8,
-  },
-  reactLogo: {
-    height: 178,
-    width: 290,
-    bottom: 0,
-    left: 0,
-    position: 'absolute',
-  },
-});
