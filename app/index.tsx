@@ -5,7 +5,7 @@ import { Center } from '@/src/components/ui/center';
 import { Heading } from '@/src/components/ui/heading';
 import { Text } from '@/src/components/ui/text';
 import { VStack } from '@/src/components/ui/vstack';
-import { useNavigation } from '@react-navigation/native';
+import { router } from 'expo-router';
 import React, { useEffect } from 'react';
 import { Image, SafeAreaView } from 'react-native';
 import Animated, {
@@ -27,8 +27,6 @@ const AnimatedText = Animated.createAnimatedComponent(Text);
 const AnimatedButton = Animated.createAnimatedComponent(Button);
 
 const StartPage = () => {
-   const navigation = useNavigation();
-
    // Animation values
    const imageOpacity = useSharedValue(0);
    const imageScale = useSharedValue(0.8);
@@ -95,7 +93,7 @@ const StartPage = () => {
    };
 
    const navigateToNextScreen = () => {
-      // navigation.navigate("");
+      router.replace('/(auth)');
    };
 
    // Start animations when component mounts
