@@ -1,21 +1,26 @@
 {
-  "extends": "expo/tsconfig.base",
-  "compilerOptions": {
-    "strict": true,
-    "paths": {
-      "@/*": [
-        "./*"
-      ],
-      "tailwind.config": [
-        "./tailwind.config.js"
-      ]
-    }
-  },
-  "include": [
-    "**/*.ts",
-    "**/*.tsx",
-    ".expo/types/**/*.ts",
-    "expo-env.d.ts",
-    "nativewind-env.d.ts"
-  ]
+   "extends": "expo/tsconfig.base",
+   "compilerOptions": {
+      "strict": true,
+      "paths": {
+         "@/*": ["./*"],
+         "@components": ["./src/components/*"],
+         "@configs": ["./config"],
+         "@shared": ["./src/shared"],
+         "@services": ["./src/services"],
+         "@utils": ["./src/utils"],
+         "@store": ["./src/store/*"],
+         "@store-features": ["./src/redux/features"],
+         "@ui": ["./src/components/ui"],
+         "@common": ["./src/components/common"],
+         "tailwind.config": ["./tailwind.config.js"]
+      }
+   },
+   "include": [
+      "**/*.ts",
+      "**/*.tsx",
+      ".expo/types/**/*.ts",
+      "expo-env.d.ts",
+      "nativewind-env.d.ts"
+   ]
 }
