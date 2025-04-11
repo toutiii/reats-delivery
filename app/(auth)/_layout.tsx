@@ -12,6 +12,7 @@ export default function AuthLayout() {
             },
             title: '',
             headerShadowVisible: false,
+            headerBackTitle: ' ',
          }}
       >
          <Stack.Screen
@@ -19,18 +20,21 @@ export default function AuthLayout() {
             options={{
                title: '',
                headerShown: false,
+               headerBackTitle: ' ',
             }}
          />
          <Stack.Screen
             name="login"
             options={{
                title: 'Connexion',
+               headerBackTitle: ' ',
             }}
          />
          <Stack.Screen
             name="register"
             options={{
-               title: '',
+               title: 'Réjoins-nous',
+               headerBackTitle: ' ',
             }}
          />
       </Stack>
