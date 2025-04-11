@@ -1,14 +1,14 @@
-import { ThemedView } from "@/components/ThemedView";
-import { Alert, AlertIcon, AlertText } from '@/components/ui/alert';
-import { Button, ButtonText } from "@/components/ui/button";
-import { Center } from "@/components/ui/center";
+import { ThemedView } from "@/src/components/ThemedView";
+import { Alert, AlertIcon, AlertText } from "@/src/components/ui/alert";
+import { Button, ButtonText } from "@/src/components/ui/button";
+import { Center } from "@/src/components/ui/center";
 import {
   Checkbox,
   CheckboxIcon,
   CheckboxIndicator,
   CheckboxLabel,
-} from "@/components/ui/checkbox";
-import { Divider } from "@/components/ui/divider";
+} from "@/src/components/ui/checkbox";
+import { Divider } from "@/src/components/ui/divider";
 import {
   FormControl,
   FormControlError,
@@ -18,16 +18,21 @@ import {
   FormControlHelperText,
   FormControlLabel,
   FormControlLabelText,
-} from "@/components/ui/form-control";
-import { Heading } from "@/components/ui/heading";
+} from "@/src/components/ui/form-control";
+import { Heading } from "@/src/components/ui/heading";
 import {
-  AddIcon, AlertCircleIcon, CheckIcon,
+  AddIcon,
+  AlertCircleIcon,
+  CheckIcon,
   CloseIcon,
-  GlobeIcon, Icon, InfoIcon, PlayIcon,
-  SettingsIcon
-} from "@/components/ui/icon";
-import { Input, InputField } from "@/components/ui/input";
-import { Menu, MenuItem, MenuItemLabel } from "@/components/ui/menu";
+  GlobeIcon,
+  Icon,
+  InfoIcon,
+  PlayIcon,
+  SettingsIcon,
+} from "@/src/components/ui/icon";
+import { Input, InputField } from "@/src/components/ui/input";
+import { Menu, MenuItem, MenuItemLabel } from "@/src/components/ui/menu";
 import {
   Modal,
   ModalBackdrop,
@@ -36,29 +41,28 @@ import {
   ModalContent,
   ModalFooter,
   ModalHeader,
-} from "@/components/ui/modal";
-import { Text } from "@/components/ui/text";
-import { VStack } from '@/components/ui/vstack';
+} from "@/src/components/ui/modal";
+import { Text } from "@/src/components/ui/text";
+import { VStack } from "@/src/components/ui/vstack";
 import React from "react";
 import { SafeAreaView } from "react-native";
 
-
 export default function HomeScreen() {
-  const [isInvalid, setIsInvalid] = React.useState(false)
-  const [inputValue, setInputValue] = React.useState("")
-  const [showModal, setShowModal] = React.useState(false)
+  const [isInvalid, setIsInvalid] = React.useState(false);
+  const [inputValue, setInputValue] = React.useState("");
+  const [showModal, setShowModal] = React.useState(false);
 
   const handleSubmit = () => {
     if (inputValue.length < 6) {
-      setIsInvalid(true)
+      setIsInvalid(true);
     } else {
-      setIsInvalid(false)
+      setIsInvalid(false);
     }
-  }
+  };
   return (
     <ThemedView>
       <SafeAreaView>
-        <VStack className="px-5" space='lg'>
+        <VStack className="px-5" space="lg">
           <Text>Hello</Text>
           <Button size="md" variant="solid" action="primary">
             <ButtonText>Hello World!</ButtonText>
@@ -70,12 +74,12 @@ export default function HomeScreen() {
             <Text className="font-semibold">Difficult</Text>
           </Center>
 
-          <Alert action='info' variant="solid">
+          <Alert action="info" variant="solid">
             <AlertIcon as={InfoIcon} />
             <AlertText>Description of alert!</AlertText>
           </Alert>
 
-          <Checkbox size="md" isInvalid={false} isDisabled={false} value='true'>
+          <Checkbox size="md" isInvalid={false} isDisabled={false} value="true">
             <CheckboxIndicator>
               <CheckboxIcon as={CheckIcon} />
             </CheckboxIndicator>
@@ -93,9 +97,9 @@ export default function HomeScreen() {
               <FormControlLabel>
                 <FormControlLabelText>My input</FormControlLabelText>
               </FormControlLabel>
-              <Input className="my-1" size={'lg'} variant='rounded'>
+              <Input className="my-1" size={"lg"} variant="rounded">
                 <InputField
-                  type='text'
+                  type="text"
                   placeholder="placeholder test"
                   value={inputValue}
                   onChangeText={(text) => setInputValue(text)}
@@ -113,7 +117,11 @@ export default function HomeScreen() {
                 </FormControlErrorText>
               </FormControlError>
             </FormControl>
-            <Button className="w-fit self-end mt-4" size="md" onPress={handleSubmit}>
+            <Button
+              className="w-fit self-end mt-4"
+              size="md"
+              onPress={handleSubmit}
+            >
               <ButtonText>Submit</ButtonText>
             </Button>
           </VStack>
@@ -127,7 +135,7 @@ export default function HomeScreen() {
                   <Button {...triggerProps}>
                     <ButtonText>Menu</ButtonText>
                   </Button>
-                )
+                );
               }}
             >
               <MenuItem key="Add account" textValue="Add account">
@@ -155,7 +163,7 @@ export default function HomeScreen() {
             <Modal
               isOpen={showModal}
               onClose={() => {
-                setShowModal(false)
+                setShowModal(false);
               }}
               size="md"
             >
@@ -175,7 +183,10 @@ export default function HomeScreen() {
                 </ModalHeader>
                 <ModalBody>
                   <Text size="sm" className="text-typography-500">
-                    Lorem ipsum dolor sit, amet consectetur adipisicing elit. Rem dolores hic voluptatibus dicta aspernatur impedit omnis quia voluptates aliquid, officiis debitis eius doloribus numquam labore odit vero est? Reiciendis, distinctio!
+                    Lorem ipsum dolor sit, amet consectetur adipisicing elit.
+                    Rem dolores hic voluptatibus dicta aspernatur impedit omnis
+                    quia voluptates aliquid, officiis debitis eius doloribus
+                    numquam labore odit vero est? Reiciendis, distinctio!
                   </Text>
                 </ModalBody>
                 <ModalFooter>
@@ -183,14 +194,14 @@ export default function HomeScreen() {
                     variant="outline"
                     action="secondary"
                     onPress={() => {
-                      setShowModal(false)
+                      setShowModal(false);
                     }}
                   >
                     <ButtonText>Cancel</ButtonText>
                   </Button>
                   <Button
                     onPress={() => {
-                      setShowModal(false)
+                      setShowModal(false);
                     }}
                   >
                     <ButtonText>Explore</ButtonText>
@@ -204,4 +215,3 @@ export default function HomeScreen() {
     </ThemedView>
   );
 }
-

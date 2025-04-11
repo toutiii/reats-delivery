@@ -6,7 +6,7 @@ on:
       - main
 
 permissions:
-  contents: read  # Allows reading repo contents
+  contents: read # Allows reading repo contents
 
 jobs:
   lint:
@@ -36,7 +36,7 @@ jobs:
     name: Auto Prefix PR Title
     runs-on: ubuntu-latest
     permissions:
-      pull-requests: write  # Required to edit PR title
+      pull-requests: write # Required to edit PR title
 
     steps:
       - name: Get PR Details
@@ -70,4 +70,3 @@ jobs:
           fi
         env:
           GITHUB_TOKEN: ${{ secrets.MY_GITHUB_TOKEN }}
-

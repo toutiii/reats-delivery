@@ -6,7 +6,7 @@ on:
       - main
 
 permissions:
-  contents: write  # Needed for tagging commits if needed
+  contents: write # Needed for tagging commits if needed
 
 jobs:
   detect_deployment_type:
