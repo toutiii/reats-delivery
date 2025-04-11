@@ -18,7 +18,6 @@ import { Montserrat_800ExtraBold } from "@expo-google-fonts/montserrat/800ExtraB
 import { Montserrat_800ExtraBold_Italic } from "@expo-google-fonts/montserrat/800ExtraBold_Italic";
 import { Montserrat_900Black } from "@expo-google-fonts/montserrat/900Black";
 import { Montserrat_900Black_Italic } from "@expo-google-fonts/montserrat/900Black_Italic";
-
 import {
   DarkTheme,
   DefaultTheme,
@@ -73,6 +72,7 @@ export default function RootLayout() {
     <GluestackUIProvider mode="light">
       <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
         <Stack>
+          <Stack.Screen name="index" options={{ headerShown: false }} />
           <Stack.Screen name="(protected)" options={{ headerShown: false }} />
           <Stack.Screen name="+not-found" />
         </Stack>

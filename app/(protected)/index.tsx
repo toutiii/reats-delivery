@@ -1,4 +1,4 @@
-import { ThemedView } from "@/src/components/ThemedView";
+import { ThemedView } from "@/src/components/themed-view";
 import { Alert, AlertIcon, AlertText } from "@/src/components/ui/alert";
 import { Button, ButtonText } from "@/src/components/ui/button";
 import { Center } from "@/src/components/ui/center";
