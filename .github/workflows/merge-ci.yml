@@ -87,6 +87,7 @@ jobs:
       EXPO_PUBLIC_STAGING_API_BASE_URL: "https://api-staging.reats.net"
       EXPO_PUBLIC_STAGING_API_KEY: ${{ secrets.EXPO_PUBLIC_STAGING_API_KEY }}
       GOOGLE_SERVICE_ACCOUNT_JSON: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_JSON }}
+    if: needs.detect_deployment_type.outputs.deployment_type == 'build'
 
     steps:
       - name: Checkout code
