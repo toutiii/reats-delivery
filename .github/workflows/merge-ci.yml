@@ -86,7 +86,6 @@ jobs:
       ENV: "staging"
       EXPO_PUBLIC_STAGING_API_BASE_URL: "https://api-staging.reats.net"
       EXPO_PUBLIC_STAGING_API_KEY: ${{ secrets.EXPO_PUBLIC_STAGING_API_KEY }}
-    if: false
 
     steps:
       - name: Checkout code
@@ -118,11 +117,16 @@ jobs:
           eas build --platform android --profile preview --non-interactive --json > android_build.json
           echo "ANDROID_BUILD_ID=$(jq -r '.[0].id' android_build.json)" >> $GITHUB_ENV
 
+      - name: Write Google Service Account Key to File
+        working-directory: source
+        run: echo "${{ secrets.GOOGLE_SERVICE_ACCOUNT_JSON }}" > service-account.json
+
       - name: Submit Android App to Play Store
         working-directory: source
         env:
           EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
-        run: eas submit --platform android --profile preview --non-interactive --id $ANDROID_BUILD_ID
+        run: |
+          eas submit --platform android --profile preview --non-interactive --id $ANDROID_BUILD_ID --key service-account.json
 
   deploy_ios:
     name: Deploy iOS Build
