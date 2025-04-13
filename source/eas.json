@@ -6,6 +6,7 @@
   "build": {
     "preview": {
       "distribution": "internal",
+      "autoIncrement": true,
       "channel": "staging",
       "android": {
         "buildType": "app-bundle"
@@ -29,6 +30,9 @@
   },
   "submit": {
     "production": {
+      "android": {
+        "track": "production"
+      },
       "ios": {
         "ascAppId": "6743959127"
       }
