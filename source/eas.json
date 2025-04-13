@@ -6,11 +6,17 @@
   "build": {
     "preview": {
       "distribution": "internal",
-      "channel": "staging"
+      "channel": "staging",
+      "android": {
+        "buildType": "app-bundle"
+      }
     },
     "production": {
       "autoIncrement": true,
-      "channel": "production"
+      "channel": "production",
+      "android": {
+        "buildType": "app-bundle"
+      }
     },
     "testflight": {
       "distribution": "store",
@@ -33,6 +39,9 @@
       }
     },
     "preview": {
+      "android": {
+        "track": "alpha"
+      },
       "ios": {
         "ascAppId": "6743959127"
       }
