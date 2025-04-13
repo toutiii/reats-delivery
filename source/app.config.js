@@ -3,7 +3,7 @@ export default ({ config }) => {
         ...config,
         name: "source",
         slug: "source",
-        version: "1.0.0",
+        version: "0.1.0",
         orientation: "portrait",
         icon: "./assets/icon.png",
         userInterfaceStyle: "light",
