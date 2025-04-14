@@ -75,7 +75,11 @@ const LoginForm = () => {
          </View>
 
          {/* Login Button */}
-         <Button size="xl" className="my-2">
+         <Button
+            size="xl"
+            className="my-2"
+            onPress={() => router.push('/(auth)/otp')}
+         >
             <ButtonText size="lg">Se connecter</ButtonText>
          </Button>
 

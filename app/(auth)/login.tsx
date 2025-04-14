@@ -1,6 +1,7 @@
 import LoginForm from '@/src/components/auth/login-form';
 import { ThemedView } from '@/src/components/themed-view';
 import { Center } from '@/src/components/ui/center';
+import { StatusBar } from 'expo-status-bar';
 import React from 'react';
 import { SafeAreaView } from 'react-native';
 import Animated, { FadeIn } from 'react-native-reanimated';
@@ -8,6 +9,7 @@ import Animated, { FadeIn } from 'react-native-reanimated';
 const LoginScreen = () => {
    return (
       <ThemedView>
+         <StatusBar style="inverted" />
          <SafeAreaView className="flex-1">
             <Center className="justify-center my-10">
                <Animated.Image
