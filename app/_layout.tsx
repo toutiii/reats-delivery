@@ -29,8 +29,10 @@ import * as SplashScreen from 'expo-splash-screen';
 import { StatusBar } from 'expo-status-bar';
 import { useEffect } from 'react';
 import 'react-native-reanimated';
+import { Provider } from 'react-redux';
 
 import { useColorScheme } from '@/src/hooks/useColorScheme';
+import { store } from '@/src/store';
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
@@ -69,21 +71,26 @@ export default function RootLayout() {
    }
 
    return (
-      <GluestackUIProvider mode="light">
-         <ThemeProvider
-            value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}
-         >
-            <Stack>
-               <Stack.Screen name="index" options={{ headerShown: false }} />
-               <Stack.Screen
-                  name="(protected)"
-                  options={{ headerShown: false }}
-               />
-               <Stack.Screen name="(auth)" options={{ headerShown: false }} />
-               <Stack.Screen name="+not-found" />
-            </Stack>
-            <StatusBar style="auto" />
-         </ThemeProvider>
-      </GluestackUIProvider>
+      <Provider store={store}>
+         <GluestackUIProvider mode="light">
+            <ThemeProvider
+               value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}
+            >
+               <Stack>
+                  <Stack.Screen name="index" options={{ headerShown: false }} />
+                  <Stack.Screen
+                     name="(protected)"
+                     options={{ headerShown: false }}
+                  />
+                  <Stack.Screen
+                     name="(auth)"
+                     options={{ headerShown: false }}
+                  />
+                  <Stack.Screen name="+not-found" />
+               </Stack>
+               <StatusBar style="auto" />
+            </ThemeProvider>
+         </GluestackUIProvider>
+      </Provider>
    );
 }
