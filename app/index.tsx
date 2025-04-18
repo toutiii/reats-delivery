@@ -93,7 +93,7 @@ const StartPage = () => {
    };
 
    const navigateToNextScreen = () => {
-      router.replace('/(auth)');
+      router.push('/terms-and-conditions');
    };
 
    // Start animations when component mounts

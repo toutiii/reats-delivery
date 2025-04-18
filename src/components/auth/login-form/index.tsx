@@ -1,8 +1,6 @@
-import SocialAuthButtons from '@/src/components/auth/social-auth-buttons';
 import { Button, ButtonText } from '@/src/components/ui/button';
 import { VStack } from '@/src/components/ui/vstack';
 import { ICountry } from '@/src/shared/interface';
-import { Ionicons } from '@expo/vector-icons';
 import { router } from 'expo-router';
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
@@ -50,7 +48,7 @@ const LoginForm = () => {
          />
 
          {/* Remember Me & Forgot Password */}
-         <View className="flex-row justify-between items-center my-2">
+         {/* <View className="flex-row justify-between items-center my-2">
             <TouchableOpacity
                className="flex-row items-center"
                onPress={() => setRememberMe(!rememberMe)}
@@ -72,7 +70,7 @@ const LoginForm = () => {
                   Mot de passe oublié ?
                </Text>
             </TouchableOpacity>
-         </View>
+         </View> */}
 
          {/* Login Button */}
          <Button
@@ -89,9 +87,6 @@ const LoginForm = () => {
             <Text className="mx-4 text-gray-500">Ou</Text>
             <View className="flex-1 h-px bg-gray-300" />
          </View>
-
-         {/* Social Login Buttons */}
-         <SocialAuthButtons />
 
          {/* Register Link */}
          <View className="flex-row justify-center mt-4">

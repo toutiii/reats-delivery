@@ -1,10 +1,7 @@
-import SocialAuthButtons from '@/src/components/auth/social-auth-buttons';
 import { ThemedView } from '@/src/components/themed-view';
-import { Box } from '@/src/components/ui/box';
 import { Button, ButtonText } from '@/src/components/ui/button';
 import { Center } from '@/src/components/ui/center';
 import { HStack } from '@/src/components/ui/hstack';
-import { Text } from '@/src/components/ui/text';
 import { VStack } from '@/src/components/ui/vstack';
 import { router } from 'expo-router';
 import React, { FC, useCallback, useEffect } from 'react';
@@ -99,17 +96,17 @@ const AuthChoiceScreen: FC = () => {
                   </Animated.View>
 
                   {/* Divider */}
-                  <AnimatedHStack
+                  {/* <AnimatedHStack
                      entering={FadeInDown.delay(1000).duration(500)}
                      className="items-center my-4"
                   >
                      <Box className="flex-1 h-[1px] bg-gray-300" />
                      <Text className="mx-4 text-gray-500">Or</Text>
                      <Box className="flex-1 h-[1px] bg-gray-300" />
-                  </AnimatedHStack>
+                  </AnimatedHStack> */}
 
                   {/* Social Auth Buttons */}
-                  <SocialAuthButtons />
+                  {/* <SocialAuthButtons /> */}
                </VStack>
             </VStack>
          </SafeAreaView>

@@ -1,4 +1,3 @@
-import SocialAuthButtons from '@/src/components/auth/social-auth-buttons';
 import { Button, ButtonText } from '@/src/components/ui/button';
 import {
    FormControl,
@@ -12,7 +11,6 @@ import { AlertCircleIcon } from '@/src/components/ui/icon';
 import { Input, InputField } from '@/src/components/ui/input';
 import { VStack } from '@/src/components/ui/vstack';
 import { ICountry } from '@/src/shared/interface';
-import { Ionicons } from '@expo/vector-icons';
 import { router } from 'expo-router';
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
@@ -121,7 +119,7 @@ const RegisterForm = () => {
          />
 
          {/* Remember Me & Forgot Password */}
-         <View className="flex-row justify-between items-center my-2">
+         {/* <View className="flex-row justify-between items-center my-2">
             <TouchableOpacity
                className="flex-row items-center"
                onPress={() => setRememberMe(!rememberMe)}
@@ -139,7 +137,7 @@ const RegisterForm = () => {
             <TouchableOpacity>
                <Text className="text-base text-gray-500">Forgot password?</Text>
             </TouchableOpacity>
-         </View>
+         </View> */}
 
          {/* Register Button */}
          <Button size="xl" className="my-2">
@@ -152,9 +150,6 @@ const RegisterForm = () => {
             <Text className="mx-4 text-gray-500">Ou</Text>
             <View className="flex-1 h-px bg-gray-300" />
          </View>
-
-         {/* Social Register Buttons */}
-         <SocialAuthButtons />
 
          {/* Login Link */}
          <View className="flex-row justify-center mt-4">
