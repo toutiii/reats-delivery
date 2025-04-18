@@ -62,10 +62,9 @@ jobs:
            with:
               node-version: 18
               cache: yarn
-              cache-dependency-path: source/yarn.lock
+              cache-dependency-path: yarn.lock
 
          - name: Install dependencies
-           working-directory: source
            run: yarn install --frozen-lockfile
 
          - name: Setup Expo
@@ -75,7 +74,6 @@ jobs:
               token: ${{ secrets.EXPO_TOKEN }}
 
          - name: Deploy OTA Update
-           working-directory: source
            run: eas update --auto --branch staging
 
    deploy_android:
@@ -101,10 +99,9 @@ jobs:
            with:
               node-version: 18
               cache: yarn
-              cache-dependency-path: source/yarn.lock
+              cache-dependency-path: yarn.lock
 
          - name: Install dependencies
-           working-directory: source
            run: yarn install --frozen-lockfile
 
          - name: Setup Expo
@@ -114,13 +111,11 @@ jobs:
               token: ${{ secrets.EXPO_TOKEN }}
 
          - name: Build Android App
-           working-directory: source
            run: |
               eas build --platform android --profile preview --non-interactive --json > android_build.json
               echo "ANDROID_BUILD_ID=$(jq -r '.[0].id' android_build.json)" >> $GITHUB_ENV
 
          - name: Submit Android App to Play Store (Preview)
-           working-directory: source
            env:
               EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
               GOOGLE_SERVICE_ACCOUNT_JSON: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_JSON }}
@@ -148,10 +143,9 @@ jobs:
            with:
               node-version: 18
               cache: yarn
-              cache-dependency-path: source/yarn.lock
+              cache-dependency-path: yarn.lock
 
          - name: Install dependencies
-           working-directory: source
            run: yarn install --frozen-lockfile
 
          - name: Setup Expo
@@ -161,13 +155,11 @@ jobs:
               token: ${{ secrets.EXPO_TOKEN }}
 
          - name: Build iOS App
-           working-directory: source
            run: |
               eas build --platform ios --profile testflight --non-interactive --json > ios_build.json
               echo "IOS_BUILD_ID=$(jq -r '.[0].id' ios_build.json)" >> $GITHUB_ENV
 
          - name: Submit iOS App to TestFlight
-           working-directory: source
            env:
               EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
            run: eas submit --platform ios --profile testflight --non-interactive --id $IOS_BUILD_ID

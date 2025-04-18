@@ -49,10 +49,9 @@ jobs:
            with:
               node-version: 18
               cache: yarn
-              cache-dependency-path: source/yarn.lock
+              cache-dependency-path: yarn.lock
 
          - name: Install dependencies
-           working-directory: source
            run: yarn install --frozen-lockfile
 
          - name: Setup Expo
@@ -62,14 +61,12 @@ jobs:
               token: ${{ secrets.EXPO_TOKEN }}
 
          - name: Build iOS App for Production
-           working-directory: source
            run: |
               echo "Starting iOS production build..."
               eas build --platform ios --profile production --non-interactive --json > ios_build.json
               echo "IOS_BUILD_ID=$(jq -r '.[0].id' ios_build.json)" >> $GITHUB_ENV
 
          - name: Submit iOS App to App Store Connect
-           working-directory: source
            env:
               EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
            run: eas submit --platform ios --profile production --non-interactive --id $IOS_BUILD_ID
@@ -97,10 +94,9 @@ jobs:
            with:
               node-version: 18
               cache: yarn
-              cache-dependency-path: source/yarn.lock
+              cache-dependency-path: yarn.lock
 
          - name: Install dependencies
-           working-directory: source
            run: yarn install --frozen-lockfile
 
          - name: Setup Expo
@@ -110,13 +106,11 @@ jobs:
               token: ${{ secrets.EXPO_TOKEN }}
 
          - name: Build Android App for Production
-           working-directory: source
            run: |
               eas build --platform android --profile production --non-interactive --json > android_build.json
               echo "ANDROID_BUILD_ID=$(jq -r '.[0].id' android_build.json)" >> $GITHUB_ENV
 
          - name: Submit Android App to Play Store (Production)
-           working-directory: source
            env:
               EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
               GOOGLE_SERVICE_ACCOUNT_JSON: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_JSON }}
@@ -141,10 +135,9 @@ jobs:
            with:
               node-version: 18
               cache: yarn
-              cache-dependency-path: source/yarn.lock
+              cache-dependency-path: yarn.lock
 
          - name: Install dependencies
-           working-directory: source
            run: yarn install --frozen-lockfile
 
          - name: Setup Expo
@@ -154,5 +147,4 @@ jobs:
               token: ${{ secrets.EXPO_TOKEN }}
 
          - name: Deploy OTA Update to production channel
-           working-directory: source
            run: eas update --auto --branch production
