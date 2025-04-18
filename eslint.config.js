@@ -19,6 +19,8 @@ module.exports = [
          sourceType: 'module',
       },
       plugins: ['react'],
+      // Ajouter cette ligne pour spécifier quels fichiers analyser
+      files: ['**/*.{js,jsx,ts,tsx}'],
       rules: {
          indent: ['error', 4],
          'linebreak-style': ['error', 'unix'],
@@ -55,13 +57,15 @@ module.exports = [
          sourceType: 'script',
       },
    },
+   // Ajustez les patterns d'ignore pour ne pas ignorer tous les fichiers
    {
       ignores: [
          'node_modules/**',
          'build/**',
          'dist/**',
          'coverage/**',
-         '*.config.js',
+         // Retirez ou ajustez cette ligne si elle ignore trop de fichiers
+         // '*.config.js'
       ],
    },
 ];
