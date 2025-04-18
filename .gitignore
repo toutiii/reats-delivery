@@ -1,19 +1,38 @@
-source/node_modules/
-source/.expo*
-source/npm-debug.*
-source/*.jks
-source/*.p8
-source/*.p12
-source/*.key
-source/*.mobileprovision
-source/*.orig.*
-source/web-build/
+# Learn more https://docs.github.com/en/get-started/getting-started-with-git/ignoring-files
+
+# dependencies
+node_modules/
+
+# Expo
+.expo/
+dist/
+web-build/
+expo-env.d.ts
+
+# Native
+*.orig.*
+*.jks
+*.p8
+*.p12
+*.key
+*.mobileprovision
+
+# Metro
+.metro-health-check*
+
+# debug
+npm-debug.*
+yarn-debug.*
+yarn-error.*
 
 # macOS
-source/.DS_Store
+.DS_Store
+*.pem
 
-# Ignoring dev files
-.vscode/
-*/package-lock.json
-*/yarn-error.log
-*.expo/*
+# local env files
+.env*.local
+
+# typescript
+*.tsbuildinfo
+
+app-example

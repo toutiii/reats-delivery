@@ -1,0 +1,54 @@
+{
+   "cli": {
+      "version": ">= 15.0.12",
+      "appVersionSource": "remote"
+   },
+   "build": {
+      "preview": {
+         "distribution": "internal",
+         "autoIncrement": true,
+         "channel": "staging",
+         "android": {
+            "buildType": "app-bundle"
+         }
+      },
+      "production": {
+         "autoIncrement": true,
+         "channel": "production",
+         "android": {
+            "buildType": "app-bundle"
+         }
+      },
+      "testflight": {
+         "distribution": "store",
+         "autoIncrement": true,
+         "channel": "staging",
+         "ios": {
+            "simulator": false
+         }
+      }
+   },
+   "submit": {
+      "production": {
+         "android": {
+            "track": "production"
+         },
+         "ios": {
+            "ascAppId": "6743959127"
+         }
+      },
+      "testflight": {
+         "ios": {
+            "ascAppId": "6743959127"
+         }
+      },
+      "preview": {
+         "android": {
+            "track": "alpha"
+         },
+         "ios": {
+            "ascAppId": "6743959127"
+         }
+      }
+   }
+}
