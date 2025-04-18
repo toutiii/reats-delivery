@@ -31,15 +31,11 @@ module.exports = [
       linterOptions: {
          reportUnusedDisableDirectives: true,
       },
+      // En ESLint v9, les plugins doivent être importés directement
       plugins: {
-         react: require('eslint-plugin-react'),
-         'react-hooks': require('eslint-plugin-react-hooks'),
+         react: 'eslint-plugin-react',
+         'react-hooks': 'eslint-plugin-react-hooks',
       },
-      extends: [
-         'eslint:recommended',
-         'plugin:react/recommended',
-         'plugin:react-hooks/recommended',
-      ],
       rules: {
          indent: ['error', 4],
          'linebreak-style': ['error', 'unix'],
