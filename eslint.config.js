@@ -1,26 +1,45 @@
 module.exports = [
    {
-      env: {
-         es2021: true,
-         node: true,
+      files: ['**/*.{js,jsx,ts,tsx}'],
+      languageOptions: {
+         ecmaVersion: 'latest',
+         sourceType: 'module',
+         globals: {
+            // Pour remplacer es2021: true
+            Promise: 'readonly',
+            Map: 'readonly',
+            Set: 'readonly',
+            // Pour remplacer node: true
+            process: 'readonly',
+            module: 'writable',
+            require: 'readonly',
+            __dirname: 'readonly',
+            __filename: 'readonly',
+            console: 'readonly',
+         },
+         parserOptions: {
+            ecmaFeatures: {
+               jsx: true,
+            },
+         },
       },
       settings: {
          react: {
             version: 'detect',
          },
       },
+      linterOptions: {
+         reportUnusedDisableDirectives: true,
+      },
+      plugins: {
+         react: require('eslint-plugin-react'),
+         'react-hooks': require('eslint-plugin-react-hooks'),
+      },
       extends: [
          'eslint:recommended',
          'plugin:react/recommended',
          'plugin:react-hooks/recommended',
       ],
-      parserOptions: {
-         ecmaVersion: 'latest',
-         sourceType: 'module',
-      },
-      plugins: ['react'],
-      // Ajouter cette ligne pour spécifier quels fichiers analyser
-      files: ['**/*.{js,jsx,ts,tsx}'],
       rules: {
          indent: ['error', 4],
          'linebreak-style': ['error', 'unix'],
@@ -49,23 +68,6 @@ module.exports = [
       },
    },
    {
-      files: ['.eslintrc.{js,cjs}'],
-      env: {
-         node: true,
-      },
-      parserOptions: {
-         sourceType: 'script',
-      },
-   },
-   // Ajustez les patterns d'ignore pour ne pas ignorer tous les fichiers
-   {
-      ignores: [
-         'node_modules/**',
-         'build/**',
-         'dist/**',
-         'coverage/**',
-         // Retirez ou ajustez cette ligne si elle ignore trop de fichiers
-         // '*.config.js'
-      ],
+      ignores: ['node_modules/**', 'build/**', 'dist/**', 'coverage/**'],
    },
 ];
