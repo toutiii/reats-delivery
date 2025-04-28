@@ -27,18 +27,19 @@ export default function AuthLayout() {
             name="personal-documents"
             options={{
                title: '',
+               headerBackTitle: ' ',
+            }}
+         />
 
+         <Stack.Screen
+            name="upload-documents"
+            options={{
+               title: '',
                headerBackTitle: ' ',
             }}
          />
          {/*
-         <Stack.Screen
-            name="register"
-            options={{
-               title: 'Réjoins-nous',
-               headerBackTitle: ' ',
-            }}
-         />
+       
          <Stack.Screen
             name="otp"
             options={{

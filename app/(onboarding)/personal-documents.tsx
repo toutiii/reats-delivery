@@ -7,10 +7,8 @@ import { VStack } from '@/src/components/ui/vstack';
 import { Feather } from '@expo/vector-icons';
 import { router } from 'expo-router';
 import React, { FC } from 'react';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 const PersonalDocumentsScreen = () => {
-   const insets = useSafeAreaInsets();
    const documents = [
       { id: 'aadhar', title: 'Aadhar Card' },
       { id: 'pan', title: 'PAN Card' },
@@ -18,12 +16,7 @@ const PersonalDocumentsScreen = () => {
    ];
 
    return (
-      <ThemedView
-         className="flex-"
-         style={{
-            paddingTop: insets.top > 0 ? 0 : 16,
-         }}
-      >
+      <ThemedView className="flex-1 pt-4">
          <Box className="px-6 mb-6 mt-2">
             <Heading className="mt-4" size="2xl">
                Personal documents
@@ -40,7 +33,7 @@ const PersonalDocumentsScreen = () => {
                <DocumentItem
                   key={doc.id}
                   title={doc.title}
-                  onPress={() => router.push('/(onboarding)')}
+                  onPress={() => router.push('/(onboarding)/upload-documents')}
                />
             ))}
          </VStack>
