@@ -23,13 +23,15 @@ export default function AuthLayout() {
                headerBackTitle: ' ',
             }}
          />
-         {/* <Stack.Screen
-            name="login"
+         <Stack.Screen
+            name="personal-documents"
             options={{
-               title: 'Connexion',
+               title: '',
+
                headerBackTitle: ' ',
             }}
          />
+         {/*
          <Stack.Screen
             name="register"
             options={{

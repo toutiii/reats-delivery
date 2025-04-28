@@ -7,6 +7,7 @@ import { Text } from '@/src/components/ui/text';
 import { VStack } from '@/src/components/ui/vstack';
 import { Feather } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
+import { router } from 'expo-router';
 import React, { FC } from 'react';
 import { Pressable, View } from 'react-native';
 
@@ -81,7 +82,9 @@ const DocumentMenuItem: FC<DocumentMenuItemProps> = ({
    completed = false,
 }) => {
    return (
-      <Pressable>
+      <Pressable
+         onPress={() => router.push('/(onboarding)/personal-documents')}
+      >
          {({ pressed }) => (
             <Box
                className={`bg-white rounded-xl p-4 shadow-sm border border-gray-100
