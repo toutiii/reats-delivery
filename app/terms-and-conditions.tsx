@@ -1,205 +1,367 @@
+import React, { useEffect, useRef, useState } from 'react';
+
+import CustomBackground from '@/src/components/custom-background';
+import { ThemedView } from '@/src/components/themed-view';
+import { Box } from '@/src/components/ui/box';
+import { Button, ButtonText } from '@/src/components/ui/button';
+import { HStack } from '@/src/components/ui/hstack';
+import { Pressable } from '@/src/components/ui/pressable';
+import { Text } from '@/src/components/ui/text';
+import { VStack } from '@/src/components/ui/vstack';
 import { LinearGradient } from 'expo-linear-gradient';
-import React, { useState } from 'react';
-import {
-   Dimensions,
-   Image,
-   Platform,
-   SafeAreaView,
-   StatusBar,
-   StyleSheet,
-   Text,
-   TouchableOpacity,
-   View,
-} from 'react-native';
+import { router } from 'expo-router';
+import { StatusBar } from 'expo-status-bar';
+import { Animated, Easing, Image, View } from 'react-native';
 
-const { width, height } = Dimensions.get('window');
-
-const PartnerOnboarding = () => {
+const TermsAndConditions = () => {
    const [isChecked, setIsChecked] = useState(false);
+
+   // Animation values for dots
+   const dotAnim1 = useRef(new Animated.Value(0)).current;
+   const dotAnim2 = useRef(new Animated.Value(0)).current;
+   const dotAnim3 = useRef(new Animated.Value(0)).current;
+   const dotAnim4 = useRef(new Animated.Value(0)).current;
+   const dotAnim5 = useRef(new Animated.Value(0)).current;
+
+   useEffect(() => {
+      // Animation sequence for each dot
+      const animateDots = () => {
+         // Reset animations
+         dotAnim1.setValue(0);
+         dotAnim2.setValue(0);
+         dotAnim3.setValue(0);
+         dotAnim4.setValue(0);
+         dotAnim5.setValue(0);
+
+         // Create animation sequences with different timings and patterns
+         Animated.parallel([
+            Animated.loop(
+               Animated.sequence([
+                  Animated.timing(dotAnim1, {
+                     toValue: 1,
+                     duration: 3000,
+                     easing: Easing.inOut(Easing.sin),
+                     useNativeDriver: true,
+                  }),
+                  Animated.timing(dotAnim1, {
+                     toValue: 0,
+                     duration: 3000,
+                     easing: Easing.inOut(Easing.sin),
+                     useNativeDriver: true,
+                  }),
+               ])
+            ),
+            Animated.loop(
+               Animated.sequence([
+                  Animated.timing(dotAnim2, {
+                     toValue: 1,
+                     duration: 4000,
+                     easing: Easing.inOut(Easing.circle),
+                     useNativeDriver: true,
+                  }),
+                  Animated.timing(dotAnim2, {
+                     toValue: 0,
+                     duration: 4000,
+                     easing: Easing.inOut(Easing.circle),
+                     useNativeDriver: true,
+                  }),
+               ])
+            ),
+            Animated.loop(
+               Animated.sequence([
+                  Animated.timing(dotAnim3, {
+                     toValue: 1,
+                     duration: 5000,
+                     easing: Easing.inOut(Easing.cubic),
+                     useNativeDriver: true,
+                  }),
+                  Animated.timing(dotAnim3, {
+                     toValue: 0,
+                     duration: 5000,
+                     easing: Easing.inOut(Easing.cubic),
+                     useNativeDriver: true,
+                  }),
+               ])
+            ),
+            Animated.loop(
+               Animated.sequence([
+                  Animated.timing(dotAnim4, {
+                     toValue: 1,
+                     duration: 4500,
+                     easing: Easing.inOut(Easing.quad),
+                     useNativeDriver: true,
+                  }),
+                  Animated.timing(dotAnim4, {
+                     toValue: 0,
+                     duration: 4500,
+                     easing: Easing.inOut(Easing.quad),
+                     useNativeDriver: true,
+                  }),
+               ])
+            ),
+            Animated.loop(
+               Animated.sequence([
+                  Animated.timing(dotAnim5, {
+                     toValue: 1,
+                     duration: 3500,
+                     easing: Easing.inOut(Easing.ease),
+                     useNativeDriver: true,
+                  }),
+                  Animated.timing(dotAnim5, {
+                     toValue: 0,
+                     duration: 3500,
+                     easing: Easing.inOut(Easing.ease),
+                     useNativeDriver: true,
+                  }),
+               ])
+            ),
+         ]).start();
+      };
+
+      animateDots();
+   }, []);
+
+   // Interpolate animation values for each dot
+   const dot1Transform = {
+      transform: [
+         {
+            translateY: dotAnim1.interpolate({
+               inputRange: [0, 1],
+               outputRange: [0, -10],
+            }),
+         },
+         {
+            translateX: dotAnim1.interpolate({
+               inputRange: [0, 1],
+               outputRange: [0, 5],
+            }),
+         },
+      ],
+   };
+
+   const dot2Transform = {
+      transform: [
+         {
+            translateY: dotAnim2.interpolate({
+               inputRange: [0, 1],
+               outputRange: [0, 8],
+            }),
+         },
+         {
+            translateX: dotAnim2.interpolate({
+               inputRange: [0, 1],
+               outputRange: [0, -8],
+            }),
+         },
+      ],
+   };
+
+   const dot3Transform = {
+      transform: [
+         {
+            translateY: dotAnim3.interpolate({
+               inputRange: [0, 1],
+               outputRange: [0, -7],
+            }),
+         },
+         {
+            translateX: dotAnim3.interpolate({
+               inputRange: [0, 1],
+               outputRange: [0, -5],
+            }),
+         },
+      ],
+   };
+
+   const dot4Transform = {
+      transform: [
+         {
+            translateY: dotAnim4.interpolate({
+               inputRange: [0, 1],
+               outputRange: [0, 10],
+            }),
+         },
+         {
+            translateX: dotAnim4.interpolate({
+               inputRange: [0, 1],
+               outputRange: [0, 5],
+            }),
+         },
+      ],
+   };
+
+   const dot5Transform = {
+      transform: [
+         {
+            translateY: dotAnim5.interpolate({
+               inputRange: [0, 1],
+               outputRange: [0, 6],
+            }),
+         },
+         {
+            translateX: dotAnim5.interpolate({
+               inputRange: [0, 1],
+               outputRange: [0, -6],
+            }),
+         },
+      ],
+   };
+
+   // Animation for dot opacity
+   const dot1Opacity = dotAnim1.interpolate({
+      inputRange: [0, 0.5, 1],
+      outputRange: [0.6, 0.8, 0.6],
+   });
+
+   const dot2Opacity = dotAnim2.interpolate({
+      inputRange: [0, 0.5, 1],
+      outputRange: [0.6, 0.9, 0.6],
+   });
+
+   const dot3Opacity = dotAnim3.interpolate({
+      inputRange: [0, 0.5, 1],
+      outputRange: [0.6, 0.7, 0.6],
+   });
+
+   const dot4Opacity = dotAnim4.interpolate({
+      inputRange: [0, 0.5, 1],
+      outputRange: [0.6, 0.8, 0.6],
+   });
+
+   const dot5Opacity = dotAnim5.interpolate({
+      inputRange: [0, 0.5, 1],
+      outputRange: [0.6, 0.7, 0.6],
+   });
 
    const toggleCheckbox = () => {
       setIsChecked(!isChecked);
    };
 
    return (
-      <SafeAreaView style={styles.container}>
-         <StatusBar barStyle="dark-content" />
-         <LinearGradient
-            colors={['#FFC0B3', '#FFDED5']}
-            start={{ x: 0, y: 0 }}
-            end={{ x: 0, y: 1 }}
-            style={styles.gradient}
-         >
-            {/* Small white dots/stars - adjusted positions to match design */}
-            <View style={[styles.dot, { top: '12%', left: '26%' }]} />
-            <View style={[styles.dot, { top: '12%', right: '26%' }]} />
-            <View style={[styles.dot, { top: '20%', left: '50%' }]} />
+      <ThemedView className="flex-1">
+         <StatusBar style="dark" />
+         <View className="flex-1 bg-white pb-20">
+            <Box className="flex-1">
+               <CustomBackground>
+                  {/* Background with proper curvature */}
+                  <LinearGradient
+                     colors={['#ffd1cc', '#ffc6c0']}
+                     className="absolute top-0 left-0 right-0 bottom-0"
+                  />
 
-            {/* Main Illustration - adjusted ratio and position */}
-            <View style={styles.illustrationContainer}>
-               <Image
-                  source={require('@/src/assets/images/onboarding/delivery-illustration.png')}
-                  style={styles.illustration}
-                  resizeMode="contain"
-               />
-            </View>
-
-            {/* Content Container - adjusted spacing */}
-            <View style={styles.contentContainer}>
-               <Text style={styles.tagline}>Be a EatFit Partner</Text>
-               <Text style={styles.headline}>
-                  Get a stable monthly{'\n'}income
-               </Text>
-
-               {/* Checkbox and Terms - adjusted alignment and spacing */}
-               <View style={styles.termsContainer}>
-                  <TouchableOpacity
-                     style={styles.checkbox}
-                     onPress={toggleCheckbox}
-                     activeOpacity={0.8}
+                  {/* Animated dots in the background */}
+                  <Animated.View
+                     style={[
+                        dot1Transform,
+                        { position: 'absolute', top: 144, left: 128 },
+                     ]}
                   >
-                     {isChecked && <View style={styles.checkboxInner} />}
-                  </TouchableOpacity>
-                  <Text style={styles.termsText}>
+                     <Animated.View
+                        className="w-2 h-2 bg-white rounded-full"
+                        style={{ opacity: dot1Opacity }}
+                     />
+                  </Animated.View>
+
+                  <Animated.View
+                     style={[
+                        dot2Transform,
+                        { position: 'absolute', top: 208, left: 256 },
+                     ]}
+                  >
+                     <Animated.View
+                        className="w-2 h-2 bg-white rounded-full"
+                        style={{ opacity: dot2Opacity }}
+                     />
+                  </Animated.View>
+
+                  <Animated.View
+                     style={[
+                        dot3Transform,
+                        { position: 'absolute', top: 64, right: 64 },
+                     ]}
+                  >
+                     <Animated.View
+                        className="w-2 h-2 bg-white rounded-full"
+                        style={{ opacity: dot3Opacity }}
+                     />
+                  </Animated.View>
+
+                  <Animated.View
+                     style={[
+                        dot4Transform,
+                        { position: 'absolute', right: 40, top: 256 },
+                     ]}
+                  >
+                     <Animated.View
+                        className="w-2 h-2 bg-white rounded-full"
+                        style={{ opacity: dot4Opacity }}
+                     />
+                  </Animated.View>
+
+                  <Animated.View
+                     style={[
+                        dot5Transform,
+                        { position: 'absolute', left: 40, top: 240 },
+                     ]}
+                  >
+                     <Animated.View
+                        className="w-2 h-2 bg-white rounded-full"
+                        style={{ opacity: dot5Opacity }}
+                     />
+                  </Animated.View>
+
+                  {/* Illustration */}
+                  <View className="justify-center items-center px-6 pt-40">
+                     <Box className="w-full aspect-square max-h-80">
+                        <Image
+                           source={require('@/src/assets/images/onboarding/delivery-illustration.png')}
+                           alt="Delivery Partner"
+                           className="w-full h-full"
+                           resizeMode="contain"
+                        />
+                     </Box>
+                  </View>
+
+                  {/* Texts */}
+                  <VStack className="px-8 pt-4 pb-6">
+                     <Text className="text-gray-800 text-lg font-semibold">
+                        Be a EatFit Partner
+                     </Text>
+                     <Text className="text-3xl font-bold text-gray-900 mt-1">
+                        Get a stable monthly income
+                     </Text>
+                  </VStack>
+               </CustomBackground>
+            </Box>
+
+            {/* Bottom Section */}
+            <Box className="px-6 py-6">
+               {/* Terms Checkbox */}
+               <HStack className="items-start mb-6" space="md">
+                  <Pressable onPress={toggleCheckbox} className="pt-1">
+                     <Box
+                        className={`h-5 w-5 border border-gray-300 rounded ${isChecked ? 'bg-white' : 'bg-white'}`}
+                     >
+                        {isChecked && (
+                           <Box className="h-3 w-3 bg-rose-400 m-auto" />
+                        )}
+                     </Box>
+                  </Pressable>
+                  <Text className="flex-1 text-gray-700">
                      By signing up I agree to the{' '}
-                     <Text style={styles.termsLink}>Terms of use</Text> and{' '}
-                     <Text style={styles.termsLink}>Privacy Policy</Text>.
+                     <Text className="text-rose-400">Terms of use</Text> and{' '}
+                     <Text className="text-rose-400">Privacy Policy</Text>.
                   </Text>
-               </View>
+               </HStack>
 
-               {/* Continue Button - adjusted color and shadow */}
-               <TouchableOpacity
-                  style={styles.continueButton}
-                  activeOpacity={0.9}
-               >
-                  <Text style={styles.continueText}>Continuer</Text>
-               </TouchableOpacity>
-            </View>
-
-            {/* Home Indicator Line */}
-            <View style={styles.homeIndicator} />
-         </LinearGradient>
-      </SafeAreaView>
+               {/* Continue Button */}
+               <Button size="lg" onPress={() => router.replace('/(auth)')}>
+                  <ButtonText className="">Continuer</ButtonText>
+               </Button>
+            </Box>
+         </View>
+      </ThemedView>
    );
 };
 
-const styles = StyleSheet.create({
-   container: {
-      flex: 1,
-      backgroundColor: '#FFC0B3', // Ensure no white flashes during loading
-   },
-   gradient: {
-      flex: 1,
-      alignItems: 'center',
-      justifyContent: 'space-between',
-      paddingTop: Platform.OS === 'ios' ? 0 : 20,
-   },
-   dot: {
-      position: 'absolute',
-      width: 5,
-      height: 5,
-      borderRadius: 2.5,
-      backgroundColor: 'white',
-      opacity: 0.8,
-   },
-   illustrationContainer: {
-      width: width * 0.85,
-      height: height * 0.45,
-      marginTop: height * 0.05,
-      alignItems: 'center',
-      justifyContent: 'center',
-   },
-   illustration: {
-      width: '100%',
-      height: '100%',
-   },
-   contentContainer: {
-      width: '100%',
-      paddingHorizontal: 24,
-      paddingBottom: Platform.OS === 'ios' ? 20 : 40,
-      marginTop: -height * 0.08, // Pull content up closer to illustration
-   },
-   tagline: {
-      fontSize: 16,
-      color: '#333',
-      fontWeight: '500',
-      marginBottom: 8,
-      fontFamily: Platform.OS === 'ios' ? 'System' : 'sans-serif-medium',
-   },
-   headline: {
-      fontSize: 26,
-      fontWeight: 'bold',
-      color: '#000',
-      marginBottom: 32,
-      lineHeight: 34,
-      fontFamily: Platform.OS === 'ios' ? 'System' : 'sans-serif-medium',
-   },
-   termsContainer: {
-      flexDirection: 'row',
-      alignItems: 'flex-start',
-      marginBottom: 24,
-   },
-   checkbox: {
-      width: 20,
-      height: 20,
-      borderWidth: 1,
-      borderColor: '#999',
-      marginRight: 10,
-      borderRadius: 2,
-      justifyContent: 'center',
-      alignItems: 'center',
-      marginTop: 2,
-   },
-   checkboxInner: {
-      width: 12,
-      height: 12,
-      backgroundColor: '#000',
-      borderRadius: 1,
-   },
-   termsText: {
-      fontSize: 14,
-      color: '#333',
-      flex: 1,
-      lineHeight: 20,
-      fontFamily: Platform.OS === 'ios' ? 'System' : 'sans-serif',
-   },
-   termsLink: {
-      color: '#E56B52',
-      textDecorationLine: 'underline',
-   },
-   continueButton: {
-      backgroundColor: '#F47458',
-      borderRadius: 8,
-      paddingVertical: 16,
-      alignItems: 'center',
-      justifyContent: 'center',
-      width: '100%',
-      ...Platform.select({
-         ios: {
-            shadowColor: '#000',
-            shadowOffset: { width: 0, height: 2 },
-            shadowOpacity: 0.1,
-            shadowRadius: 4,
-         },
-         android: {
-            elevation: 3,
-         },
-      }),
-   },
-   continueText: {
-      color: 'white',
-      fontSize: 16,
-      fontWeight: '600',
-      fontFamily: Platform.OS === 'ios' ? 'System' : 'sans-serif-medium',
-   },
-   homeIndicator: {
-      width: 40,
-      height: 5,
-      backgroundColor: '#000',
-      borderRadius: 3,
-      opacity: 0.2,
-      marginBottom: 8,
-   },
-});
-
-export default PartnerOnboarding;
+export default TermsAndConditions;
