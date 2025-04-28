@@ -141,7 +141,12 @@ const RegisterForm = () => {
 
          {/* Register Button */}
          <Button size="xl" className="my-2">
-            <ButtonText size="lg">S'inscrire</ButtonText>
+            <ButtonText
+               size="lg"
+               onPress={() => router.replace('/(onboarding)')}
+            >
+               S'inscrire
+            </ButtonText>
          </Button>
 
          {/* Divider */}
