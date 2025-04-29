@@ -57,7 +57,12 @@ const DocumentsScreen = () => {
          </View>
 
          <Box className="px-6 mt-12">
-            <Button size="xl">
+            <Button
+               size="xl"
+               onPress={() =>
+                  router.push('/(onboarding)/information-verification')
+               }
+            >
                <ButtonText className="text-lg font-medium">Submit</ButtonText>
             </Button>
          </Box>

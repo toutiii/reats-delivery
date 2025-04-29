@@ -38,15 +38,15 @@ export default function AuthLayout() {
                headerBackTitle: ' ',
             }}
          />
-         {/*
-       
+
          <Stack.Screen
-            name="otp"
+            name="information-verification"
             options={{
-               title: 'Verify OTP',
+               title: '',
+               headerShown: false,
                headerBackTitle: ' ',
             }}
-         /> */}
+         />
       </Stack>
    );
 }
