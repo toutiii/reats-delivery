@@ -29,6 +29,7 @@ type FormInputControlPhoneProps<T extends FieldValues> = {
    country: ICountry;
    placeholder: string;
    isRequired: boolean;
+   isDisabled?: boolean;
    setCountry: React.Dispatch<React.SetStateAction<ICountry>>;
 };
 
@@ -43,6 +44,7 @@ export const FormInputControlPhone = <T extends FieldValues>({
    country,
    placeholder,
    isRequired,
+   isDisabled,
    setCountry,
 }: FormInputControlPhoneProps<T>) => {
    const [showActionsheet, setShowActionsheet] = useState(false);
@@ -63,6 +65,7 @@ export const FormInputControlPhone = <T extends FieldValues>({
             <Controller
                control={control}
                name={name}
+               disabled={isDisabled}
                render={({
                   field: { onChange, onBlur },
                }: {
