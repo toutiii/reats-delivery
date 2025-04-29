@@ -5,7 +5,7 @@ import { Text } from '@/src/components/ui/text';
 import { VStack } from '@/src/components/ui/vstack';
 import { Feather } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
-import { router } from 'expo-router';
+import { Link, router } from 'expo-router';
 import React, { FC } from 'react';
 import { Pressable, ScrollView, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -132,13 +132,15 @@ const InformationVerificationScreen: FC = () => {
 
                {/* Help Section */}
                <View className="items-center mt-8 mb-4">
-                  <Text className="text-base text-gray-700">
+                  <Text>
                      Need Help?{' '}
                      <Text className="text-rose-500 font-medium">
                         Contact Us
                      </Text>
                   </Text>
                </View>
+
+               <Link href={'/(protected)'}>Dashboard</Link>
             </VStack>
          </ScrollView>
       </ThemedView>
