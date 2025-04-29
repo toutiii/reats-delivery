@@ -38,11 +38,11 @@ const RegisterForm = () => {
    } = useForm({
       resolver: yupResolver(registerValidationSchema),
       defaultValues: {
-         firstName: '',
-         lastName: '',
-         siret: '',
-         city: '',
-         phone: '',
+         firstName: 'Dave',
+         lastName: 'Glad',
+         siret: '00000000000000',
+         city: 'Paris',
+         phone: '0753790506',
       },
    });
 
