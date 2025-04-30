@@ -19,6 +19,7 @@ import { Controller, useForm } from 'react-hook-form';
 import { TouchableOpacity, View } from 'react-native';
 import { FormInputControlPhone } from '../../common/form-input-control-phone';
 import { Alert, AlertIcon, AlertText } from '../../ui/alert';
+import InputMultiSelectCity, { City } from '../../ui/input-auto-complete';
 import { Text } from '../../ui/text';
 
 const RegisterForm = () => {
@@ -29,6 +30,12 @@ const RegisterForm = () => {
       value: 'France',
    });
    const [error, setError] = useState<string>('');
+   const [selectedCity, setSelectedCity] = useState<City | null>(null);
+
+   const handleCitySelected = (city: City) => {
+      setSelectedCity(city);
+      console.log('Ville sélectionnée dans le composant parent:', city);
+   };
 
    const {
       control,
@@ -228,6 +235,11 @@ const RegisterForm = () => {
             textInfo="Format: +33 X XX XX XX XX"
             isRequired={true}
             isDisabled={isSubmitting}
+         />
+
+         <InputMultiSelectCity
+            placeholder="Rechercher une commune..."
+            helperText="Ex: Paris, Lyon, Marseille, etc."
          />
 
          {error && (
