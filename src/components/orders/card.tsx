@@ -1,4 +1,5 @@
 import { Feather } from '@expo/vector-icons';
+import { router } from 'expo-router';
 import React, { useEffect, useRef, useState } from 'react';
 import {
    Animated,
@@ -196,6 +197,8 @@ export const Card: React.FC<CardProps> = ({ order, onViewDetails }) => {
       ]).start(() => {
          onViewDetails(order);
       });
+
+      router.push('/(protected)/order-details/1');
    };
 
    // Styles dynamiques

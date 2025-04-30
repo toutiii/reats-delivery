@@ -45,6 +45,13 @@ export default function TabLayout() {
                ),
             }}
          />
+         <Tabs.Screen
+            name="order-details/[id]"
+            options={{
+               title: 'Order Details',
+               href: null,
+            }}
+         />
       </Tabs>
    );
 }

@@ -1,6 +1,6 @@
 import { Feather } from '@expo/vector-icons';
 import React from 'react';
-import { SafeAreaView, ScrollView, TouchableOpacity, View } from 'react-native';
+import { ScrollView, TouchableOpacity, View } from 'react-native';
 import { OrderStatus } from '../orders/order-status';
 import { TimeLeft } from '../orders/time-left';
 import { Text } from '../ui/text';
@@ -16,34 +16,16 @@ export const OrderDetails: React.FC<OrderDetailScreenProps> = ({
 }) => {
    if (!order.customer || !order.pickup) {
       return (
-         <SafeAreaView className="flex-1 bg-gray-50">
-            <View className="bg-white px-4 py-4 flex-row items-center border-b border-gray-100">
-               <TouchableOpacity onPress={onBack} className="mr-3">
-                  <Feather name="arrow-left" size={22} color="#374151" />
-               </TouchableOpacity>
-               <Text className="text-lg font-medium text-gray-800">
-                  Order Details
-               </Text>
-            </View>
+         <View>
             <View className="p-5">
                <Text>Informations de commande incomplètes</Text>
             </View>
-         </SafeAreaView>
+         </View>
       );
    }
 
    return (
-      <SafeAreaView className="flex-1 bg-gray-50">
-         {/* Header avec bouton retour */}
-         <View className="bg-white px-4 py-4 flex-row items-center border-b border-gray-100">
-            <TouchableOpacity onPress={onBack} className="mr-3">
-               <Feather name="arrow-left" size={22} color="#374151" />
-            </TouchableOpacity>
-            <Text className="text-lg font-medium text-gray-800">
-               Order Details
-            </Text>
-         </View>
-
+      <>
          <ScrollView className="flex-1">
             {/* En-tête de commande */}
             <View className="bg-white px-5 py-4 border-b border-gray-100">
@@ -127,6 +109,6 @@ export const OrderDetails: React.FC<OrderDetailScreenProps> = ({
          <View className="items-center py-3">
             <View className="w-12 h-1 bg-gray-300 rounded-full"></View>
          </View>
-      </SafeAreaView>
+      </>
    );
 };
