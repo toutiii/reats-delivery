@@ -29,276 +29,278 @@ interface CardProps {
 export const Card: React.FC<CardProps> = ({ order, onViewDetails }) => {
    const [isExpanded, setIsExpanded] = useState<boolean>(false);
 
-   // Native animations (useNativeDriver: true)
-   const scaleAnim = useRef(new Animated.Value(1)).current;
-   const buttonScaleAnim = useRef(new Animated.Value(1)).current;
-   const iconAnim = useRef(new Animated.Value(0)).current;
-   const shakeAnim = useRef(new Animated.Value(0)).current;
-   const contentItemOpacity = useRef(new Animated.Value(0)).current;
-   const contentItemTranslateY = useRef(new Animated.Value(15)).current;
+   // Animations
+   const cardScale = useRef(new Animated.Value(0.98)).current;
+   const fadeAnim = useRef(new Animated.Value(0)).current;
+   const slideAnim = useRef(new Animated.Value(10)).current;
+   const rotateAnim = useRef(new Animated.Value(0)).current;
+   const viewButtonScale = useRef(new Animated.Value(1)).current;
+   const expandButtonScale = useRef(new Animated.Value(1)).current;
 
    // Animation d'entrée au montage du composant
    useEffect(() => {
-      Animated.sequence([
-         Animated.timing(scaleAnim, {
-            toValue: 1.03,
-            duration: 200,
-            useNativeDriver: true,
-            easing: Easing.out(Easing.back(1.5)),
-         }),
-         Animated.timing(scaleAnim, {
-            toValue: 1,
-            duration: 150,
-            useNativeDriver: true,
-         }),
-      ]).start();
+      Animated.spring(cardScale, {
+         toValue: 1,
+         useNativeDriver: true,
+         friction: 8,
+         tension: 40,
+         velocity: 3,
+      }).start();
    }, []);
 
-   // Animation pour indicateur de statut
-   useEffect(() => {
-      if (order.status === 'Delivered') {
-         pulseAnimation();
-      }
-   }, [order.status]);
-
-   const pulseAnimation = () => {
-      Animated.loop(
-         Animated.sequence([
-            Animated.timing(buttonScaleAnim, {
-               toValue: 1.08,
-               duration: 800,
-               useNativeDriver: true,
-               easing: Easing.out(Easing.ease),
-            }),
-            Animated.timing(buttonScaleAnim, {
-               toValue: 1,
-               duration: 800,
-               useNativeDriver: true,
-               easing: Easing.in(Easing.ease),
-            }),
-         ]),
-         { iterations: 3 }
-      ).start();
+   // Configuration de l'animation d'expansion/réduction
+   const configureLayoutAnimation = () => {
+      LayoutAnimation.configureNext({
+         duration: 300,
+         update: {
+            type: LayoutAnimation.Types.spring,
+            springDamping: 0.85,
+         },
+      });
    };
 
-   // Animation de secousse pour attirer l'attention
-   const triggerShakeAnimation = () => {
-      shakeAnim.setValue(0);
+   const toggleExpand = () => {
+      // Animation de feedback pour le bouton
       Animated.sequence([
-         Animated.timing(shakeAnim, {
-            toValue: 10,
+         Animated.timing(expandButtonScale, {
+            toValue: 0.95,
             duration: 100,
             useNativeDriver: true,
-            easing: Easing.linear,
          }),
-         Animated.timing(shakeAnim, {
-            toValue: -10,
-            duration: 100,
+         Animated.timing(expandButtonScale, {
+            toValue: 1,
+            duration: 200,
             useNativeDriver: true,
-            easing: Easing.linear,
-         }),
-         Animated.timing(shakeAnim, {
-            toValue: 10,
-            duration: 100,
-            useNativeDriver: true,
-            easing: Easing.linear,
-         }),
-         Animated.timing(shakeAnim, {
-            toValue: 0,
-            duration: 100,
-            useNativeDriver: true,
-            easing: Easing.linear,
+            easing: Easing.out(Easing.back(2)),
          }),
       ]).start();
-   };
 
-   const toggleExpand = (): void => {
-      // Animation de l'icône de chevron
-      Animated.timing(iconAnim, {
+      configureLayoutAnimation();
+
+      // Rotation du chevron
+      Animated.timing(rotateAnim, {
          toValue: isExpanded ? 0 : 1,
          duration: 300,
          useNativeDriver: true,
-         easing: Easing.bezier(0.25, 1, 0.5, 1),
+         easing: Easing.bezier(0.25, 0.1, 0.25, 1),
       }).start();
 
-      // Animation d'opacité et de translation du contenu
+      // Gestion des animations de contenu
       if (!isExpanded) {
-         // Réinitialiser au début du déploiement
-         contentItemOpacity.setValue(0);
-         contentItemTranslateY.setValue(15);
+         // Réinitialisation des valeurs d'animation avant l'expansion
+         fadeAnim.setValue(0);
+         slideAnim.setValue(10);
 
-         // Animer l'entrée du contenu
+         // Animation d'entrée du contenu
          Animated.parallel([
-            Animated.timing(contentItemOpacity, {
+            Animated.timing(fadeAnim, {
                toValue: 1,
-               duration: 300,
+               duration: 400,
                useNativeDriver: true,
-               easing: Easing.in(Easing.quad),
+               easing: Easing.out(Easing.quad),
             }),
-            Animated.timing(contentItemTranslateY, {
+            Animated.timing(slideAnim, {
                toValue: 0,
-               duration: 300,
+               duration: 350,
                useNativeDriver: true,
-               easing: Easing.in(Easing.quad),
+               easing: Easing.out(Easing.quad),
             }),
          ]).start();
-      }
-
-      // Utiliser LayoutAnimation pour la hauteur
-      LayoutAnimation.configureNext({
-         duration: 350,
-         update: {
-            type: LayoutAnimation.Types.easeInEaseOut,
-            property: LayoutAnimation.Properties.scaleXY,
-         },
-      });
-
-      // Effet de rebond pour le bouton de détails
-      if (!isExpanded) {
-         setTimeout(() => {
-            Animated.sequence([
-               Animated.timing(buttonScaleAnim, {
-                  toValue: 1.1,
-                  duration: 150,
-                  useNativeDriver: true,
-                  easing: Easing.out(Easing.back(2)),
-               }),
-               Animated.timing(buttonScaleAnim, {
-                  toValue: 1,
-                  duration: 100,
-                  useNativeDriver: true,
-               }),
-            ]).start();
-         }, 250);
       }
 
       setIsExpanded(!isExpanded);
    };
 
-   // Effets d'animation au clic sur le bouton de détails
    const handleViewDetails = () => {
+      // Animation du bouton lors d'un appui
       Animated.sequence([
-         Animated.timing(buttonScaleAnim, {
-            toValue: 0.9,
+         Animated.timing(viewButtonScale, {
+            toValue: 0.95,
             duration: 100,
             useNativeDriver: true,
          }),
-         Animated.timing(buttonScaleAnim, {
+         Animated.timing(viewButtonScale, {
             toValue: 1.05,
-            duration: 100,
+            duration: 150,
             useNativeDriver: true,
             easing: Easing.out(Easing.back(2)),
          }),
-         Animated.timing(buttonScaleAnim, {
+         Animated.timing(viewButtonScale, {
             toValue: 1,
             duration: 100,
             useNativeDriver: true,
          }),
       ]).start(() => {
          onViewDetails(order);
+         router.push('/(protected)/order-details/1');
       });
-
-      router.push('/(protected)/order-details/1');
    };
 
-   // Styles dynamiques
-   const iconRotation = iconAnim.interpolate({
+   // Interpolation de la rotation de l'icône selon l'état d'expansion
+   const iconRotation = rotateAnim.interpolate({
       inputRange: [0, 1],
       outputRange: ['0deg', '180deg'],
    });
 
-   const cardStyle = {
-      transform: [{ scale: scaleAnim }, { translateX: shakeAnim }],
-   };
-
-   const buttonScale = {
-      transform: [{ scale: buttonScaleAnim }],
-   };
-
-   // Effet d'entrée pour les éléments du contenu
-   const contentItemStyle = {
-      opacity: contentItemOpacity,
-      transform: [{ translateY: contentItemTranslateY }],
-   };
-
    return (
-      <Animated.View style={[cardStyle]} className="mb-3">
-         {/* Header toujours visible avec effet 3D subtil */}
-         <TouchableOpacity
-            onPress={() => {
-               toggleExpand();
-               if (!isExpanded) triggerShakeAnimation();
-            }}
-            activeOpacity={0.7}
-            className={`bg-white px-5 py-4 ${isExpanded ? 'rounded-t-xl shadow-[0_2px_8px_rgba(0,0,0,0.08)]' : 'rounded-xl shadow-[0_2px_5px_rgba(0,0,0,0.05)]'}`}
-            accessibilityRole="button"
-            accessibilityLabel={`Order ${order.id}, ${order.status}. Tap to ${isExpanded ? 'collapse' : 'expand'}.`}
-         >
-            <View className="flex-row justify-between items-center">
-               <View>
-                  <Text className="text-gray-800 font-medium text-base">
-                     Order No.
-                  </Text>
-                  <Text className="text-gray-800 font-medium text-base">
-                     #{order.id}
-                  </Text>
-               </View>
-
-               <View className="flex-row items-center">
-                  <Animated.View
-                     style={order.status === 'Delivered' ? buttonScale : null}
-                  >
-                     <OrderStatus status={order.status} />
-                  </Animated.View>
-                  <Animated.View
-                     style={{
-                        marginLeft: 8,
-                        transform: [{ rotate: iconRotation }],
-                     }}
-                  >
-                     <Feather name="chevron-down" size={20} color="#666" />
-                  </Animated.View>
-               </View>
-            </View>
-         </TouchableOpacity>
-
-         {/* Contenu avec animations d'entrée */}
-         {isExpanded && (
-            <View className="bg-white rounded-b-xl px-5 pt-1 pb-4 shadow-[0_2px_8px_rgba(0,0,0,0.05)]">
-               {order.type && (
-                  <Animated.View
-                     style={contentItemStyle}
-                     className="flex-row mb-3"
-                  >
-                     <Text className="text-gray-800 font-medium">
-                        {order.type} | {order.time}
-                     </Text>
-                  </Animated.View>
-               )}
-
-               {order.customer && (
-                  <Animated.View
-                     style={contentItemStyle}
-                     className="flex-row items-center mb-4"
-                  >
-                     <View className="w-6 h-6 mr-3 flex-row justify-center items-center">
-                        <Feather name="user" size={18} color="#f87171" />
+      <Animated.View
+         style={{ transform: [{ scale: cardScale }] }}
+         className="mb-4"
+         accessibilityLabel={`Carte de commande ${order.id}`}
+         accessibilityState={{ expanded: isExpanded }}
+      >
+         <View className={`bg-white rounded-xl overflow-hidden shadow-sm`}>
+            <View className="px-4 pt-4 pb-4">
+               <View className="flex-row justify-between items-center">
+                  {/* Numéro de commande */}
+                  <View className="flex-row items-center flex-1">
+                     <View className="w-10 h-10 bg-gray-50 rounded-full mr-3 items-center justify-center">
+                        <Text className="text-gray-600 font-bold">
+                           {order.id}
+                        </Text>
                      </View>
-                     <Text className="text-gray-800 font-medium">
-                        {order.customer.name}
-                     </Text>
-                  </Animated.View>
-               )}
+                     <View>
+                        <Text className="text-gray-400 text-xs mb-0.5">
+                           Commande N°
+                        </Text>
+                        <Text className="text-gray-800 font-semibold">
+                           #{order.id}
+                        </Text>
+                     </View>
+                  </View>
 
-               <Animated.View style={contentItemStyle}>
-                  <Button onPress={handleViewDetails}>
-                     <Animated.View style={buttonScale}>
-                        <ButtonText>View Details</ButtonText>
+                  {/* Statut */}
+                  <View className="flex-row items-center">
+                     <OrderStatus status={order.status} />
+
+                     {/* Bouton de détails - toujours visible */}
+                     <Animated.View
+                        style={[{ transform: [{ scale: viewButtonScale }] }]}
+                     >
+                        <TouchableOpacity
+                           onPress={handleViewDetails}
+                           className="ml-3 p-2 bg-blue-50 rounded-full"
+                           accessibilityRole="button"
+                           accessibilityLabel="Voir les détails de la commande"
+                           accessibilityHint="Ouvre la page complète des détails de la commande"
+                        >
+                           <Feather name="eye" size={18} color="#3b82f6" />
+                        </TouchableOpacity>
                      </Animated.View>
-                  </Button>
-               </Animated.View>
+                  </View>
+               </View>
+
+               <View className="flex-row flex-wrap mt-3">
+                  {order.type && (
+                     <View className="mr-3 mb-1 py-1 px-2 bg-gray-50 rounded-md">
+                        <Text className="text-xs text-gray-600">
+                           {order.type}
+                        </Text>
+                     </View>
+                  )}
+                  {order.time && (
+                     <View className="mr-3 mb-1 py-1 px-2 bg-gray-50 rounded-md">
+                        <Text className="text-xs text-gray-600">
+                           {order.time}
+                        </Text>
+                     </View>
+                  )}
+               </View>
+
+               {/* Bouton Développer/Réduire */}
+               <View className="mt-3">
+                  <Animated.View
+                     style={{ transform: [{ scale: expandButtonScale }] }}
+                  >
+                     <Button
+                        onPress={toggleExpand}
+                        accessibilityRole="button"
+                        accessibilityLabel={
+                           isExpanded
+                              ? 'Masquer les détails'
+                              : 'Afficher les détails'
+                        }
+                        accessibilityHint={
+                           isExpanded
+                              ? 'Masque les informations supplémentaires de la commande'
+                              : 'Affiche les informations supplémentaires de la commande'
+                        }
+                        variant="outline"
+                     >
+                        <ButtonText className="text-sm font-medium mr-1">
+                           {isExpanded ? 'Masquer détails' : 'Afficher détails'}
+                        </ButtonText>
+                        <Animated.View
+                           style={{
+                              transform: [{ rotate: iconRotation }],
+                           }}
+                        >
+                           <Feather
+                              name="chevron-down"
+                              size={18}
+                              color="#FF6347"
+                           />
+                        </Animated.View>
+                     </Button>
+                  </Animated.View>
+               </View>
             </View>
-         )}
+
+            {isExpanded && (
+               <View>
+                  <View className="h-px bg-gray-100" />
+                  <View className="p-4">
+                     <Animated.View
+                        style={{
+                           opacity: fadeAnim,
+                           transform: [{ translateY: slideAnim }],
+                        }}
+                        className="mb-4"
+                     >
+                        {order.customer && (
+                           <View className="flex-row items-center mb-4">
+                              <View className="w-8 h-8 bg-red-50 rounded-full mr-3 items-center justify-center">
+                                 <Feather
+                                    name="user"
+                                    size={16}
+                                    color="#f87171"
+                                 />
+                              </View>
+                              <View>
+                                 <Text className="text-xs text-gray-500 mb-0.5">
+                                    Client
+                                 </Text>
+                                 <Text className="text-gray-800 font-medium">
+                                    {order.customer.name}
+                                 </Text>
+                              </View>
+                           </View>
+                        )}
+
+                        <View className="bg-gray-50 p-3 rounded-lg">
+                           <Text className="mb-1">Adresse de livraison :</Text>
+                           <Text className="text-sm">
+                              {
+                                 '123 Rue Principale, Appartement 4B, Paris, 75001'
+                              }
+                           </Text>
+                        </View>
+                     </Animated.View>
+
+                     <Animated.View
+                        style={{
+                           opacity: fadeAnim,
+                           transform: [{ translateY: slideAnim }],
+                        }}
+                     >
+                        <Button onPress={handleViewDetails}>
+                           <ButtonText>Voir tous les détails</ButtonText>
+                        </Button>
+                     </Animated.View>
+                  </View>
+               </View>
+            )}
+         </View>
       </Animated.View>
    );
 };
