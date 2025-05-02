@@ -1,4 +1,11 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import { Feather } from '@expo/vector-icons';
+import React, {
+   useCallback,
+   useEffect,
+   useMemo,
+   useRef,
+   useState,
+} from 'react';
 import {
    ActivityIndicator,
    Animated,
@@ -17,13 +24,7 @@ import {
    FormControlLabelText,
 } from '../../ui/form-control';
 import { HStack } from '../hstack';
-import {
-   AddIcon,
-   AlertCircleIcon,
-   CheckIcon,
-   CloseIcon,
-   SearchIcon,
-} from '../icon';
+import { AddIcon, AlertCircleIcon, CloseIcon, SearchIcon } from '../icon';
 import { Input, InputField, InputIcon, InputSlot } from '../input';
 import { Text } from '../text';
 import { VStack } from '../vstack';
@@ -54,6 +55,18 @@ interface InputMultiSelectCityProps {
    selectionColor?: string;
 }
 
+// Constantes pour éviter les re-rendus
+const ANIMATION_CONFIG = {
+   duration: 200,
+   useNativeDriver: true,
+};
+
+const SPRING_CONFIG = {
+   friction: 8,
+   tension: 40,
+   useNativeDriver: true,
+};
+
 const InputMultiSelectCity: React.FC<InputMultiSelectCityProps> = ({
    onCitiesSelected,
    label = 'Recherche de villes',
@@ -62,34 +75,64 @@ const InputMultiSelectCity: React.FC<InputMultiSelectCityProps> = ({
    helperText = 'Commencez à taper pour voir des suggestions',
    maxSelections = 5,
    minSelections = 1,
-   themeColor = '#3B82F6', // Bleu par défaut
-   accentColor = '#EFF6FF',
-   selectionColor = '#10B981', // Vert pour les villes sélectionnées
+   themeColor = '#FF6347',
+   accentColor = '#fffbfa',
+   selectionColor = '#10B981',
 }) => {
+   // States
    const [inputValue, setInputValue] = useState<string>('');
    const [suggestions, setSuggestions] = useState<City[]>([]);
    const [isLoading, setIsLoading] = useState<boolean>(false);
    const [isInvalid, setIsInvalid] = useState<boolean>(false);
    const [selectedCities, setSelectedCities] = useState<City[]>([]);
-   const [isFocused, setIsFocused] = useState<boolean>(false);
    const [errorType, setErrorType] = useState<string>('');
 
    // Références pour les animations
-   const inputRef = useRef(null);
-   const suggestionOpacity = useRef(new Animated.Value(0)).current;
-   const selectionScale = useRef(new Animated.Value(1)).current;
-   const shakeAnimation = useRef(new Animated.Value(0)).current;
-   const tagAppearAnimation = useRef(new Animated.Value(0)).current;
+   const animations = useRef({
+      suggestionOpacity: new Animated.Value(0),
+      selectionScale: new Animated.Value(1),
+      shakeAnimation: new Animated.Value(0),
+      tagAppearAnimation: new Animated.Value(0),
+   }).current;
 
-   // Fonction pour éviter les erreurs avec les classes dynamiques
-   const getBorderColor = () => {
-      if (isInvalid) return '#EF4444'; // Rouge pour erreur
-      return isFocused ? themeColor : '#E5E7EB'; // Border color normal ou focus
-   };
+   // Styles mémorisés
+   const styles = useMemo(
+      () => ({
+         tagStyle: {
+            backgroundColor: accentColor,
+            borderWidth: 1,
+            borderColor: themeColor,
+         },
+         clearButtonStyle: {
+            color: themeColor,
+         },
+         addButtonStyle: {
+            color: themeColor,
+         },
+         validSelectionStyle: {
+            color: selectionColor,
+         },
+         errorIconStyle: {
+            color: '#EF4444',
+            width: 20,
+            height: 20,
+         },
+         clearIconContainerStyle: {
+            backgroundColor: themeColor,
+         },
+      }),
+      [themeColor, accentColor, selectionColor]
+   );
 
-   const getIconColor = () => {
-      return isFocused ? themeColor : '#9CA3AF'; // text-gray-400 équivalent en hex
-   };
+   // Calcul mémorisé des messages d'erreur
+   const errorMessage_i18n = useMemo(
+      () => ({
+         maxLimit: `Vous ne pouvez pas sélectionner plus de ${maxSelections} villes`,
+         minLimit: `Veuillez sélectionner au moins ${minSelections} ville${minSelections > 1 ? 's' : ''}`,
+         network: 'Erreur de connexion, veuillez réessayer',
+      }),
+      [maxSelections, minSelections]
+   );
 
    // Fonction de recherche des suggestions avec mémorisation
    const fetchSuggestions = useCallback(
@@ -111,21 +154,20 @@ const InputMultiSelectCity: React.FC<InputMultiSelectCityProps> = ({
 
             const data: City[] = await response.json();
 
-            // Filtrer les villes déjà sélectionnées
+            // Filtrer les villes déjà sélectionnées avec une Map pour optimiser les performances
+            const selectedCityCodes = new Set(
+               selectedCities.map(city => city.code)
+            );
             const filteredData = data.filter(
-               city =>
-                  !selectedCities.some(
-                     selectedCity => selectedCity.code === city.code
-                  )
+               city => !selectedCityCodes.has(city.code)
             );
 
             setSuggestions(filteredData);
 
             // Animation des suggestions
-            Animated.timing(suggestionOpacity, {
+            Animated.timing(animations.suggestionOpacity, {
                toValue: filteredData.length > 0 ? 1 : 0,
-               duration: 200,
-               useNativeDriver: true,
+               ...ANIMATION_CONFIG,
             }).start();
          } catch (error) {
             console.error('Erreur:', error);
@@ -135,7 +177,7 @@ const InputMultiSelectCity: React.FC<InputMultiSelectCityProps> = ({
             setIsLoading(false);
          }
       },
-      [selectedCities]
+      [selectedCities, animations.suggestionOpacity]
    );
 
    // Debounce pour éviter trop d'appels API
@@ -147,88 +189,102 @@ const InputMultiSelectCity: React.FC<InputMultiSelectCityProps> = ({
       return () => clearTimeout(timeoutId);
    }, [inputValue, fetchSuggestions]);
 
-   // Gestion de la sélection d'une ville
-   const handleSelectCity = (city: City): void => {
-      if (selectedCities.length >= maxSelections) {
-         setIsInvalid(true);
-         setErrorType('maxLimit');
-         startShakeAnimation();
-         return;
-      }
-
-      // Animation d'apparition des tags
-      tagAppearAnimation.setValue(0);
-
-      setSelectedCities(prev => [...prev, city]);
-      setInputValue('');
-      setSuggestions([]);
-      setIsInvalid(false);
-      setErrorType('');
-
-      // Animation d'apparition du tag
-      Animated.spring(tagAppearAnimation, {
-         toValue: 1,
-         friction: 8,
-         tension: 40,
-         useNativeDriver: true,
-      }).start();
-
-      // Callback pour le parent
-      if (onCitiesSelected) {
-         onCitiesSelected([...selectedCities, city]);
-      }
-   };
-
-   // Suppression d'une ville sélectionnée
-   const handleRemoveCity = (cityCode: string): void => {
-      const updatedCities = selectedCities.filter(
-         city => city.code !== cityCode
-      );
-      setSelectedCities(updatedCities);
-
-      // Callback pour le parent
-      if (onCitiesSelected) {
-         onCitiesSelected(updatedCities);
-      }
-
-      // Vérifier si nous sommes en dessous du minimum requis
-      if (updatedCities.length < minSelections) {
-         setIsInvalid(true);
-         setErrorType('minLimit');
-      } else {
-         setIsInvalid(false);
-         setErrorType('');
-      }
-   };
-
    // Animation de secousse pour erreur
-   const startShakeAnimation = () => {
+   const startShakeAnimation = useCallback(() => {
       Animated.sequence([
-         Animated.timing(shakeAnimation, {
+         Animated.timing(animations.shakeAnimation, {
             toValue: 10,
             duration: 100,
             useNativeDriver: true,
          }),
-         Animated.timing(shakeAnimation, {
+         Animated.timing(animations.shakeAnimation, {
             toValue: -10,
             duration: 100,
             useNativeDriver: true,
          }),
-         Animated.timing(shakeAnimation, {
+         Animated.timing(animations.shakeAnimation, {
             toValue: 10,
             duration: 100,
             useNativeDriver: true,
          }),
-         Animated.timing(shakeAnimation, {
+         Animated.timing(animations.shakeAnimation, {
             toValue: 0,
             duration: 100,
             useNativeDriver: true,
          }),
       ]).start();
-   };
+   }, [animations.shakeAnimation]);
+
+   // Gestion de la sélection d'une ville
+   const handleSelectCity = useCallback(
+      (city: City): void => {
+         if (selectedCities.length >= maxSelections) {
+            setIsInvalid(true);
+            setErrorType('maxLimit');
+            startShakeAnimation();
+            return;
+         }
+
+         // Animation d'apparition des tags
+         animations.tagAppearAnimation.setValue(0);
+
+         // Créer le nouveau tableau de villes sélectionnées
+         const updatedCities = [...selectedCities, city];
+
+         // Mettre à jour l'état avec le nouveau tableau
+         setSelectedCities(updatedCities);
+         setInputValue('');
+         setSuggestions([]);
+         setIsInvalid(false);
+         setErrorType('');
+
+         // Animation d'apparition du tag
+         Animated.spring(animations.tagAppearAnimation, {
+            toValue: 1,
+            ...SPRING_CONFIG,
+         }).start();
+
+         // Callback pour le parent avec le nouveau tableau mis à jour
+         if (onCitiesSelected) {
+            onCitiesSelected(updatedCities);
+         }
+      },
+      [
+         selectedCities,
+         maxSelections,
+         animations.tagAppearAnimation,
+         startShakeAnimation,
+         onCitiesSelected,
+      ]
+   );
+
+   // Suppression d'une ville sélectionnée
+   const handleRemoveCity = useCallback(
+      (cityCode: string): void => {
+         const updatedCities = selectedCities.filter(
+            city => city.code !== cityCode
+         );
+         setSelectedCities(updatedCities);
+
+         // Callback pour le parent
+         if (onCitiesSelected) {
+            onCitiesSelected(updatedCities);
+         }
+
+         // Vérifier si nous sommes en dessous du minimum requis
+         if (updatedCities.length < minSelections) {
+            setIsInvalid(true);
+            setErrorType('minLimit');
+         } else {
+            setIsInvalid(false);
+            setErrorType('');
+         }
+      },
+      [selectedCities, minSelections, onCitiesSelected]
+   );
 
    // Validation du formulaire
-   const validateSelection = (): boolean => {
+   const validateSelection = useCallback((): boolean => {
       if (selectedCities.length < minSelections) {
          setIsInvalid(true);
          setErrorType('minLimit');
@@ -239,12 +295,12 @@ const InputMultiSelectCity: React.FC<InputMultiSelectCityProps> = ({
       setIsInvalid(false);
       setErrorType('');
       return true;
-   };
+   }, [selectedCities.length, minSelections, startShakeAnimation]);
 
    // Reset complet du champ avec animation
-   const handleClearAll = (): void => {
+   const handleClearAll = useCallback((): void => {
       // Animation de disparition
-      Animated.timing(selectionScale, {
+      Animated.timing(animations.selectionScale, {
          toValue: 0,
          duration: 150,
          useNativeDriver: true,
@@ -256,11 +312,9 @@ const InputMultiSelectCity: React.FC<InputMultiSelectCityProps> = ({
          setSuggestions([]);
 
          // Animation de réapparition
-         Animated.spring(selectionScale, {
+         Animated.spring(animations.selectionScale, {
             toValue: 1,
-            friction: 8,
-            tension: 40,
-            useNativeDriver: true,
+            ...SPRING_CONFIG,
          }).start();
 
          // Callback pour le parent
@@ -268,28 +322,146 @@ const InputMultiSelectCity: React.FC<InputMultiSelectCityProps> = ({
             onCitiesSelected([]);
          }
       });
-   };
+   }, [animations.selectionScale, onCitiesSelected]);
+
+   // Fonction optimisée pour éviter les re-calculs dans le render
+   const handleInputChange = useCallback(
+      (text: string) => {
+         setInputValue(text);
+         if (isInvalid && errorType === 'maxLimit') {
+            setIsInvalid(false);
+            setErrorType('');
+         }
+      },
+      [isInvalid, errorType]
+   );
+
+   // Gestion du focus et blur pour l'input
+   const handleInputBlur = useCallback(() => {
+      // Valider après la perte de focus
+      if (selectedCities.length > 0) {
+         validateSelection();
+      }
+   }, [selectedCities.length, validateSelection]);
 
    // Affichage du message d'erreur en fonction du type
-   const getErrorMessage = () => {
-      switch (errorType) {
-         case 'maxLimit':
-            return `Vous ne pouvez pas sélectionner plus de ${maxSelections} villes`;
-         case 'minLimit':
-            return `Veuillez sélectionner au moins ${minSelections} ville${minSelections > 1 ? 's' : ''}`;
-         case 'network':
-            return `Erreur de connexion, veuillez réessayer`;
-         default:
-            return errorMessage;
-      }
-   };
+   const getErrorMessage = useCallback(() => {
+      return (
+         errorMessage_i18n[errorType as keyof typeof errorMessage_i18n] ||
+         errorMessage
+      );
+   }, [errorType, errorMessage_i18n, errorMessage]);
+
+   // Rendu des villes sélectionnées - mémorisé pour éviter les re-rendus inutiles
+   const renderedSelectedCities = useMemo(() => {
+      if (selectedCities.length === 0) return null;
+
+      return (
+         <View className="mb-3">
+            <ScrollView
+               horizontal
+               showsHorizontalScrollIndicator={false}
+               contentContainerStyle={{
+                  flexDirection: 'row',
+                  flexWrap: 'nowrap',
+                  gap: 8,
+                  paddingVertical: 4,
+               }}
+            >
+               {selectedCities.map(city => (
+                  <View key={city.code}>
+                     <HStack
+                        className="items-center px-3 py-2 rounded-full"
+                        style={styles.tagStyle}
+                     >
+                        <Text
+                           className="font-medium text-sm mr-1"
+                           style={styles.clearButtonStyle}
+                        >
+                           {city.nom}
+                        </Text>
+                        <TouchableOpacity
+                           onPress={() => handleRemoveCity(city.code)}
+                           className="w-5 h-5 rounded-full justify-center items-center"
+                           style={styles.clearIconContainerStyle}
+                        >
+                           <CloseIcon color="#FFFFFF" />
+                        </TouchableOpacity>
+                     </HStack>
+                  </View>
+               ))}
+            </ScrollView>
+         </View>
+      );
+   }, [selectedCities, handleRemoveCity, styles]);
+
+   // Rendu des suggestions - mémorisé pour éviter les re-rendus inutiles
+   const renderedSuggestions = useMemo(() => {
+      if (suggestions.length === 0) return null;
+
+      return (
+         <Animated.View style={{ opacity: animations.suggestionOpacity }}>
+            <VStack
+               className="w-full border border-gray-100 rounded-lg mt-2 mb-3 bg-white shadow-sm overflow-hidden"
+               style={{ elevation: 2 }}
+            >
+               {suggestions.map((city, index) => (
+                  <TouchableOpacity
+                     key={city.code}
+                     onPress={() => handleSelectCity(city)}
+                     className="w-full py-4 px-4"
+                     style={{
+                        borderBottomWidth:
+                           index < suggestions.length - 1 ? 1 : 0,
+                        borderBottomColor: '#F3F4F6',
+                        backgroundColor:
+                           index % 2 === 0 ? '#FFFFFF' : '#FAFAFA',
+                     }}
+                     activeOpacity={0.7}
+                  >
+                     <HStack className="justify-between items-center">
+                        <HStack className="items-center space-x-3">
+                           <VStack className="space-y-1">
+                              <Text className="font-medium text-gray-800">
+                                 {city.nom}
+                              </Text>
+                              <Text className="text-xs text-gray-500">
+                                 {city.departement?.code} -{' '}
+                                 {city.departement?.nom}
+                              </Text>
+                           </VStack>
+                        </HStack>
+                        <HStack className="items-center space-x-2">
+                           <Text
+                              className="text-xs font-medium"
+                              style={styles.addButtonStyle}
+                           >
+                              Ajouter
+                           </Text>
+                           <AddIcon
+                              color={themeColor}
+                              style={{ width: 20, height: 20 }}
+                           />
+                        </HStack>
+                     </HStack>
+                  </TouchableOpacity>
+               ))}
+            </VStack>
+         </Animated.View>
+      );
+   }, [
+      suggestions,
+      animations.suggestionOpacity,
+      handleSelectCity,
+      styles.addButtonStyle,
+      themeColor,
+   ]);
 
    return (
       <Animated.View
+         className="w-full max-w-md"
          style={{
-            transform: [{ translateX: shakeAnimation }],
-            width: '100%',
-            maxWidth: 480, // un peu plus large que l'original
+            transform: [{ translateX: animations.shakeAnimation }],
          }}
       >
          <FormControl isInvalid={isInvalid} size="md">
@@ -304,8 +476,8 @@ const InputMultiSelectCity: React.FC<InputMultiSelectCityProps> = ({
                   {selectedCities.length > 0 && (
                      <TouchableOpacity onPress={handleClearAll}>
                         <Text
-                           style={{ color: themeColor }}
-                           className="text-sm font-medium"
+                           className="text-sm font-medium pl-1"
+                           style={styles.clearButtonStyle}
                         >
                            Tout effacer ({selectedCities.length})
                         </Text>
@@ -315,92 +487,12 @@ const InputMultiSelectCity: React.FC<InputMultiSelectCityProps> = ({
             </FormControlLabel>
 
             {/* Affichage des villes sélectionnées */}
-            {selectedCities.length > 0 && (
-               <Animated.View
-                  style={{
-                     opacity: selectionScale,
-                     transform: [{ scale: selectionScale }],
-                     marginBottom: 12,
-                  }}
-               >
-                  <ScrollView
-                     horizontal
-                     showsHorizontalScrollIndicator={false}
-                     contentContainerStyle={{
-                        flexDirection: 'row',
-                        flexWrap: 'nowrap',
-                        gap: 8,
-                        paddingVertical: 4,
-                     }}
-                  >
-                     {selectedCities.map((city, index) => (
-                        <Animated.View
-                           key={city.code}
-                           style={{
-                              opacity:
-                                 index === selectedCities.length - 1
-                                    ? tagAppearAnimation
-                                    : 1,
-                              transform: [
-                                 {
-                                    scale:
-                                       index === selectedCities.length - 1
-                                          ? tagAppearAnimation
-                                          : 1,
-                                 },
-                              ],
-                           }}
-                        >
-                           <HStack
-                              className="items-center px-3 py-2 rounded-full"
-                              style={{
-                                 backgroundColor: accentColor,
-                                 borderWidth: 1,
-                                 borderColor: themeColor,
-                              }}
-                           >
-                              <Text
-                                 className="font-medium text-sm mr-1"
-                                 style={{ color: themeColor }}
-                              >
-                                 {city.nom}
-                              </Text>
-                              <TouchableOpacity
-                                 onPress={() => handleRemoveCity(city.code)}
-                                 style={{
-                                    width: 18,
-                                    height: 18,
-                                    borderRadius: 9,
-                                    justifyContent: 'center',
-                                    alignItems: 'center',
-                                    backgroundColor: themeColor,
-                                 }}
-                              >
-                                 <CloseIcon color="#FFFFFF" />
-                              </TouchableOpacity>
-                           </HStack>
-                        </Animated.View>
-                     ))}
-                  </ScrollView>
-               </Animated.View>
-            )}
+            {renderedSelectedCities}
 
             {/* Input de recherche */}
-            <Input
-               className="rounded-lg"
-               style={{
-                  borderWidth: 2,
-                  borderColor: getBorderColor(),
-                  backgroundColor: '#FFFFFF',
-               }}
-               size="md"
-               ref={inputRef}
-            >
+            <Input variant="rounded" size="lg">
                <InputSlot className="pl-4">
-                  <InputIcon
-                     as={SearchIcon}
-                     style={{ color: getIconColor() }}
-                  />
+                  <InputIcon as={SearchIcon} />
                </InputSlot>
                <InputField
                   type="text"
@@ -411,21 +503,9 @@ const InputMultiSelectCity: React.FC<InputMultiSelectCityProps> = ({
                   }
                   value={inputValue}
                   className="h-14 text-base font-medium px-2"
-                  onChangeText={(text: string) => {
-                     setInputValue(text);
-                     if (isInvalid && errorType === 'maxLimit') {
-                        setIsInvalid(false);
-                        setErrorType('');
-                     }
-                  }}
-                  onFocus={() => setIsFocused(true)}
-                  onBlur={() => {
-                     setIsFocused(false);
-                     // Valider après la perte de focus
-                     if (selectedCities.length > 0) {
-                        validateSelection();
-                     }
-                  }}
+                  onChangeText={handleInputChange}
+                  onFocus={() => {}}
+                  onBlur={handleInputBlur}
                />
                {inputValue !== '' && (
                   <InputSlot onPress={() => setInputValue('')} className="pr-4">
@@ -437,7 +517,7 @@ const InputMultiSelectCity: React.FC<InputMultiSelectCityProps> = ({
             {/* État de chargement */}
             {isLoading && (
                <FormControlHelper>
-                  <HStack space="xs" className="items-center my-2">
+                  <HStack className="items-center my-2 space-x-2">
                      <ActivityIndicator
                         size="small"
                         color={themeColor}
@@ -475,68 +555,14 @@ const InputMultiSelectCity: React.FC<InputMultiSelectCityProps> = ({
             )}
 
             {/* Liste des suggestions */}
-            {suggestions.length > 0 && (
-               <Animated.View style={{ opacity: suggestionOpacity }}>
-                  <VStack
-                     className="w-full border border-gray-100 rounded-lg mt-2 mb-3 bg-white overflow-hidden shadow-sm"
-                     style={{ elevation: 2 }}
-                  >
-                     {suggestions.map((city, index) => (
-                        <TouchableOpacity
-                           key={city.code}
-                           onPress={() => handleSelectCity(city)}
-                           style={{
-                              width: '100%',
-                              paddingVertical: 14,
-                              paddingHorizontal: 16,
-                              borderBottomWidth:
-                                 index < suggestions.length - 1 ? 1 : 0,
-                              borderBottomColor: '#F3F4F6', // border-gray-100
-                              backgroundColor:
-                                 index % 2 === 0 ? '#FFFFFF' : '#FAFAFA',
-                           }}
-                           activeOpacity={0.7}
-                        >
-                           <HStack className="justify-between items-center">
-                              <HStack className="items-center space-x-3">
-                                 <VStack space="xs">
-                                    <Text className="font-medium text-gray-800">
-                                       {city.nom}
-                                    </Text>
-                                    <Text className="text-xs text-gray-500">
-                                       {city.departement?.code} -{' '}
-                                       {city.departement?.nom}
-                                    </Text>
-                                 </VStack>
-                              </HStack>
-                              <HStack space="xs" className="items-center">
-                                 <Text
-                                    className="text-xs font-medium"
-                                    style={{ color: themeColor }}
-                                 >
-                                    Ajouter
-                                 </Text>
-                                 <AddIcon
-                                    color={themeColor}
-                                    style={{ width: 20, height: 20 }}
-                                 />
-                              </HStack>
-                           </HStack>
-                        </TouchableOpacity>
-                     ))}
-                  </VStack>
-               </Animated.View>
-            )}
+            {renderedSuggestions}
 
             {/* Message quand aucun résultat */}
             {inputValue.length > 2 &&
                !isLoading &&
                suggestions.length === 0 && (
                   <FormControlHelper>
-                     <HStack
-                        space="xs"
-                        className="items-center my-2 p-3 bg-gray-50 rounded-lg"
-                     >
+                     <HStack className="items-center my-2 p-3 bg-gray-50 rounded-lg">
                         <FormControlHelperText className="text-gray-500 font-medium">
                            Aucune ville trouvée pour "{inputValue}"
                         </FormControlHelperText>
@@ -550,10 +576,11 @@ const InputMultiSelectCity: React.FC<InputMultiSelectCityProps> = ({
                   <HStack className="items-center space-x-2 mt-2">
                      <FormControlErrorIcon
                         as={AlertCircleIcon}
-                        style={{ color: '#EF4444', width: 20, height: 20 }}
+                        style={styles.errorIconStyle}
                      />
                      <FormControlErrorText
-                        style={{ color: '#EF4444', fontWeight: '500' }}
+                        className="font-medium"
+                        style={{ color: '#EF4444' }}
                      >
                         {getErrorMessage()}
                      </FormControlErrorText>
@@ -563,23 +590,21 @@ const InputMultiSelectCity: React.FC<InputMultiSelectCityProps> = ({
 
             {/* Résumé du statut de sélection */}
             {selectedCities.length >= 1 && (
-               <View
-                  className="mt-4 mb-2 px-4 py-3 rounded-lg"
-                  style={{ backgroundColor: '#F9FAFB' }}
-               >
+               <View className="mt-4 mb-2 px-4 py-3 rounded-lg bg-gray-50">
                   <HStack className="justify-between items-center">
                      <Text className="font-medium text-gray-700">
                         {selectedCities.length} / {maxSelections} villes
                      </Text>
                      {selectedCities.length >= minSelections && (
                         <HStack className="items-center space-x-1">
-                           <CheckIcon
+                           <Feather
+                              name="check-circle"
+                              size={16}
                               color={selectionColor}
-                              style={{ width: 16, height: 16 }}
                            />
                            <Text
-                              style={{ color: selectionColor }}
-                              className="text-sm font-medium"
+                              className="text-sm font-medium pl-1"
+                              style={styles.validSelectionStyle}
                            >
                               Sélection valide
                            </Text>
@@ -593,4 +618,4 @@ const InputMultiSelectCity: React.FC<InputMultiSelectCityProps> = ({
    );
 };
 
-export default InputMultiSelectCity;
+export default React.memo(InputMultiSelectCity);
