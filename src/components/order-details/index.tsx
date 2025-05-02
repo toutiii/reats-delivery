@@ -1,8 +1,18 @@
 import { Feather } from '@expo/vector-icons';
-import React from 'react';
-import { ScrollView, TouchableOpacity, View } from 'react-native';
+import React, { useState } from 'react';
+import {
+   Linking,
+   Platform,
+   Pressable,
+   SafeAreaView,
+   ScrollView,
+   TouchableOpacity,
+   View,
+} from 'react-native';
 import { OrderStatus } from '../orders/order-status';
 import { TimeLeft } from '../orders/time-left';
+import { ThemedView } from '../themed-view';
+import { Button, ButtonText } from '../ui/button';
 import { Text } from '../ui/text';
 
 interface OrderDetailScreenProps {
@@ -14,101 +24,255 @@ export const OrderDetails: React.FC<OrderDetailScreenProps> = ({
    order,
    onBack,
 }) => {
+   const [selectedStatus, setSelectedStatus] = useState<string | null>(null);
+   const [statusOpen, setStatusOpen] = useState(false);
+
+   // Options de statut pour le menu déroulant
+   const statusOptions = ['En cours', 'En route', 'Livré', 'Annulé'];
+
+   // Vérification des données
    if (!order.customer || !order.pickup) {
       return (
-         <View>
-            <View className="p-5">
-               <Text>Informations de commande incomplètes</Text>
-            </View>
+         <View className="flex-1 justify-center items-center bg-white">
+            <Feather name="alert-circle" size={48} color="#f87171" />
+            <Text className="text-gray-800 font-medium text-lg mt-4">
+               Informations de commande incomplètes
+            </Text>
+            <Button onPress={onBack} className="mt-6 px-6">
+               <ButtonText>Retour</ButtonText>
+            </Button>
          </View>
       );
    }
 
+   const handleCall = () => {
+      const phoneNumber = order.customer?.phone || '+33123456789';
+      Linking.openURL(`tel:${phoneNumber}`);
+   };
+
+   const handleOpenMap = () => {
+      const address = encodeURIComponent(order.customer.address);
+      const url = Platform.select({
+         ios: `maps:0,0?q=${address}`,
+         android: `geo:0,0?q=${address}`,
+      });
+      if (url) Linking.openURL(url);
+   };
+
    return (
-      <>
-         <ScrollView className="flex-1">
-            {/* En-tête de commande */}
-            <View className="bg-white px-5 py-4 border-b border-gray-100">
-               <Text className="text-gray-800 font-medium mb-1">
-                  Order No. #{order.id}
-               </Text>
-               <View className="flex-row justify-between items-center">
-                  <Text className="text-gray-800 font-medium">
-                     {order.type} | {order.time}
+      <ThemedView className="flex-1">
+         <SafeAreaView className="flex-1">
+            {/* En-tête fixe */}
+            <View className="bg-white pt-3 pb-3 px-5 shadow-xs z-10">
+               <View className="flex-row items-center mb-2">
+                  <TouchableOpacity
+                     onPress={onBack}
+                     className="p-2 mr-3"
+                     accessibilityLabel="Retour"
+                     accessibilityRole="button"
+                  >
+                     <Feather name="arrow-left" size={22} color="#374151" />
+                  </TouchableOpacity>
+                  <Text className="text-xl font-bold text-gray-800">
+                     Détails de la commande
                   </Text>
+               </View>
+
+               <View className="flex-row justify-between items-center">
+                  <View>
+                     <Text className="text-gray-400 text-xs">Commande N°</Text>
+                     <Text className="text-gray-800 font-semibold">
+                        #{order.id}
+                     </Text>
+                  </View>
                   <OrderStatus status={order.status} />
                </View>
             </View>
 
-            <View className="px-5 py-4">
-               {/* Informations client */}
-               <View className="flex-row items-start mb-5">
-                  <View className="w-6 h-6 mr-3 flex-row justify-center items-center">
-                     <Feather name="user" size={20} color="#f87171" />
-                  </View>
-                  <View>
-                     <Text className="text-gray-800 font-medium">
-                        {order.customer.name}
+            <ScrollView
+               className="flex-1"
+               showsVerticalScrollIndicator={false}
+               contentContainerClassName="pb-6"
+            >
+               <View className="bg-white mx-4 mt-4 rounded-xl shadow-sm overflow-hidden">
+                  <View className="p-4 border-b border-gray-100">
+                     <Text className="text-gray-400 text-xs uppercase mb-1">
+                        Détails de la commande
                      </Text>
-                     <TouchableOpacity className="mt-2">
-                        <Feather name="phone" size={20} color="#f87171" />
-                     </TouchableOpacity>
+                     <View className="flex-row justify-between items-center">
+                        <Text className="text-gray-800 font-medium">
+                           {order.type}
+                        </Text>
+                        <Text className="text-gray-600">{order.time}</Text>
+                     </View>
+                  </View>
+
+                  <View className="p-4 border-b border-gray-100">
+                     <Text className="text-gray-400 text-xs uppercase mb-3">
+                        Client
+                     </Text>
+                     <View className="flex-row mb-3">
+                        <View className="w-10 h-10 bg-red-50 rounded-full items-center justify-center mr-3">
+                           <Feather name="user" size={20} color="#f87171" />
+                        </View>
+                        <View className="flex-1 justify-center">
+                           <Text className="text-gray-800 font-medium">
+                              {order.customer.name}
+                           </Text>
+                           {order.customer.email && (
+                              <Text className="text-gray-500 text-sm">
+                                 {order.customer.email}
+                              </Text>
+                           )}
+                        </View>
+                        <TouchableOpacity
+                           onPress={handleCall}
+                           className="w-10 h-10 bg-green-50 rounded-full items-center justify-center"
+                           accessibilityLabel="Appeler le client"
+                           accessibilityRole="button"
+                        >
+                           <Feather name="phone" size={18} color="#10b981" />
+                        </TouchableOpacity>
+                     </View>
+                  </View>
+
+                  {/* Adresse de livraison */}
+                  <Pressable
+                     onPress={handleOpenMap}
+                     className="p-4 border-b border-gray-100 active:bg-gray-50"
+                     accessibilityLabel="Voir l'adresse sur la carte"
+                     accessibilityRole="button"
+                  >
+                     <View className="flex-row justify-between items-center mb-2">
+                        <Text className="text-gray-400 text-xs uppercase">
+                           Adresse de livraison
+                        </Text>
+                        <View className="bg-blue-50 rounded-full p-1">
+                           <Feather name="map" size={14} color="#3b82f6" />
+                        </View>
+                     </View>
+                     <View className="flex-row items-center">
+                        <View className="w-8 h-8 bg-blue-50 rounded-full items-center justify-center mr-3">
+                           <Feather name="map-pin" size={16} color="#3b82f6" />
+                        </View>
+                        <Text className="text-gray-700 flex-1">
+                           {order.customer.address}
+                        </Text>
+                     </View>
+                  </Pressable>
+
+                  <View className="p-4">
+                     <Text className="text-gray-400 text-xs uppercase mb-2">
+                        Retrait prévu
+                     </Text>
+                     <View className="bg-red-50 rounded-lg p-3">
+                        <View className="flex-row justify-between items-center mb-2">
+                           <View className="flex-row items-center">
+                              <Feather name="clock" size={16} color="#f87171" />
+                              <Text className="text-red-500 font-medium ml-2">
+                                 Départ dans
+                              </Text>
+                           </View>
+                           <TimeLeft hours={order.pickup.timeLeft} />
+                        </View>
+                        <Text className="text-gray-700">
+                           {order.pickup.date} à {order.pickup.time}
+                        </Text>
+                     </View>
                   </View>
                </View>
 
-               {/* Adresse de livraison */}
-               <View className="flex-row items-start mb-5">
-                  <View className="w-6 h-6 mr-3 flex-row justify-center items-center">
-                     <Feather name="map-pin" size={20} color="#f87171" />
-                  </View>
-                  <View>
-                     <Text className="text-gray-800 font-medium mb-1">
-                        Delivery
+               <View className="bg-white mx-4 mt-4 rounded-xl shadow-sm overflow-hidden">
+                  <View className="p-4">
+                     <Text className="text-gray-400 text-xs uppercase mb-3">
+                        Mise à jour du statut
                      </Text>
-                     <Text className="text-gray-600 leading-tight">
-                        {order.customer.address}
-                     </Text>
+
+                     {/* Menu déroulant de statut */}
+                     <View className="mb-4">
+                        <Pressable
+                           onPress={() => setStatusOpen(!statusOpen)}
+                           className="bg-gray-50 border border-gray-200 rounded-lg px-4 py-3.5 flex-row justify-between items-center"
+                           accessibilityLabel="Sélectionner un statut"
+                           accessibilityRole="button"
+                           accessibilityState={{ expanded: statusOpen }}
+                        >
+                           <Text
+                              className={
+                                 selectedStatus
+                                    ? 'text-gray-800'
+                                    : 'text-gray-400'
+                              }
+                           >
+                              {selectedStatus || 'Sélectionner un statut'}
+                           </Text>
+                           <Feather
+                              name={statusOpen ? 'chevron-up' : 'chevron-down'}
+                              size={18}
+                              color="#9CA3AF"
+                           />
+                        </Pressable>
+
+                        {/* Options de statut */}
+                        {statusOpen && (
+                           <View className="bg-white border border-gray-200 rounded-lg mt-1 overflow-hidden">
+                              {statusOptions.map((option, index) => (
+                                 <Pressable
+                                    key={option}
+                                    onPress={() => {
+                                       setSelectedStatus(option);
+                                       setStatusOpen(false);
+                                    }}
+                                    className={`px-4 py-3 ${
+                                       index < statusOptions.length - 1
+                                          ? 'border-b border-gray-100'
+                                          : ''
+                                    } ${option === selectedStatus ? 'bg-gray-50' : ''}`}
+                                    accessibilityLabel={option}
+                                    accessibilityRole="menuitem"
+                                 >
+                                    <Text
+                                       className={
+                                          option === selectedStatus
+                                             ? 'text-blue-500'
+                                             : 'text-gray-700'
+                                       }
+                                    >
+                                       {option}
+                                    </Text>
+                                 </Pressable>
+                              ))}
+                           </View>
+                        )}
+                     </View>
+
+                     {/* Bouton de confirmation */}
+                     <Button
+                        onPress={() => {
+                           /* Action de confirmation */
+                        }}
+                        className={`${selectedStatus ? 'bg-red-500' : 'bg-gray-300'}`}
+                        disabled={!selectedStatus}
+                        size="lg"
+                     >
+                        <ButtonText>Confirmer la mise à jour</ButtonText>
+                     </Button>
                   </View>
                </View>
 
-               {/* Informations de ramassage */}
-               <View className="bg-red-50 rounded-lg p-4 mb-5">
-                  <View className="flex-row justify-between items-center mb-2">
-                     <Text className="text-red-500 font-medium">
-                        Delivery Pickup By
+               {/* Informations supplémentaires */}
+               <View className="bg-white mx-4 mt-4 rounded-xl shadow-sm overflow-hidden">
+                  <View className="p-4">
+                     <Text className="text-gray-400 text-xs uppercase mb-3">
+                        Notes
                      </Text>
-                     <TimeLeft hours={order.pickup.timeLeft} />
+                     <Text className="text-gray-700">
+                        {order.notes || 'Aucune note pour cette commande.'}
+                     </Text>
                   </View>
-                  <Text className="text-gray-700 leading-tight">
-                     {order.pickup.date}
-                     {'\n'}
-                     {order.pickup.time}
-                  </Text>
                </View>
-
-               {/* Mise à jour du statut */}
-               <View className="mb-6">
-                  <Text className="text-gray-600 mb-1.5">Update Status</Text>
-                  <TouchableOpacity className="bg-white border border-gray-200 rounded-lg px-3 py-3 flex-row justify-between items-center">
-                     <Text className="text-gray-400">Select an option</Text>
-                     <Feather name="chevron-down" size={18} color="#9CA3AF" />
-                  </TouchableOpacity>
-               </View>
-
-               {/* Bouton de confirmation */}
-               <TouchableOpacity
-                  activeOpacity={0.8}
-                  className="bg-red-500 rounded-lg py-4 items-center mb-6"
-               >
-                  <Text className="text-white font-medium">Confirm Pickup</Text>
-               </TouchableOpacity>
-            </View>
-         </ScrollView>
-
-         {/* Indicateur de bas */}
-         <View className="items-center py-3">
-            <View className="w-12 h-1 bg-gray-300 rounded-full"></View>
-         </View>
-      </>
+            </ScrollView>
+         </SafeAreaView>
+      </ThemedView>
    );
 };

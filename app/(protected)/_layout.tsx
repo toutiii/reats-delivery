@@ -50,6 +50,7 @@ export default function TabLayout() {
             options={{
                title: 'Order Details',
                href: null,
+               headerShown: false,
             }}
          />
       </Tabs>

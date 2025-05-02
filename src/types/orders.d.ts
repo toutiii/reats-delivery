@@ -2,6 +2,7 @@ interface Customer {
    name: string;
    address: string;
    phone?: string;
+   email: string;
 }
 
 interface PickupInfo {
@@ -15,8 +16,9 @@ interface Order {
    status: OrderStatus;
    type?: string;
    time?: string;
-   customer?: Customer;
+   customer: Customer;
    pickup?: PickupInfo;
+   notes: string;
 }
 
 type OrderStatus =
