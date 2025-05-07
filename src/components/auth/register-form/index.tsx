@@ -184,7 +184,12 @@ const RegisterForm = () => {
          </View>
 
          {/* Ville de livraison Input */}
-         <View>
+         <InputMultiSelectCity
+            label="Ville(s) de livraison"
+            placeholder="Rechercher une commune..."
+            helperText="Ex: Paris, Lyon, Marseille, etc."
+         />
+         {/* <View>
             <Controller
                control={control}
                name="city"
@@ -221,7 +226,7 @@ const RegisterForm = () => {
                   </FormControl>
                )}
             />
-         </View>
+         </View> */}
 
          <FormInputControlPhone
             control={control}
@@ -235,11 +240,6 @@ const RegisterForm = () => {
             textInfo="Format: +33 X XX XX XX XX"
             isRequired={true}
             isDisabled={isSubmitting}
-         />
-
-         <InputMultiSelectCity
-            placeholder="Rechercher une commune..."
-            helperText="Ex: Paris, Lyon, Marseille, etc."
          />
 
          {error && (

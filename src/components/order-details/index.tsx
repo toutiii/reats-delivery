@@ -1,4 +1,5 @@
 import { Feather } from '@expo/vector-icons';
+import { router } from 'expo-router';
 import React, { useState } from 'react';
 import {
    Linking,
@@ -64,20 +65,6 @@ export const OrderDetails: React.FC<OrderDetailScreenProps> = ({
          <SafeAreaView className="flex-1">
             {/* En-tête fixe */}
             <View className="bg-white pt-3 pb-3 px-5 shadow-xs z-10">
-               <View className="flex-row items-center mb-2">
-                  <TouchableOpacity
-                     onPress={onBack}
-                     className="p-2 mr-3"
-                     accessibilityLabel="Retour"
-                     accessibilityRole="button"
-                  >
-                     <Feather name="arrow-left" size={22} color="#374151" />
-                  </TouchableOpacity>
-                  <Text className="text-xl font-bold text-gray-800">
-                     Détails de la commande
-                  </Text>
-               </View>
-
                <View className="flex-row justify-between items-center">
                   <View>
                      <Text className="text-gray-400 text-xs">Commande N°</Text>
@@ -249,7 +236,7 @@ export const OrderDetails: React.FC<OrderDetailScreenProps> = ({
                      {/* Bouton de confirmation */}
                      <Button
                         onPress={() => {
-                           /* Action de confirmation */
+                           router.push('/order-details/delivery/1');
                         }}
                         className={`${selectedStatus ? 'bg-red-500' : 'bg-gray-300'}`}
                         disabled={!selectedStatus}

@@ -10,10 +10,7 @@ const Orders: React.FC = () => {
    };
 
    return (
-      <ScrollView
-         className="flex-1 px-6 mb-28"
-         showsVerticalScrollIndicator={false}
-      >
+      <ScrollView className="flex-1 px-6" showsVerticalScrollIndicator={false}>
          <VStack className="flex-1 mt-8" space="lg">
             {orders.map((order, index) => (
                <Card
