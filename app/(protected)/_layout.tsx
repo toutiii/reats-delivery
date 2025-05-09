@@ -89,6 +89,14 @@ export default function TabLayout() {
                },
             }}
          />
+         <Tabs.Screen
+            name="order-details/delivery/confirmation"
+            options={{
+               title: '',
+               href: null,
+               headerShown: false,
+            }}
+         />
       </Tabs>
    );
 }
