@@ -175,74 +175,14 @@ export const OrderDetails: React.FC<OrderDetailScreenProps> = ({
                         Mise à jour du statut
                      </Text>
 
-                     {/* Menu déroulant de statut */}
-                     <View className="mb-4">
-                        <Pressable
-                           onPress={() => setStatusOpen(!statusOpen)}
-                           className="bg-gray-50 border border-gray-200 rounded-lg px-4 py-3.5 flex-row justify-between items-center"
-                           accessibilityLabel="Sélectionner un statut"
-                           accessibilityRole="button"
-                           accessibilityState={{ expanded: statusOpen }}
-                        >
-                           <Text
-                              className={
-                                 selectedStatus
-                                    ? 'text-gray-800'
-                                    : 'text-gray-400'
-                              }
-                           >
-                              {selectedStatus || 'Sélectionner un statut'}
-                           </Text>
-                           <Feather
-                              name={statusOpen ? 'chevron-up' : 'chevron-down'}
-                              size={18}
-                              color="#9CA3AF"
-                           />
-                        </Pressable>
-
-                        {/* Options de statut */}
-                        {statusOpen && (
-                           <View className="bg-white border border-gray-200 rounded-lg mt-1 overflow-hidden">
-                              {statusOptions.map((option, index) => (
-                                 <Pressable
-                                    key={option}
-                                    onPress={() => {
-                                       setSelectedStatus(option);
-                                       setStatusOpen(false);
-                                    }}
-                                    className={`px-4 py-3 ${
-                                       index < statusOptions.length - 1
-                                          ? 'border-b border-gray-100'
-                                          : ''
-                                    } ${option === selectedStatus ? 'bg-gray-50' : ''}`}
-                                    accessibilityLabel={option}
-                                    accessibilityRole="menuitem"
-                                 >
-                                    <Text
-                                       className={
-                                          option === selectedStatus
-                                             ? 'text-blue-500'
-                                             : 'text-gray-700'
-                                       }
-                                    >
-                                       {option}
-                                    </Text>
-                                 </Pressable>
-                              ))}
-                           </View>
-                        )}
-                     </View>
-
                      {/* Bouton de confirmation */}
                      <Button
                         onPress={() => {
                            router.push('/order-details/delivery/1');
                         }}
-                        className={`${selectedStatus ? 'bg-red-500' : 'bg-gray-300'}`}
-                        disabled={!selectedStatus}
                         size="lg"
                      >
-                        <ButtonText>Confirmer la mise à jour</ButtonText>
+                        <ButtonText>Confirmer la course</ButtonText>
                      </Button>
                   </View>
                </View>

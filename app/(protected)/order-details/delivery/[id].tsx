@@ -1,3 +1,4 @@
+import { GOOGLE_MAPS_API_KEY } from '@/env';
 import { Button, ButtonText } from '@/src/components/ui/button';
 import { Text } from '@/src/components/ui/text';
 import { VStack } from '@/src/components/ui/vstack';
@@ -24,10 +25,6 @@ import MapView, {
 } from 'react-native-maps';
 import MapViewDirections from 'react-native-maps-directions';
 
-// Remplacez par votre clé API Google Maps
-const GOOGLE_MAPS_API_KEY = process.env.GOOGLE_MAPS_API_KEY as string;
-
-// Types
 type OrderItem = {
    id: string;
    name: string;
@@ -35,19 +32,13 @@ type OrderItem = {
    quantity: number;
 };
 
-type DeliveryStatus =
-   | 'en_attente'
-   | 'en_preparation'
-   | 'en_cours'
-   | 'livree'
-   | 'annulee';
+type DeliveryStatus = 'en_cours' | 'livree' | 'annulee';
 
 type LocationPoint = {
    latitude: number;
    longitude: number;
 };
 
-// Types pour la carte et la région
 type MapRegion = {
    latitude: number;
    longitude: number;
@@ -78,28 +69,24 @@ interface OrderDetails {
    items: OrderItem[];
 }
 
-// Configurations
 const LOCATION_TRACKING_OPTIONS = {
    accuracy: Location.Accuracy.Highest,
-   distanceInterval: 5, // Mise à jour tous les 5 mètres
-   timeInterval: 3000, // Ou toutes les 3 secondes
+   distanceInterval: 5,
+   timeInterval: 3000,
 };
 
 const MAP_PADDING = { top: 100, right: 50, bottom: 350, left: 50 };
 
 export default function DeliveryMapScreen() {
-   // Router et paramètres
    const router = useRouter();
    const params = useLocalSearchParams();
-   const orderId = typeof params.id === 'string' ? params.id : 'ORDER123'; // ID par défaut
+   const orderId = typeof params.id === 'string' ? params.id : 'ORDER123';
 
-   // Références
    const mapRef = useRef<MapView | null>(null);
    const locationSubscription = useRef<Location.LocationSubscription | null>(
       null
    );
 
-   // États
    const [loading, setLoading] = useState<boolean>(true);
    const [error, setError] = useState<string | null>(null);
    const [currentLocation, setCurrentLocation] = useState<LocationPoint | null>(
@@ -111,14 +98,11 @@ export default function DeliveryMapScreen() {
    const [distanceToClient, setDistanceToClient] =
       useState<string>('Calcul...');
 
-   // Les dimensions de l'écran pour calculer le ratio d'aspect
    const { height, width } = Dimensions.get('window');
    const ASPECT_RATIO = width / height;
    const LATITUDE_DELTA = 0.0421;
    const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
 
-   // Données statiques pour une commande démo
-   // Dans une app réelle, ces données proviendraient de votre API
    const mockOrderDetails: OrderDetails = useMemo(
       () => ({
          id: orderId,
@@ -155,22 +139,12 @@ export default function DeliveryMapScreen() {
       [orderId]
    );
 
-   // Charger les détails de la commande
    useEffect(() => {
       async function loadOrderData() {
          try {
             setLoading(true);
-
-            // Dans une app réelle, remplacez par un appel API
-            // const response = await api.getOrderDetails(orderId);
-            // setOrderDetails(response.data);
-
-            // Pour l'instant, utiliser les données mockées
             setOrderDetails(mockOrderDetails);
-
-            // Demander les permissions de localisation
             await requestLocationPermissions();
-
             setLoading(false);
          } catch (err) {
             console.error('Erreur lors du chargement des données:', err);
@@ -181,13 +155,11 @@ export default function DeliveryMapScreen() {
 
       loadOrderData();
 
-      // Nettoyage
       return () => {
          stopLocationTracking();
       };
    }, [orderId, mockOrderDetails]);
 
-   // Demander les permissions de localisation et démarrer le suivi
    const requestLocationPermissions = async (): Promise<boolean> => {
       try {
          const { status } = await Location.requestForegroundPermissionsAsync();
@@ -199,7 +171,6 @@ export default function DeliveryMapScreen() {
             return false;
          }
 
-         // Démarrer le suivi de localisation
          startLocationTracking();
          return true;
       } catch (err) {
@@ -209,13 +180,10 @@ export default function DeliveryMapScreen() {
       }
    };
 
-   // Démarrer le suivi de localisation en temps réel
    const startLocationTracking = async (): Promise<void> => {
       try {
-         // Arrêter tout suivi précédent
          stopLocationTracking();
 
-         // Obtenir la position initiale
          const initialPosition = await Location.getCurrentPositionAsync({
             accuracy: Location.Accuracy.Highest,
          });
@@ -224,13 +192,10 @@ export default function DeliveryMapScreen() {
          const newLocation: LocationPoint = { latitude, longitude };
          setCurrentLocation(newLocation);
 
-         // Centrer la carte pour montrer l'itinéraire et la position actuelle
-         // Petit délai pour s'assurer que le composant Map est complètement chargé
          setTimeout(() => {
             fitMapToShowAll();
          }, 500);
 
-         // Démarrer le suivi en continu
          locationSubscription.current = await Location.watchPositionAsync(
             LOCATION_TRACKING_OPTIONS,
             location => {
@@ -239,8 +204,7 @@ export default function DeliveryMapScreen() {
 
                setCurrentLocation(newLocation);
 
-               // Si nous n'utilisons pas MapViewDirections, nous pouvons calculer manuellement
-               if (orderDetails && !GOOGLE_MAPS_API_KEY.includes('VOTRE_CLE')) {
+               if (orderDetails) {
                   calculateManualETA(newLocation, orderDetails.client.location);
                }
             }
@@ -251,7 +215,6 @@ export default function DeliveryMapScreen() {
       }
    };
 
-   // Arrêter le suivi de localisation
    const stopLocationTracking = (): void => {
       if (locationSubscription.current) {
          locationSubscription.current.remove();
@@ -259,28 +222,20 @@ export default function DeliveryMapScreen() {
       }
    };
 
-   // Mettre à jour l'estimation du temps d'arrivée manuellement si l'API n'est pas disponible
    const calculateManualETA = (
       currentPos: LocationPoint,
       destination: LocationPoint
    ): void => {
       try {
-         // Distance entre position actuelle et client
          const distance = calculateDistance(currentPos, destination);
          setDistanceToClient(`${(distance / 1000).toFixed(1)} km`);
 
-         // Vitesse moyenne estimée (20 km/h)
          const avgSpeedKmPerHour = 20;
-
-         // Conversion de la distance en km
          const distanceInKm = distance / 1000;
-
-         // Temps estimé en minutes
          const timeInMinutes = Math.round(
             (distanceInKm / avgSpeedKmPerHour) * 60
          );
 
-         // Formater l'ETA
          if (timeInMinutes < 1) {
             setEta("moins d'une minute");
          } else if (timeInMinutes === 1) {
@@ -293,12 +248,11 @@ export default function DeliveryMapScreen() {
       }
    };
 
-   // Calculer la distance entre deux points (formule de Haversine)
    const calculateDistance = (
       point1: LocationPoint,
       point2: LocationPoint
    ): number => {
-      const R = 6371e3; // Rayon de la Terre en mètres
+      const R = 6371e3;
       const lat1 = (point1.latitude * Math.PI) / 180;
       const lat2 = (point2.latitude * Math.PI) / 180;
       const deltaLat = ((point2.latitude - point1.latitude) * Math.PI) / 180;
@@ -311,33 +265,27 @@ export default function DeliveryMapScreen() {
             Math.sin(deltaLon / 2) *
             Math.sin(deltaLon / 2);
       const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-      return R * c; // Distance en mètres
+      return R * c;
    };
 
-   // Ajuster la carte pour montrer tous les points importants
    const fitMapToShowAll = (): void => {
       if (!mapRef.current || !orderDetails || !currentLocation) return;
 
-      // Inclure la position actuelle, le client et le restaurant
       const pointsToShow = [currentLocation, orderDetails.client.location];
 
-      // Inclure le restaurant si nécessaire
       if (orderDetails.restaurant.location) {
          pointsToShow.push(orderDetails.restaurant.location);
       }
 
-      // S'assurer que tous les points importants sont visibles sur la carte
       mapRef.current.fitToCoordinates(pointsToShow, {
          edgePadding: MAP_PADDING,
          animated: true,
       });
    };
 
-   // Centrer la carte sur la position actuelle
    const centerOnCurrentLocation = (): void => {
       if (!mapRef.current || !currentLocation) return;
 
-      // Configuration correcte selon la définition de l'API react-native-maps
       mapRef.current.animateToRegion(
          {
             latitude: currentLocation.latitude,
@@ -349,9 +297,7 @@ export default function DeliveryMapScreen() {
       );
    };
 
-   // Callback lorsque MapViewDirections a calculé un itinéraire
    const onDirectionsReady = (result: any) => {
-      // Mettre à jour l'ETA et la distance basées sur les résultats de l'API
       setDistanceToClient(`${result.distance.toFixed(1)} km`);
       setEta(
          result.duration < 1
@@ -362,7 +308,6 @@ export default function DeliveryMapScreen() {
       );
    };
 
-   // Contacter le client
    const contactClient = (method: 'phone' | 'message'): void => {
       if (!orderDetails) return;
 
@@ -397,7 +342,6 @@ export default function DeliveryMapScreen() {
       }
    };
 
-   // Marquer comme livrée
    const markAsDelivered = (): void => {
       Alert.alert(
          'Livraison terminée',
@@ -413,11 +357,6 @@ export default function DeliveryMapScreen() {
                onPress: async () => {
                   try {
                      setLoading(true);
-
-                     // Dans une app réelle, appel API pour mettre à jour le statut
-                     // await api.updateOrderStatus(orderId, 'livree');
-
-                     // Simuler un délai
                      setTimeout(() => {
                         setLoading(false);
                         router.push({
@@ -444,7 +383,6 @@ export default function DeliveryMapScreen() {
       );
    };
 
-   // Écran de chargement
    if (loading) {
       return (
          <View className="flex-1 items-center justify-center bg-white">
@@ -456,7 +394,6 @@ export default function DeliveryMapScreen() {
       );
    }
 
-   // Écran d'erreur
    if (error) {
       return (
          <View className="flex-1 items-center justify-center bg-white p-4">
@@ -471,33 +408,21 @@ export default function DeliveryMapScreen() {
       );
    }
 
-   // Écran principal
    return (
       <View className="flex-1">
          <SafeAreaView>
-            <View className="flex-row items-start justify-between px-3 pt-3">
-               <TouchableOpacity
-                  onPress={() => router.back()}
-                  className="flex-row items-center justify-center rounded-full py-2 px-4 w-10 h-10 border border-gray-200 bg-gray-100 shadow-md mb-2"
-               >
-                  <Feather color="#000" name="arrow-left" size={19} />
+            <View className="flex-row items-start justify-between px-6 pt-6">
+               <TouchableOpacity className="flex-row items-center justify-center rounded-full py-2 px-4 border border-gray-200 bg-gray-100 shadow-md mb-2">
+                  <Text className="text-base leading-6 font-bold text-black tracking-wide">
+                     Aide
+                  </Text>
                </TouchableOpacity>
-
                <View className="items-end">
                   <TouchableOpacity
-                     // onPress={() => router.push('/help')}
-                     className="flex-row items-center justify-center rounded-full py-2 px-4 border border-gray-200 bg-gray-100 shadow-md mb-2"
-                  >
-                     <Text className="text-base leading-6 font-bold text-black tracking-wide">
-                        Aide
-                     </Text>
-                  </TouchableOpacity>
-
-                  <TouchableOpacity
                      onPress={centerOnCurrentLocation}
-                     className="flex-row items-center justify-center rounded-full py-2 px-4 w-10 h-10 border border-gray-200 bg-gray-100 shadow-md mb-2"
+                     className="bg-primary-500 rounded-full p-3"
                   >
-                     <Feather color="#000" name="navigation" size={19} />
+                     <Feather color="#fff" name="navigation" size={18} />
                   </TouchableOpacity>
                </View>
             </View>
@@ -535,7 +460,6 @@ export default function DeliveryMapScreen() {
             zoomEnabled={true}
             toolbarEnabled={false}
          >
-            {/* Restaurant (origine) */}
             {orderDetails?.restaurant.location && (
                <Marker
                   coordinate={orderDetails.restaurant.location}
@@ -548,7 +472,6 @@ export default function DeliveryMapScreen() {
                </Marker>
             )}
 
-            {/* Client (destination) */}
             {orderDetails?.client.location && (
                <Marker
                   coordinate={orderDetails.client.location}
@@ -561,21 +484,18 @@ export default function DeliveryMapScreen() {
                </Marker>
             )}
 
-            {/* Cercle autour de la position du livreur (rayon d'action) */}
             {currentLocation && (
                <Circle
                   center={currentLocation}
-                  radius={200} // 200 mètres de rayon
+                  radius={200}
                   strokeColor="#10B981"
                   fillColor="rgba(16, 185, 129, 0.1)"
                />
             )}
 
-            {/* Utilisation de MapViewDirections pour tracer l'itinéraire */}
             {currentLocation &&
                orderDetails?.client.location &&
-               GOOGLE_MAPS_API_KEY &&
-               !GOOGLE_MAPS_API_KEY.includes('VOTRE_CLE') && (
+               GOOGLE_MAPS_API_KEY && (
                   <MapViewDirections
                      origin={currentLocation}
                      destination={orderDetails.client.location}
@@ -588,7 +508,6 @@ export default function DeliveryMapScreen() {
                         console.error(
                            `Erreur de l'API Directions: ${errorMessage}`
                         );
-                        // Fallback à une méthode manuelle
                         calculateManualETA(
                            currentLocation,
                            orderDetails.client.location
@@ -597,10 +516,9 @@ export default function DeliveryMapScreen() {
                   />
                )}
 
-            {/* Si l'API n'est pas disponible, utiliser un itinéraire direct (polyline) */}
             {currentLocation &&
                orderDetails?.client.location &&
-               GOOGLE_MAPS_API_KEY && (
+               !GOOGLE_MAPS_API_KEY && (
                   <Polyline
                      coordinates={[
                         currentLocation,
@@ -703,7 +621,7 @@ export default function DeliveryMapScreen() {
             )}
 
             <VStack className="px-6 mt-3" space="md">
-               <Button className="bg-green-500" onPress={markAsDelivered}>
+               <Button onPress={markAsDelivered}>
                   <ButtonText>Marquer comme livrée</ButtonText>
                </Button>
 

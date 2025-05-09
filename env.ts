@@ -15,3 +15,5 @@ export const apiKeyBackend =
         : process.env.EXPO_PUBLIC_DEVELOPMENT_API_KEY;
 
 export const appOriginHeader = 'delivery';
+
+export const GOOGLE_MAPS_API_KEY = process.env.GOOGLE_MAPS_API_KEY;
