@@ -1,4 +1,4 @@
-import all_constants from "../constants";
+import all_constants from "../../constants";
 
 export function checkNumericFormat(value, fieldLabel) {
     if (typeof value !== "undefined") {

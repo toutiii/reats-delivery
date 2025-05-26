@@ -1,4 +1,4 @@
-import all_constants from "../constants";
+import all_constants from "../../constants";
 
 export function validateFields(fields, objectToValidate) {
     const errors = {};

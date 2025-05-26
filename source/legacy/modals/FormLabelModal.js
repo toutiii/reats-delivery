@@ -1,6 +1,6 @@
 import { Modal, Text, View } from "react-native";
 import React from "react";
-import all_constants from "../constants";
+import all_constants from "../../constants";
 import CustomButton from "../components/CustomButton";
 
 export default function FormLabelModal({ ...props }) {

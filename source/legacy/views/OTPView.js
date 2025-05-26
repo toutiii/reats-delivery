@@ -3,13 +3,13 @@ import React, { useState } from "react";
 import { Platform, Text, StyleSheet, TextInput, View } from "react-native";
 
 import CustomButton from "../components/CustomButton";
-import all_constants from "../constants";
-import { callBackEnd } from "../api/callBackend";
+import all_constants from "../../constants";
+import { callBackEnd } from "../../api/callBackend";
 import CustomAlert from "../components/CustomAlert";
 import { CommonActions } from "@react-navigation/native";
 import { CountdownCircleTimer } from "react-native-countdown-circle-timer";
 import * as SecureStore from "expo-secure-store";
-import { apiBaseUrl, apiKeyBackend } from "../env";
+import { apiBaseUrl, apiKeyBackend } from "../../env";
 
 export default function OTPView({ ...props }) {
     const [

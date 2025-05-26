@@ -2,7 +2,7 @@ import { FlatList, View, Button } from "react-native";
 import React from "react";
 import DishForModal from "../components/DishForModal";
 import Modal from "react-native-modal";
-import all_constants from "../constants";
+import all_constants from "../../constants";
 
 export default function DishModal({ ...props }) {
     return (

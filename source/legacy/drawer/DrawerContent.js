@@ -10,10 +10,10 @@ import {
     useTheme,
 } from "react-native-paper";
 import Animated from "react-native-reanimated";
-import all_constants from "../constants";
-import { getItemFromSecureStore } from "../helpers/toolbox";
-import { apiBaseUrl } from "../env";
-import { callBackEnd } from "../api/callBackend";
+import all_constants from "../../constants";
+import { getItemFromSecureStore } from "../../helpers/toolbox";
+import { apiBaseUrl } from "../../env";
+import { callBackEnd } from "../../api/callBackend";
 import { CommonActions } from "@react-navigation/native";
 import CustomAlert from "../components/CustomAlert";
 import Ionicons from "react-native-vector-icons/Ionicons";

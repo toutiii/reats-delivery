@@ -1,81 +1,32 @@
 import React from "react";
 import Form from "./Form";
-import all_constants from "../constants";
+import all_constants from "../../../constants";
 import { View } from "react-native";
 import {
     checkValueIsDefined,
     checkValueNotContainsSpecialChar,
-    checkPhoneNumbers,
-} from "../validators/common_validators";
-import { checkNumericFormat } from "../validators/settingsform_validators";
-import { callBackendWithFormDataForDelivers } from "../api/callBackend";
-import CustomAlert from "../components/CustomAlert";
-import { apiBaseUrl } from "../env";
-import { getDeliveryRadius } from "../helpers/toolbox";
+} from "../../validators/common_validators";
+import { checkNumericFormat } from "../../validators/settingsform_validators";
+import { callBackendWithFormDataForDelivers } from "../../../api/callBackend";
+import { apiBaseUrl } from "../../../env";
+import { getDeliveryRadius } from "../../../helpers/toolbox";
 
-export default function SignupForm({ ...props }) {
-    const [
-        showAlert,
-        setShowAlert
-    ] = React.useState(false);
-    const [
-        isRequestOK,
-        setIsRequestOK
-    ] = React.useState(false);
-    const [
-        item,
-        setItem
-    ] = React.useState(null);
-
-    const handleResult = (isRequestSuccessful, itemObject) => {
-        setIsRequestOK(isRequestSuccessful);
-        setItem(itemObject);
-        setShowAlert(true);
-    };
-
-    const onConfirmPressedRequestSuccess = () => {
-        setShowAlert(false);
-        props.navigation.navigate("OTPView", { item: item });
-    };
-
-    const onConfirmPressedRequestFailed = () => {
-        setShowAlert(false);
-    };
-
+export default function SettingsPersonalInformationForm({ ...props }) {
     return (
         <View style={{ flex: 1 }}>
-            <View>
-                <CustomAlert
-                    show={showAlert}
-                    title={
-                        isRequestOK
-                            ? all_constants.messages.success.title
-                            : all_constants.messages.failed.title
-                    }
-                    message={
-                        isRequestOK && all_constants.messages.success.otp_message_signup
-                    }
-                    confirmButtonColor={isRequestOK
-                        ? "green"
-                        : "red"}
-                    onConfirmPressed={() => {
-                        isRequestOK
-                            ? onConfirmPressedRequestSuccess()
-                            : onConfirmPressedRequestFailed();
-                    }}
-                />
-            </View>
-
             <View style={{ flex: 2 }}>
                 <Form
                     action={callBackendWithFormDataForDelivers}
-                    useApiKey={true}
                     url={`${apiBaseUrl}/api/v1/delivers/`}
-                    method={"POST"}
+                    method={"PATCH"}
                     navigation={props.navigation}
-                    afterSubmit={handleResult}
-                    item={{}}
+                    refreshDataStateChanger={props.route.params.refreshDataStateChanger}
+                    item={props.route.params.item}
                     fields={{
+                        photo: {
+                            type: all_constants.field_type.image,
+                            label: all_constants.label.form.settings.image,
+                        },
                         firstname: {
                             fieldIsMandatory: true,
                             type: all_constants.field_type.textinput,
@@ -109,19 +60,7 @@ export default function SignupForm({ ...props }) {
                                 checkNumericFormat
                             ],
                             maxLength: all_constants.max_length.form.phone,
-                        },
-                        phone_confirmation: {
-                            fieldIsMandatory: true,
-                            type: all_constants.field_type.textinput,
-                            label: all_constants.label.form.settings.phone_confirmation,
-                            placeholder: all_constants.placeholders.form.settings.phone,
-                            keyboardNumeric: true,
-                            validators: [
-                                checkValueIsDefined,
-                                checkNumericFormat,
-                                checkPhoneNumbers,
-                            ],
-                            maxLength: all_constants.max_length.form.phone,
+                            isReadOnly: true,
                         },
                         siret: {
                             fieldIsMandatory: true,
@@ -134,6 +73,7 @@ export default function SignupForm({ ...props }) {
                                 checkNumericFormat
                             ],
                             maxLength: all_constants.max_length.form.siret,
+                            isReadOnly: true,
                         },
                         town: {
                             fieldIsMandatory: true,

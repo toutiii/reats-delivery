@@ -1,7 +1,7 @@
 import React from "react";
 import { Text, View } from "react-native";
 import { Divider } from "react-native-paper";
-import all_constants from "../constants";
+import all_constants from "../../constants";
 import stylesOrder from "../styles/styles-order";
 import {
     AntDesign,

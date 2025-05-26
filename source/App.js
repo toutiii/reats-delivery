@@ -2,12 +2,12 @@ import React, { Component } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
-import { MainDrawerNavigator } from "./drawer/MainDrawerNavigator";
+import { MainDrawerNavigator } from "./legacy/drawer/MainDrawerNavigator";
 import { AutocompleteDropdownContextProvider } from "react-native-autocomplete-dropdown";
 
-import SignupForm from "./forms/SignupForm";
-import LoginForm from "./forms/LoginForm";
-import OTPView from "./views/OTPView";
+import SignupForm from "./legacy/forms/forms/SignupForm";
+import LoginForm from "./legacy/forms/forms/LoginForm";
+import OTPView from "./legacy/views/OTPView";
 
 const Stack = createStackNavigator();
 

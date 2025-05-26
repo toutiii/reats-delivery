@@ -8,11 +8,11 @@ import {
     View,
 } from "react-native";
 import styles_order from "../styles/styles-order.js";
-import all_constants from "../constants.js";
+import all_constants from "../../constants.js";
 import Order from "../components/Order.js";
-import { getItemFromSecureStore } from "../helpers/toolbox";
-import { apiBaseUrl } from "../env.js";
-import { callBackEnd } from "../api/callBackend.js";
+import { getItemFromSecureStore } from "../../helpers/toolbox";
+import { apiBaseUrl } from "../../env.js";
+import { callBackEnd } from "../../api/callBackend.js";
 
 export default function DeliveryHistoryFlatList({ ...props }) {
     const fadeAnim = React.useRef(new Animated.Value(1)).current;

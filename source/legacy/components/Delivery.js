@@ -1,7 +1,7 @@
 import React from "react";
 import { Text, View, Image } from "react-native";
 import styles_home_view from "../styles/styles-home-view";
-import all_constants from "../constants";
+import all_constants from "../../constants";
 
 export default function Delivery({ ...props }) {
     return (
