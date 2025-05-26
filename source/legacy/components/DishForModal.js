@@ -1,5 +1,5 @@
 import { Image, Text, View } from "react-native";
-import all_constants from "../constants";
+import all_constants from "../../constants";
 import React from "react";
 import styles_dish_for_modal from "../styles/styles-dish-for-modal";
 import HorizontalLine from "./HorizontalLine";

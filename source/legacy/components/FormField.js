@@ -10,11 +10,11 @@ import {
 } from "react-native";
 
 import styles_field from "../styles/styles-field";
-import all_constants from "../constants";
+import all_constants from "../../constants";
 import RNPickerSelect from "react-native-picker-select";
 import styles_home_view from "../styles/styles-home-view";
 import * as ImagePicker from "expo-image-picker";
-import CustomButton from "../components/CustomButton";
+import CustomButton from "./CustomButton";
 import FormLabelModal from "../modals/FormLabelModal";
 import CustomAlert from "./CustomAlert";
 import DateTimePicker from "@react-native-community/datetimepicker";
@@ -368,7 +368,7 @@ export default function FormField({ ...props }) {
                             >
                                 <View style={{ alignItems: "center" }}>
                                     <Image
-                                        source={require("../images/photo.png")}
+                                        source={require("../../images/photo.png")}
                                         style={{ height: 30, width: 30 }}
                                     />
                                 </View>
@@ -383,7 +383,7 @@ export default function FormField({ ...props }) {
                             >
                                 <View style={{ alignItems: "center" }}>
                                     <Image
-                                        source={require("../images/galerie.png")}
+                                        source={require("../../images/galerie.png")}
                                         style={{ height: 30, width: 30 }}
                                     />
                                 </View>

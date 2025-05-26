@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { createStackNavigator } from "@react-navigation/stack";
-import all_constants from "../constants";
+import all_constants from "../../constants";
 import DeliveryHistoryFlatList from "../flatlist/DeliveryHistoryFlatList";
 import OrderView from "../views/OrderView";
 

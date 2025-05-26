@@ -3,8 +3,8 @@ import React from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import HomeView from "../views/HomeView";
 import SimpleView from "../views/SimpleView";
-import all_constants from "../constants";
-import SettingsPersonalInformationForm from "../forms/SettingsPersonalInformationForm";
+import all_constants from "../../constants";
+import SettingsPersonalInformationForm from "../forms/forms/SettingsPersonalInformationForm";
 import StatsView from "../views/StatsView";
 import DeliveryHistoryStack from "../stack/DeliveryHistoryStack";
 

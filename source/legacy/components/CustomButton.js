@@ -1,8 +1,8 @@
 import { Text, TouchableHighlight, View } from "react-native";
 import React from "react";
-import all_constants from "../constants";
 import styles_button from "../styles/styles-button";
 import Ionicons from "react-native-vector-icons/Ionicons";
+import all_constants from "../../constants";
 
 export default function CustomButton({ label, ...props }) {
     return (

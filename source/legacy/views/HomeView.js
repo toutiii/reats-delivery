@@ -3,7 +3,7 @@ import { Text, View } from "react-native";
 import { FontAwesome5 } from "@expo/vector-icons";
 import HorizontalLine from "../components/HorizontalLine";
 import styles_home_view from "../styles/styles-home-view";
-import all_constants from "../constants";
+import all_constants from "../../constants";
 
 export default class HomeView extends Component {
     intervalID;

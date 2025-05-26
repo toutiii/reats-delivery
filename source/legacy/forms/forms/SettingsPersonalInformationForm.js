@@ -1,15 +1,15 @@
 import React from "react";
 import Form from "./Form";
-import all_constants from "../constants";
+import all_constants from "../../../constants";
 import { View } from "react-native";
 import {
     checkValueIsDefined,
     checkValueNotContainsSpecialChar,
-} from "../validators/common_validators";
-import { checkNumericFormat } from "../validators/settingsform_validators";
-import { callBackendWithFormDataForDelivers } from "../api/callBackend";
-import { apiBaseUrl } from "../env";
-import { getDeliveryRadius } from "../helpers/toolbox";
+} from "../../validators/common_validators";
+import { checkNumericFormat } from "../../validators/settingsform_validators";
+import { callBackendWithFormDataForDelivers } from "../../../api/callBackend";
+import { apiBaseUrl } from "../../../env";
+import { getDeliveryRadius } from "../../../helpers/toolbox";
 
 export default function SettingsPersonalInformationForm({ ...props }) {
     return (

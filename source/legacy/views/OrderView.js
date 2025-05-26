@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { View, Text } from "react-native";
 import styles_order_view from "../styles/styles-order-view";
-import all_constants from "../constants";
+import all_constants from "../../constants";
 import CustomButton from "../components/CustomButton";
 import DishModal from "../modals/DishModal.js";
 import {
@@ -12,7 +12,7 @@ import {
 } from "@expo/vector-icons";
 import moment from "moment";
 import "moment/locale/fr"; // Import French locale
-import { buildReadableAddress } from "../helpers/toolbox";
+import { buildReadableAddress } from "../../helpers/toolbox";
 
 export default class OrderView extends Component {
     constructor(props) {
