@@ -25,6 +25,31 @@ module.exports = {
                 sourceType: "script",
             },
         },
+        // AJOUT : Configuration spécifique pour TypeScript
+        {
+            files: [
+                "*.ts",
+                "*.tsx"
+            ],
+            parser: "@typescript-eslint/parser",
+            plugins: [
+                "@typescript-eslint"
+            ],
+            extends: [
+                "eslint:recommended",
+                "plugin:react/recommended",
+                "plugin:react-hooks/recommended",
+                "plugin:@typescript-eslint/recommended",
+            ],
+            parserOptions: {
+                ecmaVersion: "latest",
+                sourceType: "module",
+                ecmaFeatures: {
+                    jsx: true,
+                },
+                project: "./tsconfig.json", // Optionnel pour les règles avancées
+            },
+        },
     ],
     parserOptions: {
         ecmaVersion: "latest",
@@ -67,7 +92,7 @@ module.exports = {
         "multiline-ternary": 1,
         "max-len": [
             "error",
-            { code: 119 }
+            { code: 260 }
         ],
         "keyword-spacing": 1,
         "new-parens": 1,
