@@ -14,13 +14,6 @@ export function GluestackUIProvider({
   children?: React.ReactNode;
   style?: ViewProps["style"];
 }) {
-    // const { colorScheme, setColorScheme } = useColorScheme();
-
-    // useEffect(() => {
-    //   setColorScheme(mode);
-    //   // eslint-disable-next-line react-hooks/exhaustive-deps
-    // }, [mode]);
-
     return (
         <View
             style={[
