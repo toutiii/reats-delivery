@@ -5,6 +5,7 @@ import { OverlayProvider } from "@gluestack-ui/overlay";
 import { ToastProvider } from "@gluestack-ui/toast";
 import { setFlushStyles } from "@gluestack-ui/nativewind-utils/flush";
 import { script } from "./script";
+import { DARK_CTE, LIGHT_CTE } from "@/constants/theme";
 
 export type ModeType = "light" | "dark" | "system";
 
@@ -57,9 +58,11 @@ export function GluestackUIProvider({
             const documentElement = document.documentElement;
             if (documentElement) {
                 documentElement.classList.add(mode);
-                documentElement.classList.remove(mode === "light"
-                    ? "dark"
-                    : "light");
+                documentElement.classList.remove(
+                    mode === "light"
+                        ? DARK_CTE
+                        : LIGHT_CTE,
+                );
                 documentElement.style.colorScheme = mode;
             }
         }
