@@ -7,8 +7,6 @@ import { setFlushStyles } from "@gluestack-ui/nativewind-utils/flush";
 import { script } from "./script";
 import { DARK_CTE, LIGHT_CTE } from "@/constants/theme";
 
-export type ModeType = "light" | "dark" | "system";
-
 const variableStyleTagId = "nativewind-style";
 const createStyle = (styleTagId: string) => {
     const style = document.createElement("style");
