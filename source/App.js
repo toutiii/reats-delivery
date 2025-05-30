@@ -1,4 +1,7 @@
+import "react-native-reanimated";
 import React, { Component } from "react";
+import "@/global.css";
+import { GluestackUIProvider } from "@/components/ui/gluestack-ui-provider";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
@@ -14,34 +17,36 @@ const Stack = createStackNavigator();
 export default class App extends Component {
     render() {
         return (
-            <AutocompleteDropdownContextProvider>
-                <SafeAreaView style={{ flex: 1 }}>
-                    <NavigationContainer>
-                        <Stack.Navigator initialRouteName="LoginForm">
-                            <Stack.Screen
-                                name="MainDrawerNavigator"
-                                component={MainDrawerNavigator}
-                                options={{ headerShown: false }}
-                            />
-                            <Stack.Screen
-                                name="OTPView"
-                                component={OTPView}
-                                options={{ headerShown: false }}
-                            />
-                            <Stack.Screen
-                                name="LoginForm"
-                                component={LoginForm}
-                                options={{ headerShown: false }}
-                            />
-                            <Stack.Screen
-                                name="SignupForm"
-                                component={SignupForm}
-                                options={{ headerShown: true, headerTitle: "" }}
-                            />
-                        </Stack.Navigator>
-                    </NavigationContainer>
-                </SafeAreaView>
-            </AutocompleteDropdownContextProvider>
+            <GluestackUIProvider mode="light">
+                <AutocompleteDropdownContextProvider>
+                    <SafeAreaView style={{ flex: 1 }}>
+                        <NavigationContainer>
+                            <Stack.Navigator initialRouteName="LoginForm">
+                                <Stack.Screen
+                                    name="MainDrawerNavigator"
+                                    component={MainDrawerNavigator}
+                                    options={{ headerShown: false }}
+                                />
+                                <Stack.Screen
+                                    name="OTPView"
+                                    component={OTPView}
+                                    options={{ headerShown: false }}
+                                />
+                                <Stack.Screen
+                                    name="LoginForm"
+                                    component={LoginForm}
+                                    options={{ headerShown: false }}
+                                />
+                                <Stack.Screen
+                                    name="SignupForm"
+                                    component={SignupForm}
+                                    options={{ headerShown: true, headerTitle: "" }}
+                                />
+                            </Stack.Navigator>
+                        </NavigationContainer>
+                    </SafeAreaView>
+                </AutocompleteDropdownContextProvider>
+            </GluestackUIProvider>
         );
     }
 }
