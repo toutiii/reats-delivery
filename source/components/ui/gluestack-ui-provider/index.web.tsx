@@ -32,7 +32,7 @@ export function GluestackUIProvider({
     let cssVariablesWithMode = "";
     Object.keys(config).forEach((configKey) => {
         cssVariablesWithMode +=
-      configKey === "dark"
+      configKey === DARK_CTE
           ? "\n .dark {\n "
           : "\n:root {\n";
         const cssVariables = Object.keys(
@@ -48,8 +48,8 @@ export function GluestackUIProvider({
 
     const handleMediaQuery = React.useCallback((e: MediaQueryListEvent) => {
         script(e.matches
-            ? "dark"
-            : "light");
+            ? DARK_CTE
+            : LIGHT_CTE);
     }, [
     ]);
 
