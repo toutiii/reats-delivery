@@ -1,6 +1,6 @@
 import "react-native-reanimated";
 import React, { Component } from "react";
-import "@/global.css";
+import "./global.css";
 import { GluestackUIProvider } from "@/components/ui/gluestack-ui-provider";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { NavigationContainer } from "@react-navigation/native";
