@@ -1,11 +1,9 @@
-// import { ThemedView } from '@/components/themed-view';
 import { Box } from '@/components/ui/box';
 import { Button, ButtonText } from '@/components/ui/button';
 import { Center } from '@/components/ui/center';
 import { Heading } from '@/components/ui/heading';
 import { Text } from '@/components/ui/text';
 import { VStack } from '@/components/ui/vstack';
-// import { router } from 'expo-router';
 import React, { useEffect } from 'react';
 import { Image, SafeAreaView, View } from 'react-native';
 import Animated, {
@@ -93,7 +91,7 @@ const StartPage = () => {
    };
 
    const navigateToNextScreen = () => {
-    //   router.push('/terms-and-conditions');
+   return
    };
 
    // Start animations when component mounts
