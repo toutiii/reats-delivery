@@ -1,6 +1,11 @@
 export default ({ config }) => {
     return {
         ...config,
+        expo: {
+            web: {
+                bundler: "metro",
+            },
+        },
         name: "source",
         slug: "source",
         version: "0.1.0",
@@ -31,7 +36,8 @@ export default ({ config }) => {
         },
         plugins: [
             "expo-build-properties",
-            "expo-secure-store"
+            "expo-secure-store",
+            "expo-font"
         ],
         extra: {
             eas: {

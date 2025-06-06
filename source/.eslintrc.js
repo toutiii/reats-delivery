@@ -13,6 +13,10 @@ module.exports = {
         "plugin:react/recommended",
         "plugin:react-hooks/recommended",
     ],
+    ignorePatterns: [
+        "node_modules/",
+        "**/node_modules/**"
+    ],
     overrides: [
         {
             env: {
@@ -47,7 +51,7 @@ module.exports = {
                 ecmaFeatures: {
                     jsx: true,
                 },
-                project: "./tsconfig.json", // Optionnel pour les règles avancées
+                project: "tsconfig.json", // Optionnel pour les règles avancées
             },
         },
     ],
@@ -104,5 +108,6 @@ module.exports = {
         "array-bracket-spacing": 1,
         "array-element-newline": 1,
         "react-hooks/exhaustive-deps": 0,
+        "@typescript-eslint/no-require-imports": 0,
     },
 };
