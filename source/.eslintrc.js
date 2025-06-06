@@ -104,5 +104,6 @@ module.exports = {
         "array-bracket-spacing": 1,
         "array-element-newline": 1,
         "react-hooks/exhaustive-deps": 0,
+        "@typescript-eslint/no-require-imports": 0,
     },
 };

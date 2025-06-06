@@ -10,6 +10,12 @@
     "lint:fix": "eslint app/ --fix",
     "prepare": "cd .. && husky source/.husky"
   },
+  "lint-staged": {
+    "*.{js,jsx,ts,tsx}": [
+      "yarn prettier --write",
+      "yarn eslint --fix"
+    ]
+  },
   "dependencies": {
     "@expo/html-elements": "0.4.2",
     "@gluestack-ui/button": "^1.0.14",

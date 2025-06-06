@@ -1,11 +1,11 @@
-import { Box } from '@/components/ui/box';
-import { Button, ButtonText } from '@/components/ui/button';
-import { Center } from '@/components/ui/center';
-import { Heading } from '@/components/ui/heading';
-import { Text } from '@/components/ui/text';
-import { VStack } from '@/components/ui/vstack';
-import React, { useEffect } from 'react';
-import { Image, SafeAreaView, View } from 'react-native';
+import { Box } from "@/components/ui/box";
+import { Button, ButtonText } from "@/components/ui/button";
+import { Center } from "@/components/ui/center";
+import { Heading } from "@/components/ui/heading";
+import { Text } from "@/components/ui/text";
+import { VStack } from "@/components/ui/vstack";
+import React, { useEffect } from "react";
+import { Image, SafeAreaView, View } from "react-native";
 import Animated, {
    Easing,
    Extrapolate,
@@ -17,7 +17,7 @@ import Animated, {
    withSequence,
    withSpring,
    withTiming,
-} from 'react-native-reanimated';
+} from "react-native-reanimated";
 
 const AnimatedCenter = Animated.createAnimatedComponent(Center);
 const AnimatedHeading = Animated.createAnimatedComponent(Heading);
@@ -136,7 +136,7 @@ const StartPage = () => {
                      style={imageAnimatedStyle}
                   >
                      <Image
-                        source={require('../../assets/images/onboarding/shipping.png')}
+                        source={require("../../assets/images/onboarding/shipping.png")}
                         className="w-[90%] h-[90%]"
                         resizeMode="contain"
                      />
