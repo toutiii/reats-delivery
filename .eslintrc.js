@@ -1,50 +1,14 @@
 module.exports = {
     root: true,
-    env: {
-        es2021: true,
-        node: true,
-    },
-    settings: {
-        react: {
-            version: "detect",
-        },
-    },
-    extends: [
-        "eslint:recommended"
-    ],
+    ignorePatterns: ["!source/**/*"],
+    rules: {},
     overrides: [
         {
-            files: [
-                "source/**/*.ts",
-                "source/**/*.tsx"
-            ],
-            parser: "@typescript-eslint/parser",
-            parserOptions: {
-                ecmaVersion: "latest",
-                sourceType: "module",
-                ecmaFeatures: {
-                    jsx: true,
-                },
-                project: "./source/tsconfig.json",
-            },
-            extends: [
-                "eslint:recommended",
-                "plugin:@typescript-eslint/recommended"
-            ],
+            files: ["source/**/*.js", "source/**/*.jsx", "source/**/*.ts", "source/**/*.tsx"],
             rules: {
-                "react-hooks/exhaustive-deps": "off",
-                "@typescript-eslint/no-require-imports": "off"
+                "react-hooks/exhaustive-deps": 0,
+                "@typescript-eslint/no-require-imports": 0
             }
         }
-    ],
-    parserOptions: {
-        ecmaVersion: "latest",
-        sourceType: "module",
-    },
-    rules: {
-        "indent": ["error", 4],
-        "linebreak-style": ["error", "unix"],
-        "quotes": ["error", "double"],
-        "semi": ["error", "always"]
-    }
+    ]
 };
