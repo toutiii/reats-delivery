@@ -3,11 +3,11 @@ import { DrawerContentScrollView, DrawerItem } from "@react-navigation/drawer";
 import React from "react";
 import { Image, StyleSheet, TouchableOpacity, View } from "react-native";
 import {
-    ActivityIndicator,
-    Drawer,
-    Text,
-    Title,
-    useTheme,
+  ActivityIndicator,
+  Drawer,
+  Text,
+  Title,
+  useTheme,
 } from "react-native-paper";
 import Animated from "react-native-reanimated";
 import all_constants from "../../constants";
@@ -19,197 +19,179 @@ import CustomAlert from "../components/CustomAlert";
 import Ionicons from "react-native-vector-icons/Ionicons";
 
 export default function DrawerContent(props) {
-    const paperTheme = useTheme();
-    const [
-        userData,
-        setUserData
-    ] = React.useState(null);
-    const [
-        requesting,
-        isRequesting
-    ] = React.useState(true);
-    const [
-        refreshData,
-        setRefreshData
-    ] = React.useState(false);
+  const paperTheme = useTheme();
+  const [userData, setUserData] = React.useState(null);
+  const [requesting, isRequesting] = React.useState(true);
+  const [refreshData, setRefreshData] = React.useState(false);
 
-    const [
-        showSignOutAlert,
-        setShowSignOutAlert
-    ] = React.useState(false);
+  const [showSignOutAlert, setShowSignOutAlert] = React.useState(false);
 
-    const resetNavigationStackToLoginView = () => {
-        const resetAction = CommonActions.reset({
-            index: 0,
-            routes: [
-                { name: "LoginForm" }
-            ],
-        });
-        props.navigation.dispatch(resetAction);
-    };
+  const resetNavigationStackToLoginView = () => {
+    const resetAction = CommonActions.reset({
+      index: 0,
+      routes: [{ name: "LoginForm" }],
+    });
+    props.navigation.dispatch(resetAction);
+  };
 
-    async function getData() {
-        const userID = await getItemFromSecureStore("userIDForDeliveryApp");
-        const access = await getItemFromSecureStore("accessTokenForDeliveryApp");
-        const result = await callBackEnd(
-            new FormData(),
-            `${apiBaseUrl}/api/v1/delivers/${userID}/`,
-            "GET",
-            access,
-        );
+  async function getData() {
+    const userID = await getItemFromSecureStore("userIDForDeliveryApp");
+    const access = await getItemFromSecureStore("accessTokenForDeliveryApp");
+    const result = await callBackEnd(
+      new FormData(),
+      `${apiBaseUrl}/api/v1/delivers/${userID}/`,
+      "GET",
+      access,
+    );
 
-        setUserData(result.data);
-        isRequesting(false);
-        setRefreshData(false);
+    setUserData(result.data);
+    isRequesting(false);
+    setRefreshData(false);
+  }
+
+  React.useEffect(() => {
+    if (requesting) {
+      console.log("Fetching data to feed drawer content");
+      getData();
     }
 
-    React.useEffect(() => {
-        if (requesting) {
-            console.log("Fetching data to feed drawer content");
-            getData();
-        }
-
-        return () => {
-            isRequesting(false);
-        };
-    }, [
-        refreshData
-    ]);
-
-    const changeRefreshDataState = () => {
-        setRefreshData(true);
-        isRequesting(true);
+    return () => {
+      isRequesting(false);
     };
+  }, [refreshData]);
 
-    return (
-        <View style={{ flex: 1, backgroundColor: paperTheme.colors.surface }}>
-            {requesting
-                ? (
-                    <View style={{ flex: 1, justifyContent: "center" }}>
-                        <ActivityIndicator animating={true} color="tomato" />
-                    </View>
-                )
-                : (
-                    <DrawerContentScrollView {...props}>
-                        <Animated.View style={[
-                            styles.drawerContent
-                        ]}>
-                            {showSignOutAlert && (
-                                <CustomAlert
-                                    show={showSignOutAlert}
-                                    title={all_constants.custom_alert.sign_out_title}
-                                    message={all_constants.custom_alert.sign_out_message}
-                                    confirmButtonColor="green"
-                                    showCancelButton={true}
-                                    cancelButtonColor="red"
-                                    confirmText={all_constants.custom_alert.sign_out_confirm_text}
-                                    cancelText={all_constants.custom_alert.sign_out_cancel_text}
-                                    onConfirmPressed={() => {
-                                        setShowSignOutAlert(false);
-                                        resetNavigationStackToLoginView();
-                                    }}
-                                    onCancelPressed={() => {
-                                        setShowSignOutAlert(false);
-                                    }}
-                                />
-                            )}
-                            <View style={styles.userInfoSection}>
-                                <TouchableOpacity
-                                    style={{ marginLeft: 10 }}
-                                    onPress={() => {
-                                        props.navigation.toggleDrawer();
-                                    }}
-                                >
-                                    <Image
-                                        source={{
-                                            uri: userData.personal_infos_section.data.photo,
-                                        }}
-                                        style={{ width: 70, height: 70, borderRadius: 150 / 2 }}
-                                    />
-                                </TouchableOpacity>
-                                <Title style={styles.title}>
-                                    {all_constants.drawercontent.hello}
-                                    {userData["personal_infos_section"]["data"]["firstname"]}
-                                </Title>
-                            </View>
+  const changeRefreshDataState = () => {
+    setRefreshData(true);
+    isRequesting(true);
+  };
 
-                            <Drawer.Section style={{ marginTop: "15%" }}>
-                                <DrawerItem
-                                    icon={({ color, size }) => (
-                                        <MaterialCommunityIcons
-                                            name="account"
-                                            color={color}
-                                            size={size}
-                                        />
-                                    )}
-                                    label={all_constants.drawercontent.drawer_item.label.account}
-                                    onPress={() => {
-                                        props.navigation.navigate("SettingsPersonalInformationForm", {
-                                            item: userData["personal_infos_section"]["data"],
-                                            refreshDataStateChanger: changeRefreshDataState,
-                                        });
-                                    }}
-                                />
-                                <DrawerItem
-                                    icon={({ color, size }) => (
-                                        <Ionicons name="stats-chart" color={color} size={size} />
-                                    )}
-                                    label={all_constants.drawercontent.drawer_item.label.stats}
-                                    onPress={() => {
-                                        props.navigation.navigate("StatsView");
-                                    }}
-                                />
-                                <DrawerItem
-                                    icon={({ color, size }) => (
-                                        <MaterialCommunityIcons
-                                            name="history"
-                                            color={color}
-                                            size={size}
-                                        />
-                                    )}
-                                    label={all_constants.drawercontent.drawer_item.label.history}
-                                    onPress={() => {
-                                        props.navigation.navigate("DeliveryHistory");
-                                    }}
-                                />
-                            </Drawer.Section>
+  return (
+    <View style={{ flex: 1, backgroundColor: paperTheme.colors.surface }}>
+      {requesting
+        ? (
+          <View style={{ flex: 1, justifyContent: "center" }}>
+            <ActivityIndicator animating={true} color="tomato" />
+          </View>
+        )
+        : (
+          <DrawerContentScrollView {...props}>
+            <Animated.View style={[styles.drawerContent]}>
+              {showSignOutAlert && (
+                <CustomAlert
+                  show={showSignOutAlert}
+                  title={all_constants.custom_alert.sign_out_title}
+                  message={all_constants.custom_alert.sign_out_message}
+                  confirmButtonColor="green"
+                  showCancelButton={true}
+                  cancelButtonColor="red"
+                  confirmText={all_constants.custom_alert.sign_out_confirm_text}
+                  cancelText={all_constants.custom_alert.sign_out_cancel_text}
+                  onConfirmPressed={() => {
+                    setShowSignOutAlert(false);
+                    resetNavigationStackToLoginView();
+                  }}
+                  onCancelPressed={() => {
+                    setShowSignOutAlert(false);
+                  }}
+                />
+              )}
+              <View style={styles.userInfoSection}>
+                <TouchableOpacity
+                  style={{ marginLeft: 10 }}
+                  onPress={() => {
+                    props.navigation.toggleDrawer();
+                  }}
+                >
+                  <Image
+                    source={{
+                      uri: userData.personal_infos_section.data.photo,
+                    }}
+                    style={{ width: 70, height: 70, borderRadius: 150 / 2 }}
+                  />
+                </TouchableOpacity>
+                <Title style={styles.title}>
+                  {all_constants.drawercontent.hello}
+                  {userData["personal_infos_section"]["data"]["firstname"]}
+                </Title>
+              </View>
 
-                            <Drawer.Section>
-                                <DrawerItem
-                                    icon={({ size }) => (
-                                        <MaterialCommunityIcons
-                                            name="power"
-                                            color="red"
-                                            size={size}
-                                        />
-                                    )}
-                                    label={() => (
-                                        <Text style={{ color: "red", fontWeight: "bold" }}>
-                                            {all_constants.drawercontent.logout}
-                                        </Text>
-                                    )}
-                                    onPress={() => {
-                                        setShowSignOutAlert(true);
-                                    }}
-                                />
-                            </Drawer.Section>
-                        </Animated.View>
-                    </DrawerContentScrollView>
-                )}
-        </View>
-    );
+              <Drawer.Section style={{ marginTop: "15%" }}>
+                <DrawerItem
+                  icon={({ color, size }) => (
+                    <MaterialCommunityIcons
+                      name="account"
+                      color={color}
+                      size={size}
+                    />
+                  )}
+                  label={all_constants.drawercontent.drawer_item.label.account}
+                  onPress={() => {
+                    props.navigation.navigate("SettingsPersonalInformationForm", {
+                      item: userData["personal_infos_section"]["data"],
+                      refreshDataStateChanger: changeRefreshDataState,
+                    });
+                  }}
+                />
+                <DrawerItem
+                  icon={({ color, size }) => (
+                    <Ionicons name="stats-chart" color={color} size={size} />
+                  )}
+                  label={all_constants.drawercontent.drawer_item.label.stats}
+                  onPress={() => {
+                    props.navigation.navigate("StatsView");
+                  }}
+                />
+                <DrawerItem
+                  icon={({ color, size }) => (
+                    <MaterialCommunityIcons
+                      name="history"
+                      color={color}
+                      size={size}
+                    />
+                  )}
+                  label={all_constants.drawercontent.drawer_item.label.history}
+                  onPress={() => {
+                    props.navigation.navigate("DeliveryHistory");
+                  }}
+                />
+              </Drawer.Section>
+
+              <Drawer.Section>
+                <DrawerItem
+                  icon={({ size }) => (
+                    <MaterialCommunityIcons
+                      name="power"
+                      color="red"
+                      size={size}
+                    />
+                  )}
+                  label={() => (
+                    <Text style={{ color: "red", fontWeight: "bold" }}>
+                      {all_constants.drawercontent.logout}
+                    </Text>
+                  )}
+                  onPress={() => {
+                    setShowSignOutAlert(true);
+                  }}
+                />
+              </Drawer.Section>
+            </Animated.View>
+          </DrawerContentScrollView>
+        )}
+    </View>
+  );
 }
 
 const styles = StyleSheet.create({
-    drawerContent: {
-        flex: 1,
-    },
-    userInfoSection: {
-        paddingLeft: "5%",
-        marginTop: "5%",
-    },
-    title: {
-        marginTop: "10%",
-        fontWeight: "bold",
-    },
+  drawerContent: {
+    flex: 1,
+  },
+  userInfoSection: {
+    paddingLeft: "5%",
+    marginTop: "5%",
+  },
+  title: {
+    marginTop: "10%",
+    fontWeight: "bold",
+  },
 });

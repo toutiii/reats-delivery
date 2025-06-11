@@ -1,16 +1,12 @@
 {
   "compilerOptions": {
     "paths": {
-      "@/*": [
-        "./*"
-      ],
-      "tailwind.config": [
-        "./tailwind.config.js"
-      ]
+      "@/*": ["./*"],
+      "tailwind.config": ["./tailwind.config.js"],
+      "gluestack-ui.config": ["./gluestack-ui.config.json"]
     }
   },
-  "exclude": [
-    "node_modules"
-  ],
+  "include": ["**/*.ts", "**/*.tsx", "nativewind-env.d.ts"],
+  "exclude": ["node_modules"],
   "extends": "expo/tsconfig.base"
 }
