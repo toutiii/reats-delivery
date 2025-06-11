@@ -2,6 +2,7 @@ module.exports = {
     env: {
         es2021: true,
         node: true,
+        browser: true,
     },
     settings: {
         react: {
@@ -15,7 +16,10 @@ module.exports = {
     ],
     ignorePatterns: [
         "node_modules/",
-        "**/node_modules/**"
+        "**/node_modules/**",
+        "dist/",
+        "build/",
+        "*.d.ts",
     ],
     overrides: [
         {
@@ -29,35 +33,13 @@ module.exports = {
                 sourceType: "script",
             },
         },
-        // AJOUT : Configuration spécifique pour TypeScript
-        {
-            files: [
-                "*.ts",
-                "*.tsx"
-            ],
-            parser: "@typescript-eslint/parser",
-            plugins: [
-                "@typescript-eslint"
-            ],
-            extends: [
-                "eslint:recommended",
-                "plugin:react/recommended",
-                "plugin:react-hooks/recommended",
-                "plugin:@typescript-eslint/recommended",
-            ],
-            parserOptions: {
-                ecmaVersion: "latest",
-                sourceType: "module",
-                ecmaFeatures: {
-                    jsx: true,
-                },
-                project: "tsconfig.json", // Optionnel pour les règles avancées
-            },
-        },
     ],
     parserOptions: {
         ecmaVersion: "latest",
         sourceType: "module",
+        ecmaFeatures: {
+            jsx: true,
+        },
     },
     plugins: [
         "react"
@@ -108,6 +90,13 @@ module.exports = {
         "array-bracket-spacing": 1,
         "array-element-newline": 1,
         "react-hooks/exhaustive-deps": 0,
-        "@typescript-eslint/no-require-imports": 0,
+        "no-unused-vars": [
+            "error",
+            {
+                argsIgnorePattern: "^_",
+                varsIgnorePattern: "^_",
+                destructuredArrayIgnorePattern: "^_",
+            },
+        ],
     },
 };
