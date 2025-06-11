@@ -7,30 +7,30 @@ import OrderView from "../views/OrderView";
 const Stack = createStackNavigator();
 
 export default class DeliveryHistoryStack extends Component {
-    constructor(props) {
-        super(props);
-    }
+  constructor(props) {
+    super(props);
+  }
 
-    render() {
-        return (
-            <Stack.Navigator initialRouteName="Home">
-                <Stack.Screen
-                    name={this.props.route.name + "Home"}
-                    component={DeliveryHistoryFlatList}
-                    options={{
-                        headerShown: true,
-                        title: all_constants.drawercontent.drawer_item.orders_history.title,
-                    }}
-                />
-                <Stack.Screen
-                    name="HistoryOrderDetailView"
-                    component={OrderView}
-                    options={{
-                        headerShown: true,
-                        title: "",
-                    }}
-                />
-            </Stack.Navigator>
-        );
-    }
+  render() {
+    return (
+      <Stack.Navigator initialRouteName="Home">
+        <Stack.Screen
+          name={this.props.route.name + "Home"}
+          component={DeliveryHistoryFlatList}
+          options={{
+            headerShown: true,
+            title: all_constants.drawercontent.drawer_item.orders_history.title,
+          }}
+        />
+        <Stack.Screen
+          name="HistoryOrderDetailView"
+          component={OrderView}
+          options={{
+            headerShown: true,
+            title: "",
+          }}
+        />
+      </Stack.Navigator>
+    );
+  }
 }
