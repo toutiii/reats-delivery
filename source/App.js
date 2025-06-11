@@ -12,6 +12,7 @@ import SignupForm from "./legacy/forms/forms/SignupForm";
 import LoginForm from "./legacy/forms/forms/LoginForm";
 import OTPView from "./legacy/views/OTPView";
 import StartPage from "./screens/onboarding";
+import TermsAndConditionsScreen from "./screens/onboarding/terms-and-conditions";
 
 const Stack = createStackNavigator();
 
@@ -22,32 +23,22 @@ export default class App extends Component {
         <AutocompleteDropdownContextProvider>
           <SafeAreaView style={{ flex: 1 }}>
             <NavigationContainer>
-              <Stack.Navigator initialRouteName="Onboarding">
+              <Stack.Navigator
+                initialRouteName="Onboarding"
+                screenOptions={{ headerShown: false }}
+              >
+                <Stack.Screen name="Onboarding" component={StartPage} />
                 <Stack.Screen
-                  name="Onboarding"
-                  component={StartPage}
-                  options={{ headerShown: false }}
+                  name="TermsAndConditions"
+                  component={TermsAndConditionsScreen}
                 />
                 <Stack.Screen
                   name="MainDrawerNavigator"
                   component={MainDrawerNavigator}
-                  options={{ headerShown: false }}
                 />
-                <Stack.Screen
-                  name="OTPView"
-                  component={OTPView}
-                  options={{ headerShown: false }}
-                />
-                <Stack.Screen
-                  name="LoginForm"
-                  component={LoginForm}
-                  options={{ headerShown: false }}
-                />
-                <Stack.Screen
-                  name="SignupForm"
-                  component={SignupForm}
-                  options={{ headerShown: true, headerTitle: "" }}
-                />
+                <Stack.Screen name="OTPView" component={OTPView} />
+                <Stack.Screen name="LoginForm" component={LoginForm} />
+                <Stack.Screen name="SignupForm" component={SignupForm} />
               </Stack.Navigator>
             </NavigationContainer>
           </SafeAreaView>
