@@ -20,16 +20,22 @@ module.exports = {
     "dist/",
     "build/",
     "*.d.ts",
+    "**/components/ui/icon/**",
   ],
   overrides: [
     {
       env: {
         node: true,
       },
-      files: [".eslintrc.{js,cjs}"],
+      // files: [
+      //   ".eslintrc.{js,cjs}"
+      // ],
       parserOptions: {
         sourceType: "script",
       },
+      files: ["*.ts", "*.tsx"],
+      parser: "@typescript-eslint/parser",
+      plugins: ["@typescript-eslint"],
     },
   ],
   parserOptions: {
@@ -61,9 +67,7 @@ module.exports = {
     "keyword-spacing": 1,
     "new-parens": 1,
     "lines-between-class-members": 1,
-    "array-bracket-newline": ["error", { multiline: true, minItems: 3 }],
     "array-bracket-spacing": 1,
-    "array-element-newline": 1,
     "react-hooks/exhaustive-deps": 0,
     "no-unused-vars": [
       "error",

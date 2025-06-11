@@ -67,115 +67,117 @@ export default function DrawerContent(props) {
 
   return (
     <View style={{ flex: 1, backgroundColor: paperTheme.colors.surface }}>
-      {requesting ? (
-        <View style={{ flex: 1, justifyContent: "center" }}>
-          <ActivityIndicator animating={true} color="tomato" />
-        </View>
-      ) : (
-        <DrawerContentScrollView {...props}>
-          <Animated.View style={[styles.drawerContent]}>
-            {showSignOutAlert && (
-              <CustomAlert
-                show={showSignOutAlert}
-                title={all_constants.custom_alert.sign_out_title}
-                message={all_constants.custom_alert.sign_out_message}
-                confirmButtonColor="green"
-                showCancelButton={true}
-                cancelButtonColor="red"
-                confirmText={all_constants.custom_alert.sign_out_confirm_text}
-                cancelText={all_constants.custom_alert.sign_out_cancel_text}
-                onConfirmPressed={() => {
-                  setShowSignOutAlert(false);
-                  resetNavigationStackToLoginView();
-                }}
-                onCancelPressed={() => {
-                  setShowSignOutAlert(false);
-                }}
-              />
-            )}
-            <View style={styles.userInfoSection}>
-              <TouchableOpacity
-                style={{ marginLeft: 10 }}
-                onPress={() => {
-                  props.navigation.toggleDrawer();
-                }}
-              >
-                <Image
-                  source={{
-                    uri: userData.personal_infos_section.data.photo,
+      {requesting
+        ? (
+          <View style={{ flex: 1, justifyContent: "center" }}>
+            <ActivityIndicator animating={true} color="tomato" />
+          </View>
+        )
+        : (
+          <DrawerContentScrollView {...props}>
+            <Animated.View style={[styles.drawerContent]}>
+              {showSignOutAlert && (
+                <CustomAlert
+                  show={showSignOutAlert}
+                  title={all_constants.custom_alert.sign_out_title}
+                  message={all_constants.custom_alert.sign_out_message}
+                  confirmButtonColor="green"
+                  showCancelButton={true}
+                  cancelButtonColor="red"
+                  confirmText={all_constants.custom_alert.sign_out_confirm_text}
+                  cancelText={all_constants.custom_alert.sign_out_cancel_text}
+                  onConfirmPressed={() => {
+                    setShowSignOutAlert(false);
+                    resetNavigationStackToLoginView();
                   }}
-                  style={{ width: 70, height: 70, borderRadius: 150 / 2 }}
+                  onCancelPressed={() => {
+                    setShowSignOutAlert(false);
+                  }}
                 />
-              </TouchableOpacity>
-              <Title style={styles.title}>
-                {all_constants.drawercontent.hello}
-                {userData["personal_infos_section"]["data"]["firstname"]}
-              </Title>
-            </View>
+              )}
+              <View style={styles.userInfoSection}>
+                <TouchableOpacity
+                  style={{ marginLeft: 10 }}
+                  onPress={() => {
+                    props.navigation.toggleDrawer();
+                  }}
+                >
+                  <Image
+                    source={{
+                      uri: userData.personal_infos_section.data.photo,
+                    }}
+                    style={{ width: 70, height: 70, borderRadius: 150 / 2 }}
+                  />
+                </TouchableOpacity>
+                <Title style={styles.title}>
+                  {all_constants.drawercontent.hello}
+                  {userData["personal_infos_section"]["data"]["firstname"]}
+                </Title>
+              </View>
 
-            <Drawer.Section style={{ marginTop: "15%" }}>
-              <DrawerItem
-                icon={({ color, size }) => (
-                  <MaterialCommunityIcons
-                    name="account"
-                    color={color}
-                    size={size}
-                  />
-                )}
-                label={all_constants.drawercontent.drawer_item.label.account}
-                onPress={() => {
-                  props.navigation.navigate("SettingsPersonalInformationForm", {
-                    item: userData["personal_infos_section"]["data"],
-                    refreshDataStateChanger: changeRefreshDataState,
-                  });
-                }}
-              />
-              <DrawerItem
-                icon={({ color, size }) => (
-                  <Ionicons name="stats-chart" color={color} size={size} />
-                )}
-                label={all_constants.drawercontent.drawer_item.label.stats}
-                onPress={() => {
-                  props.navigation.navigate("StatsView");
-                }}
-              />
-              <DrawerItem
-                icon={({ color, size }) => (
-                  <MaterialCommunityIcons
-                    name="history"
-                    color={color}
-                    size={size}
-                  />
-                )}
-                label={all_constants.drawercontent.drawer_item.label.history}
-                onPress={() => {
-                  props.navigation.navigate("DeliveryHistory");
-                }}
-              />
-            </Drawer.Section>
+              <Drawer.Section style={{ marginTop: "15%" }}>
+                <DrawerItem
+                  icon={({ color, size }) => (
+                    <MaterialCommunityIcons
+                      name="account"
+                      color={color}
+                      size={size}
+                    />
+                  )}
+                  label={all_constants.drawercontent.drawer_item.label.account}
+                  onPress={() => {
+                    props.navigation.navigate("SettingsPersonalInformationForm", {
+                      item: userData["personal_infos_section"]["data"],
+                      refreshDataStateChanger: changeRefreshDataState,
+                    });
+                  }}
+                />
+                <DrawerItem
+                  icon={({ color, size }) => (
+                    <Ionicons name="stats-chart" color={color} size={size} />
+                  )}
+                  label={all_constants.drawercontent.drawer_item.label.stats}
+                  onPress={() => {
+                    props.navigation.navigate("StatsView");
+                  }}
+                />
+                <DrawerItem
+                  icon={({ color, size }) => (
+                    <MaterialCommunityIcons
+                      name="history"
+                      color={color}
+                      size={size}
+                    />
+                  )}
+                  label={all_constants.drawercontent.drawer_item.label.history}
+                  onPress={() => {
+                    props.navigation.navigate("DeliveryHistory");
+                  }}
+                />
+              </Drawer.Section>
 
-            <Drawer.Section>
-              <DrawerItem
-                icon={({ size }) => (
-                  <MaterialCommunityIcons
-                    name="power"
-                    color="red"
-                    size={size}
-                  />
-                )}
-                label={() => (
-                  <Text style={{ color: "red", fontWeight: "bold" }}>
-                    {all_constants.drawercontent.logout}
-                  </Text>
-                )}
-                onPress={() => {
-                  setShowSignOutAlert(true);
-                }}
-              />
-            </Drawer.Section>
-          </Animated.View>
-        </DrawerContentScrollView>
-      )}
+              <Drawer.Section>
+                <DrawerItem
+                  icon={({ size }) => (
+                    <MaterialCommunityIcons
+                      name="power"
+                      color="red"
+                      size={size}
+                    />
+                  )}
+                  label={() => (
+                    <Text style={{ color: "red", fontWeight: "bold" }}>
+                      {all_constants.drawercontent.logout}
+                    </Text>
+                  )}
+                  onPress={() => {
+                    setShowSignOutAlert(true);
+                  }}
+                />
+              </Drawer.Section>
+            </Animated.View>
+          </DrawerContentScrollView>
+        )}
     </View>
   );
 }

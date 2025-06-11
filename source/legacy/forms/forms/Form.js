@@ -145,7 +145,9 @@ export default function Form({ ...props }) {
       const accessTokenForDeliveryApp = await getItemFromSecureStore(
         "accessTokenForDeliveryApp",
       );
-      const apiKey = props.useApiKey ? apiKeyBackend : null;
+      const apiKey = props.useApiKey
+        ? apiKeyBackend
+        : null;
 
       if (props.login) {
         result = await props.action(newItem, props.url, props.method, apiKey);
@@ -154,7 +156,9 @@ export default function Form({ ...props }) {
           newItem,
           props.url,
           props.method,
-          props.useItemID ? newItem.id : userIDForDeliveryApp,
+          props.useItemID
+            ? newItem.id
+            : userIDForDeliveryApp,
           accessTokenForDeliveryApp,
           apiKey,
         );
@@ -426,15 +430,15 @@ export default function Form({ ...props }) {
             noErrorsFound &&
             !apiOkResponse &&
             !wantToGoBack && (
-              <CustomAlert
-                show={showAlert}
-                title={all_constants.messages.failed.title}
-                confirmButtonColor="red"
-                onConfirmPressed={() => {
-                  setStateShowAlert(false);
-                }}
-              />
-            )}
+            <CustomAlert
+              show={showAlert}
+              title={all_constants.messages.failed.title}
+              confirmButtonColor="red"
+              onConfirmPressed={() => {
+                setStateShowAlert(false);
+              }}
+            />
+          )}
           <Animated.View style={{ flex: 1, opacity, width: "100%" }}>
             {fieldKeys.map((key) => {
               return (
@@ -469,39 +473,41 @@ export default function Form({ ...props }) {
                 onPress={submit}
               />
             </View>
-            {props.login ? (
-              <View style={{ flex: 1 }}>
+            {props.login
+              ? (
+                <View style={{ flex: 1 }}>
+                  <View style={styles_form.form_button}>
+                    <CustomButton
+                      label={all_constants.messages.signup}
+                      height={50}
+                      border_width={3}
+                      border_radius={30}
+                      font_size={18}
+                      backgroundColor={"dimgrey"}
+                      label_color="white"
+                      onPress={() => {
+                        props.navigation.navigate("SignupForm");
+                      }}
+                    />
+                  </View>
+                </View>
+              )
+              : (
                 <View style={styles_form.form_button}>
                   <CustomButton
-                    label={all_constants.messages.signup}
+                    label={all_constants.messages.cancel}
                     height={50}
                     border_width={3}
                     border_radius={30}
                     font_size={18}
-                    backgroundColor={"dimgrey"}
+                    backgroundColor={"red"}
                     label_color="white"
                     onPress={() => {
-                      props.navigation.navigate("SignupForm");
+                      setShowAlertCancel(true);
                     }}
                   />
                 </View>
-              </View>
-            ) : (
-              <View style={styles_form.form_button}>
-                <CustomButton
-                  label={all_constants.messages.cancel}
-                  height={50}
-                  border_width={3}
-                  border_radius={30}
-                  font_size={18}
-                  backgroundColor={"red"}
-                  label_color="white"
-                  onPress={() => {
-                    setShowAlertCancel(true);
-                  }}
-                />
-              </View>
-            )}
+              )}
             {props.deleteAccountButton && (
               <View style={styles_form.form_button}>
                 <CustomButton
@@ -521,20 +527,20 @@ export default function Form({ ...props }) {
               newItem.town !== undefined &&
               newItem.town !== null &&
               props.showDeleteAddressButton && (
-                <View style={styles_form.form_button}>
-                  <CustomButton
-                    label={props.deleteAddressButtonLabel}
-                    height={50}
-                    border_radius={30}
-                    font_size={18}
-                    backgroundColor={"darkgrey"}
-                    label_color="white"
-                    onPress={() => {
-                      setShowAlertDeleteAddress(true);
-                    }}
-                  />
-                </View>
-              )}
+              <View style={styles_form.form_button}>
+                <CustomButton
+                  label={props.deleteAddressButtonLabel}
+                  height={50}
+                  border_radius={30}
+                  font_size={18}
+                  backgroundColor={"darkgrey"}
+                  label_color="white"
+                  onPress={() => {
+                    setShowAlertDeleteAddress(true);
+                  }}
+                />
+              </View>
+            )}
           </View>
         </View>
       </ScrollView>

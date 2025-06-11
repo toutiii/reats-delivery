@@ -287,7 +287,9 @@ export default function StatsView() {
 
               <View style={{ flex: 1, alignItems: "center" }}>
                 <Text style={{ fontSize: 28, color: "black" }}>
-                  {statsData.length === 0 ? 0 : statsData.total_delivery_fees}
+                  {statsData.length === 0
+                    ? 0
+                    : statsData.total_delivery_fees}
                 </Text>
               </View>
             </View>

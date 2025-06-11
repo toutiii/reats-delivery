@@ -6,6 +6,7 @@ import { ToastProvider } from "@gluestack-ui/toast";
 import { setFlushStyles } from "@gluestack-ui/nativewind-utils/flush";
 import { script } from "./script";
 import { DARK_CTE, LIGHT_CTE } from "@/constants/theme";
+import { ModeType } from "@/types";
 
 const variableStyleTagId = "nativewind-style";
 const createStyle = (styleTagId: string) => {
@@ -16,7 +17,9 @@ const createStyle = (styleTagId: string) => {
 };
 
 export const useSafeLayoutEffect =
-  typeof window !== "undefined" ? useLayoutEffect : useEffect;
+  typeof window !== "undefined"
+    ? useLayoutEffect
+    : useEffect;
 
 export function GluestackUIProvider({
   mode = "light",
@@ -28,7 +31,9 @@ export function GluestackUIProvider({
   let cssVariablesWithMode = "";
   Object.keys(config).forEach((configKey) => {
     cssVariablesWithMode +=
-      configKey === DARK_CTE ? "\n .dark {\n " : "\n:root {\n";
+      configKey === DARK_CTE
+        ? "\n .dark {\n "
+        : "\n:root {\n";
     const cssVariables = Object.keys(
       config[configKey as keyof typeof config],
     ).reduce((acc: string, curr: string) => {
@@ -41,7 +46,9 @@ export function GluestackUIProvider({
   setFlushStyles(cssVariablesWithMode);
 
   const handleMediaQuery = React.useCallback((e: MediaQueryListEvent) => {
-    script(e.matches ? DARK_CTE : LIGHT_CTE);
+    script(e.matches
+      ? DARK_CTE
+      : LIGHT_CTE);
   }, []);
 
   useSafeLayoutEffect(() => {
@@ -50,7 +57,9 @@ export function GluestackUIProvider({
       if (documentElement) {
         documentElement.classList.add(mode);
         documentElement.classList.remove(
-          mode === "light" ? DARK_CTE : LIGHT_CTE,
+          mode === "light"
+            ? DARK_CTE
+            : LIGHT_CTE,
         );
         documentElement.style.colorScheme = mode;
       }

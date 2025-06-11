@@ -239,18 +239,26 @@ export default function OTPView({ ...props }) {
             key={index}
             style={styles.box}
             autoComplete={
-              Platform.OS === "android" && index === 0 ? "sms-otp" : "off"
+              Platform.OS === "android" && index === 0
+                ? "sms-otp"
+                : "off"
             }
             textContentType={
-              Platform.OS === "ios" && index === 0 ? "oneTimeCode" : "none"
+              Platform.OS === "ios" && index === 0
+                ? "oneTimeCode"
+                : "none"
             }
             height={40}
             onChangeText={(value) => handleOtpChange(value, index)}
             keyboardType="numeric"
             cursorColor="green"
             textAlign="center"
-            maxLength={index === 0 ? OTPLength : 1}
-            autoFocus={index === 0 ? true : false}
+            maxLength={index === 0
+              ? OTPLength
+              : 1}
+            autoFocus={index === 0
+              ? true
+              : false}
             value={digit}
             ref={(input) => {
               inputs[index] = input;

@@ -23,135 +23,135 @@ const MappedHeading = memo(
     ref,
   ) {
     switch (size) {
-      case "5xl":
-      case "4xl":
-      case "3xl":
-        return (
-          <h1
-            className={headingStyle({
-              size,
-              isTruncated,
-              bold,
-              underline,
-              strikeThrough,
-              sub,
-              italic,
-              highlight,
-              class: className,
-            })}
-            {...props}
-            ref={ref}
-          />
-        );
-      case "2xl":
-        return (
-          <h2
-            className={headingStyle({
-              size,
-              isTruncated,
-              bold,
-              underline,
-              strikeThrough,
-              sub,
-              italic,
-              highlight,
-              class: className,
-            })}
-            {...props}
-            ref={ref}
-          />
-        );
-      case "xl":
-        return (
-          <h3
-            className={headingStyle({
-              size,
-              isTruncated,
-              bold,
-              underline,
-              strikeThrough,
-              sub,
-              italic,
-              highlight,
-              class: className,
-            })}
-            {...props}
-            ref={ref}
-          />
-        );
-      case "lg":
-        return (
-          <h4
-            className={headingStyle({
-              size,
-              isTruncated,
-              bold,
-              underline,
-              strikeThrough,
-              sub,
-              italic,
-              highlight,
-              class: className,
-            })}
-            {...props}
-            ref={ref}
-          />
-        );
-      case "md":
-        return (
-          <h5
-            className={headingStyle({
-              size,
-              isTruncated,
-              bold,
-              underline,
-              strikeThrough,
-              sub,
-              italic,
-              highlight,
-              class: className,
-            })}
-            {...props}
-            ref={ref}
-          />
-        );
-      case "sm":
-      case "xs":
-        return (
-          <h6
-            className={headingStyle({
-              size,
-              isTruncated,
-              bold,
-              underline,
-              strikeThrough,
-              sub,
-              italic,
-              highlight,
-              class: className,
-            })}
-            {...props}
-            ref={ref}
-          />
-        );
-      default:
-        return (
-          <h4
-            className={headingStyle({
-              size,
-              isTruncated,
-              bold,
-              underline,
-              strikeThrough,
-              sub,
-              italic,
-              highlight,
-              class: className,
-            })}
-            {...props}
-            ref={ref}
-          />
-        );
+    case "5xl":
+    case "4xl":
+    case "3xl":
+      return (
+        <h1
+          className={headingStyle({
+            size,
+            isTruncated,
+            bold,
+            underline,
+            strikeThrough,
+            sub,
+            italic,
+            highlight,
+            class: className,
+          })}
+          {...props}
+          ref={ref}
+        />
+      );
+    case "2xl":
+      return (
+        <h2
+          className={headingStyle({
+            size,
+            isTruncated,
+            bold,
+            underline,
+            strikeThrough,
+            sub,
+            italic,
+            highlight,
+            class: className,
+          })}
+          {...props}
+          ref={ref}
+        />
+      );
+    case "xl":
+      return (
+        <h3
+          className={headingStyle({
+            size,
+            isTruncated,
+            bold,
+            underline,
+            strikeThrough,
+            sub,
+            italic,
+            highlight,
+            class: className,
+          })}
+          {...props}
+          ref={ref}
+        />
+      );
+    case "lg":
+      return (
+        <h4
+          className={headingStyle({
+            size,
+            isTruncated,
+            bold,
+            underline,
+            strikeThrough,
+            sub,
+            italic,
+            highlight,
+            class: className,
+          })}
+          {...props}
+          ref={ref}
+        />
+      );
+    case "md":
+      return (
+        <h5
+          className={headingStyle({
+            size,
+            isTruncated,
+            bold,
+            underline,
+            strikeThrough,
+            sub,
+            italic,
+            highlight,
+            class: className,
+          })}
+          {...props}
+          ref={ref}
+        />
+      );
+    case "sm":
+    case "xs":
+      return (
+        <h6
+          className={headingStyle({
+            size,
+            isTruncated,
+            bold,
+            underline,
+            strikeThrough,
+            sub,
+            italic,
+            highlight,
+            class: className,
+          })}
+          {...props}
+          ref={ref}
+        />
+      );
+    default:
+      return (
+        <h4
+          className={headingStyle({
+            size,
+            isTruncated,
+            bold,
+            underline,
+            strikeThrough,
+            sub,
+            italic,
+            highlight,
+            class: className,
+          })}
+          {...props}
+          ref={ref}
+        />
+      );
     }
   }),
 );

@@ -9,8 +9,12 @@ export const script = (mode: string) => {
 
   try {
     const isSystem = mode === "system";
-    const theme = isSystem ? getSystemColorMode() : mode;
-    documentElement.classList.remove(theme === "light" ? "dark" : "light");
+    const theme = isSystem
+      ? getSystemColorMode()
+      : mode;
+    documentElement.classList.remove(theme === "light"
+      ? "dark"
+      : "light");
     documentElement.classList.add(theme);
     documentElement.style.colorScheme = theme;
   } catch (e) {

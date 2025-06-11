@@ -21,17 +21,23 @@ export default function MainTabNavigator() {
         tabBarIcon: ({ focused, color, size }) => {
           let iconName;
           if (route.name === all_constants.tab.main_tab_navigator.home) {
-            iconName = focused ? "home" : "home-outline";
+            iconName = focused
+              ? "home"
+              : "home-outline";
             return <Ionicons name={iconName} size={size} color={color} />;
           } else if (
             route.name === all_constants.tab.main_tab_navigator.pending
           ) {
-            iconName = focused ? "hourglass" : "hourglass-outline";
+            iconName = focused
+              ? "hourglass"
+              : "hourglass-outline";
             return <Ionicons name={iconName} size={size} color={color} />;
           } else if (
             route.name === all_constants.tab.main_tab_navigator.delivery
           ) {
-            iconName = focused ? "delivery-dining" : "delivery-dining";
+            iconName = focused
+              ? "delivery-dining"
+              : "delivery-dining";
             return <MaterialIcons name={iconName} size={size} color={color} />;
           }
         },
@@ -42,8 +48,8 @@ export default function MainTabNavigator() {
           "StatsView",
         ].includes(route.name)
           ? () => {
-              return null;
-            }
+            return null;
+          }
           : undefined,
       })}
     >

@@ -31,9 +31,15 @@ export default function DishModal({ ...props }) {
               data={props.modal_data}
               renderItem={({ item }) => (
                 <DishForModal
-                  key={item.dish ? item.dish.id : item.drink.id}
-                  photo={item.dish ? item.dish.photo : item.drink.photo}
-                  name={item.dish ? item.dish.name : item.drink.name}
+                  key={item.dish
+                    ? item.dish.id
+                    : item.drink.id}
+                  photo={item.dish
+                    ? item.dish.photo
+                    : item.drink.photo}
+                  name={item.dish
+                    ? item.dish.name
+                    : item.drink.name}
                   rating={
                     item.dish
                       ? item.dish.rating
@@ -41,7 +47,9 @@ export default function DishModal({ ...props }) {
                         ? item.drink.rating
                         : "-/-"
                   }
-                  price={item.dish ? item.dish.price : item.drink.price}
+                  price={item.dish
+                    ? item.dish.price
+                    : item.drink.price}
                   quantity={
                     item.dish_quantity
                       ? item.dish_quantity
