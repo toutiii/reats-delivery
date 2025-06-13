@@ -5,6 +5,8 @@ import type { RouteProp } from "@react-navigation/native";
 export type RootStackParamList = {
   Onboarding: undefined;
   TermsAndConditions: undefined;
+  LoginScreen: undefined;
+  RegisterScreen: undefined;
   LoginForm: undefined;
   SignupForm: undefined;
   OTPView: undefined;

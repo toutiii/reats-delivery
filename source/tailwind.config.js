@@ -175,9 +175,9 @@ module.exports = {
         },
       },
       fontFamily: {
-        heading: undefined,
-        body: undefined,
-        mono: undefined,
+        heading: "Montserrat_700Bold",
+        body: "Montserrat_400Regular",
+        mono: "Montserrat_400Regular",
         roboto: ["Roboto", "sans-serif"],
       },
       fontWeight: {

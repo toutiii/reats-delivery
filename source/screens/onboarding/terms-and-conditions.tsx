@@ -341,9 +341,11 @@ const TermsAndConditionsScreen = () => {
           <HStack className="items-start mb-6" space="md">
             <Pressable onPress={toggleCheckbox} className="pt-1">
               <Box
-                className={`h-5 w-5 border border-gray-300 rounded ${isChecked
-                  ? "bg-white"
-                  : "bg-white"}`}
+                className={`h-5 w-5 border border-gray-300 rounded ${
+                  isChecked
+                    ? "bg-white"
+                    : "bg-white"
+                }`}
               >
                 {isChecked && <Box className="h-3 w-3 bg-rose-400 m-auto" />}
               </Box>
@@ -359,7 +361,7 @@ const TermsAndConditionsScreen = () => {
           <Button
             size="lg"
             disabled={!isChecked}
-            onPress={() => navigation.navigate("LoginForm")}
+            onPress={() => navigation.navigate("LoginScreen")}
           >
             <ButtonText className="">Continuer</ButtonText>
           </Button>

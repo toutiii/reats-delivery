@@ -8,7 +8,7 @@ import Animated, { FadeIn } from "react-native-reanimated";
 const LoginScreen = () => {
   return (
     <ThemedView>
-      <StatusBar style="inverted" />
+      <StatusBar style="dark" />
       <SafeAreaView className="flex-1">
         <Center className="justify-center my-10">
           <Animated.Image
