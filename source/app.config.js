@@ -32,7 +32,20 @@ export default ({ config }) => {
     web: {
       favicon: "./assets/favicon.png",
     },
-    plugins: ["expo-build-properties", "expo-secure-store", "expo-font"],
+    plugins: [
+      "expo-build-properties",
+      "expo-secure-store",
+      "expo-font",
+      [
+        "expo-splash-screen",
+        {
+          image: "./assets/splash.png",
+          imageWidth: 200,
+          resizeMode: "contain",
+          backgroundColor: "#ffffff",
+        },
+      ],
+    ],
     extra: {
       eas: {
         projectId: "6df1673a-3c4d-4188-b913-b619a786ee34",
