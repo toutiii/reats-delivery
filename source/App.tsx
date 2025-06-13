@@ -33,6 +33,7 @@ import { Montserrat_900Black } from "@expo-google-fonts/montserrat/900Black";
 import { Montserrat_900Black_Italic } from "@expo-google-fonts/montserrat/900Black_Italic";
 import { useFonts } from "expo-font";
 import { useEffect } from "react";
+import RegisterScreen from "./screens/auth/register";
 
 const Stack = createStackNavigator();
 SplashScreen.preventAutoHideAsync();
@@ -83,6 +84,7 @@ export default function App() {
               component={TermsAndConditionsScreen}
             />
             <Stack.Screen name="LoginScreen" component={LoginScreen} />
+            <Stack.Screen name="RegisterScreen" component={RegisterScreen} />
             <Stack.Screen
               name="MainDrawerNavigator"
               component={MainDrawerNavigator}

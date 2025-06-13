@@ -6,8 +6,11 @@ import { TouchableOpacity, View } from "react-native";
 import { Text } from "@/components/ui/text";
 import { ICountry } from "@/types";
 import { FormInputControlPhone } from "@/components/common/form-input-control-phone";
+import { useNavigation } from "@react-navigation/native";
+import { StackNavigation } from "@/types/navigation";
 
 const LoginForm = () => {
+  const navigation = useNavigation<StackNavigation>();
   const [country, setCountry] = useState<ICountry>({
     calling_codes: [242],
     key: "FR",
@@ -56,7 +59,7 @@ const LoginForm = () => {
         <Text className="text-base text-gray-500">
           Vous n&lsquo;avez pas de compte ?
         </Text>
-        <TouchableOpacity onPress={() => null}>
+        <TouchableOpacity onPress={() => navigation.navigate("RegisterScreen")}>
           <Text className="text-base text-blue-500">S&lsquo;inscrire</Text>
         </TouchableOpacity>
       </View>

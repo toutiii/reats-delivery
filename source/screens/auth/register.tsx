@@ -21,7 +21,7 @@ const RegisterScreen = () => {
       className="flex-1"
     >
       <ThemedView>
-        <StatusBar style="inverted" />
+        <StatusBar style="dark" />
         <SafeAreaView className="flex-1">
           <ScrollView showsVerticalScrollIndicator={false}>
             <Center className="justify-center my-4">
