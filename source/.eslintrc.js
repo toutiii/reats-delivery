@@ -20,7 +20,7 @@ module.exports = {
     "dist/",
     "build/",
     "*.d.ts",
-    "**/components/ui/icon/**",
+    "**/components/ui/**",
   ],
   overrides: [
     {
@@ -52,6 +52,7 @@ module.exports = {
     quotes: ["error", "double"],
     semi: ["error", "always"],
     "react/prop-types": 0,
+    "react/react-in-jsx-scope": "off", // Désactive la règle qui exige React en scope pour JSX
     "no-trailing-spaces": 1,
     "no-multi-spaces": 1,
     "no-unexpected-multiline": 0,

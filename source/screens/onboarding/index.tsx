@@ -18,13 +18,15 @@ import Animated, {
   withSpring,
   withTiming,
 } from "react-native-reanimated";
-
+import { useNavigation } from "@react-navigation/native";
+import type { StackNavigation } from "@/types/navigation";
 const AnimatedCenter = Animated.createAnimatedComponent(Center);
 const AnimatedHeading = Animated.createAnimatedComponent(Heading);
 const AnimatedText = Animated.createAnimatedComponent(Text);
 const AnimatedButton = Animated.createAnimatedComponent(Button);
 
 const StartPage = () => {
+  const navigation = useNavigation<StackNavigation>();
   // Animation values
   const imageOpacity = useSharedValue(0);
   const imageScale = useSharedValue(0.8);
@@ -88,6 +90,7 @@ const StartPage = () => {
         }
       }),
     );
+    navigation.navigate("TermsAndConditions");
   };
 
   const navigateToNextScreen = () => {
