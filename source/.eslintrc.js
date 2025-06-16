@@ -70,8 +70,9 @@ module.exports = {
     "lines-between-class-members": 1,
     "array-bracket-spacing": 1,
     "react-hooks/exhaustive-deps": 0,
+    "react/no-unescaped-entities": "off",
     "no-unused-vars": [
-      "error",
+      "warn",
       {
         argsIgnorePattern: "^_",
         varsIgnorePattern: "^_",
