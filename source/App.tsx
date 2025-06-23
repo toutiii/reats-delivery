@@ -34,6 +34,8 @@ import OTPScreen from "./screens/auth/otp";
 import RegisterScreen from "./screens/auth/register";
 import StartPage from "./screens/onboarding";
 import TermsAndConditionsScreen from "./screens/onboarding/terms-and-conditions";
+import DocumentsScreen from "./screens/user-infos-collection";
+import PersonalDocumentsScreen from "./screens/user-infos-collection/personal-documents";
 
 const Stack = createStackNavigator();
 SplashScreen.preventAutoHideAsync();
@@ -80,6 +82,8 @@ export default function App() {
             <Stack.Screen name="LoginScreen" component={LoginScreen} />
             <Stack.Screen name="RegisterScreen" component={RegisterScreen} />
             <Stack.Screen name="OTPScreen" component={OTPScreen} />
+            <Stack.Screen name="DocumentsScreen" component={DocumentsScreen} />
+            <Stack.Screen name="PersonalDocumentsScreen" component={PersonalDocumentsScreen} />
             <Stack.Screen name="MainDrawerNavigator" component={MainDrawerNavigator} />
             <Stack.Screen name="OTPView" component={OTPView} />
             <Stack.Screen name="LoginForm" component={LoginForm} />

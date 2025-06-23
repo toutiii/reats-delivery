@@ -10,6 +10,8 @@ export type RootStackParamList = {
   LoginForm: undefined;
   SignupForm: undefined;
   OTPScreen: undefined;
+  DocumentsScreen: undefined;
+  PersonalDocumentsScreen: undefined;
   MainDrawerNavigator: undefined;
 };
 
