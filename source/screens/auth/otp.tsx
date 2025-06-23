@@ -141,7 +141,7 @@ const OTPScreen: React.FC = () => {
         setVerificationStatus("success");
         // Navigate to next screen after successful verification
         setTimeout(() => {
-          navigation.navigate("MainDrawerNavigator"); // Replace with your actual route name
+          navigation.navigate("DocumentsScreen"); // Replace with your actual route name
         }, 1000);
       } else {
         setVerificationStatus("error");
