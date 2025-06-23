@@ -1,31 +1,25 @@
 import { Button, ButtonText } from "@/components/ui/button";
-import {
-  FormControl,
-  FormControlError,
-  FormControlErrorIcon,
-  FormControlErrorText,
-  FormControlLabel,
-  FormControlLabelText,
-} from "@/components/ui/form-control";
+import { FormControl, FormControlError, FormControlErrorIcon, FormControlErrorText, FormControlLabel, FormControlLabelText } from "@/components/ui/form-control";
 import { AlertCircleIcon, InfoIcon } from "@/components/ui/icon";
 import { Input, InputField } from "@/components/ui/input";
 import { VStack } from "@/components/ui/vstack";
 import { ICountry } from "@/types";
 
-import InputMultiSelectCity, {
-  City,
-} from "@/components/common/input-auto-complete";
+import InputMultiSelectCity, { City } from "@/components/common/input-auto-complete";
 import { Alert, AlertIcon, AlertText } from "@/components/ui/alert";
 import { Text } from "@/components/ui/text";
 import { Register } from "@/types/auth";
+import { StackNavigation } from "@/types/navigation";
 import { registerValidationSchema } from "@/utils/validation";
 import { yupResolver } from "@hookform/resolvers/yup";
+import { useNavigation } from "@react-navigation/native";
 import React, { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { TouchableOpacity, View } from "react-native";
 import { FormInputControlPhone } from "../../common/form-input-control-phone";
 
 const RegisterForm = () => {
+  const navigation = useNavigation<StackNavigation>();
   const [country, setCountry] = useState<ICountry>({
     calling_codes: [242],
     key: "FR",
@@ -61,7 +55,7 @@ const RegisterForm = () => {
       console.log("Données du formulaire:", data);
       // Simuler un délai d'API
       await new Promise((resolve) => setTimeout(resolve, 1000));
-      // na.replace("/(onboarding)");
+      navigation.navigate("OTPScreen");
     } catch (error) {
       console.error("Erreur lors de l'inscription:", error);
       setError("Erreur lors de l'inscription:");
@@ -76,31 +70,17 @@ const RegisterForm = () => {
           control={control}
           name="firstName"
           render={({ field: { onChange, onBlur, value } }) => (
-            <FormControl
-              isInvalid={!!errors.firstName}
-              size="md"
-              isDisabled={isSubmitting}
-              isReadOnly={false}
-              isRequired={true}
-            >
+            <FormControl isInvalid={!!errors.firstName} size="md" isDisabled={isSubmitting} isReadOnly={false} isRequired={true}>
               <FormControlLabel>
                 <FormControlLabelText>Prénom</FormControlLabelText>
               </FormControlLabel>
               <Input className="my-1" size={"lg"} variant="rounded">
-                <InputField
-                  type="text"
-                  placeholder="Entrez votre prénom"
-                  value={value}
-                  onChangeText={onChange}
-                  onBlur={onBlur}
-                />
+                <InputField type="text" placeholder="Entrez votre prénom" value={value} onChangeText={onChange} onBlur={onBlur} />
               </Input>
               {errors.firstName && (
                 <FormControlError>
                   <FormControlErrorIcon as={AlertCircleIcon} />
-                  <FormControlErrorText>
-                    {errors.firstName.message}
-                  </FormControlErrorText>
+                  <FormControlErrorText>{errors.firstName.message}</FormControlErrorText>
                 </FormControlError>
               )}
             </FormControl>
@@ -114,31 +94,17 @@ const RegisterForm = () => {
           control={control}
           name="lastName"
           render={({ field: { onChange, onBlur, value } }) => (
-            <FormControl
-              isInvalid={!!errors.lastName}
-              size="md"
-              isDisabled={isSubmitting}
-              isReadOnly={false}
-              isRequired={true}
-            >
+            <FormControl isInvalid={!!errors.lastName} size="md" isDisabled={isSubmitting} isReadOnly={false} isRequired={true}>
               <FormControlLabel>
                 <FormControlLabelText>Nom</FormControlLabelText>
               </FormControlLabel>
               <Input className="my-1" size={"lg"} variant="rounded">
-                <InputField
-                  type="text"
-                  placeholder="Entrez votre nom"
-                  value={value}
-                  onChangeText={onChange}
-                  onBlur={onBlur}
-                />
+                <InputField type="text" placeholder="Entrez votre nom" value={value} onChangeText={onChange} onBlur={onBlur} />
               </Input>
               {errors.lastName && (
                 <FormControlError>
                   <FormControlErrorIcon as={AlertCircleIcon} />
-                  <FormControlErrorText>
-                    {errors.lastName.message}
-                  </FormControlErrorText>
+                  <FormControlErrorText>{errors.lastName.message}</FormControlErrorText>
                 </FormControlError>
               )}
             </FormControl>
@@ -152,33 +118,17 @@ const RegisterForm = () => {
           control={control}
           name="siret"
           render={({ field: { onChange, onBlur, value } }) => (
-            <FormControl
-              isInvalid={!!errors.siret}
-              size="md"
-              isDisabled={isSubmitting}
-              isReadOnly={false}
-              isRequired={true}
-            >
+            <FormControl isInvalid={!!errors.siret} size="md" isDisabled={isSubmitting} isReadOnly={false} isRequired={true}>
               <FormControlLabel>
                 <FormControlLabelText>SIRET</FormControlLabelText>
               </FormControlLabel>
               <Input className="my-1" size={"lg"} variant="rounded">
-                <InputField
-                  type="text"
-                  placeholder="Entrez votre SIRET"
-                  value={value}
-                  onChangeText={onChange}
-                  onBlur={onBlur}
-                  keyboardType="numeric"
-                  maxLength={14}
-                />
+                <InputField type="text" placeholder="Entrez votre SIRET" value={value} onChangeText={onChange} onBlur={onBlur} keyboardType="numeric" maxLength={14} />
               </Input>
               {errors.siret && (
                 <FormControlError>
                   <FormControlErrorIcon as={AlertCircleIcon} />
-                  <FormControlErrorText>
-                    {errors.siret.message}
-                  </FormControlErrorText>
+                  <FormControlErrorText>{errors.siret.message}</FormControlErrorText>
                 </FormControlError>
               )}
             </FormControl>
@@ -187,11 +137,7 @@ const RegisterForm = () => {
       </View>
 
       {/* Ville de livraison Input */}
-      <InputMultiSelectCity
-        label="Ville(s) de livraison"
-        placeholder="Rechercher une commune..."
-        helperText="Ex: Paris, Lyon, Marseille, etc."
-      />
+      <InputMultiSelectCity label="Ville(s) de livraison" placeholder="Rechercher une commune..." helperText="Ex: Paris, Lyon, Marseille, etc." />
 
       <FormInputControlPhone
         control={control}
@@ -215,17 +161,10 @@ const RegisterForm = () => {
       )}
 
       {/* Register Button */}
-      <Button
-        size="xl"
-        className="my-2"
-        onPress={handleSubmit(onSubmit)}
-        isDisabled={isSubmitting}
-      >
-        <ButtonText size="lg">
-          {isSubmitting
-            ? "Inscription en cours..."
-            : "S'inscrire"}
-        </ButtonText>
+      <Button size="xl" className="my-2" onPress={handleSubmit(onSubmit)} isDisabled={isSubmitting}>
+        <ButtonText size="lg">{isSubmitting
+          ? "Inscription en cours..."
+          : "S'inscrire"}</ButtonText>
       </Button>
 
       {/* Divider */}
@@ -237,13 +176,8 @@ const RegisterForm = () => {
 
       {/* Login Link */}
       <View className="flex-row justify-center">
-        <Text className="text-base text-gray-500">
-          Vous avez déjà un compte?{" "}
-        </Text>
-        <TouchableOpacity
-          // onPress={() => router.push("/(auth)/login")}
-          disabled={isSubmitting}
-        >
+        <Text className="text-base text-gray-500">Vous avez déjà un compte? </Text>
+        <TouchableOpacity onPress={() => navigation.navigate("LoginScreen")} disabled={isSubmitting}>
           <Text className="text-base text-blue-500">Se connecter</Text>
         </TouchableOpacity>
       </View>

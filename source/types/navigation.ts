@@ -1,5 +1,5 @@
-import type { StackNavigationProp } from "@react-navigation/stack";
 import type { RouteProp } from "@react-navigation/native";
+import type { StackNavigationProp } from "@react-navigation/stack";
 
 // Définition des paramètres pour toutes les routes de l'application
 export type RootStackParamList = {
@@ -9,7 +9,9 @@ export type RootStackParamList = {
   RegisterScreen: undefined;
   LoginForm: undefined;
   SignupForm: undefined;
-  OTPView: undefined;
+  OTPScreen: undefined;
+  DocumentsScreen: undefined;
+  PersonalDocumentsScreen: undefined;
   MainDrawerNavigator: undefined;
 };
 
@@ -17,13 +19,9 @@ export type RootStackParamList = {
 export type StackNavigation = StackNavigationProp<RootStackParamList>;
 
 // Types pour les routes spécifiques
-export type ScreenNavigationProp<T extends keyof RootStackParamList> =
-  StackNavigationProp<RootStackParamList, T>;
+export type ScreenNavigationProp<T extends keyof RootStackParamList> = StackNavigationProp<RootStackParamList, T>;
 
-export type ScreenRouteProp<T extends keyof RootStackParamList> = RouteProp<
-  RootStackParamList,
-  T
->;
+export type ScreenRouteProp<T extends keyof RootStackParamList> = RouteProp<RootStackParamList, T>;
 
 // Type pour les props de navigation
 export type ScreenProps<T extends keyof RootStackParamList> = {
