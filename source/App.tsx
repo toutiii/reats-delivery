@@ -1,18 +1,4 @@
-import "react-native-reanimated";
-import React from "react";
-import "./global.css";
-import * as SplashScreen from "expo-splash-screen";
 import { GluestackUIProvider } from "@/components/ui/gluestack-ui-provider";
-import { NavigationContainer } from "@react-navigation/native";
-import { createStackNavigator } from "@react-navigation/stack";
-import { MainDrawerNavigator } from "./legacy/drawer/MainDrawerNavigator";
-import { AutocompleteDropdownContextProvider } from "react-native-autocomplete-dropdown";
-import SignupForm from "./legacy/forms/forms/SignupForm";
-import LoginForm from "./legacy/forms/forms/LoginForm";
-import OTPView from "./legacy/views/OTPView";
-import StartPage from "./screens/onboarding";
-import TermsAndConditionsScreen from "./screens/onboarding/terms-and-conditions";
-import LoginScreen from "./screens/auth/login";
 import { Montserrat_100Thin } from "@expo-google-fonts/montserrat/100Thin";
 import { Montserrat_100Thin_Italic } from "@expo-google-fonts/montserrat/100Thin_Italic";
 import { Montserrat_200ExtraLight } from "@expo-google-fonts/montserrat/200ExtraLight";
@@ -31,9 +17,23 @@ import { Montserrat_800ExtraBold } from "@expo-google-fonts/montserrat/800ExtraB
 import { Montserrat_800ExtraBold_Italic } from "@expo-google-fonts/montserrat/800ExtraBold_Italic";
 import { Montserrat_900Black } from "@expo-google-fonts/montserrat/900Black";
 import { Montserrat_900Black_Italic } from "@expo-google-fonts/montserrat/900Black_Italic";
+import { NavigationContainer } from "@react-navigation/native";
+import { createStackNavigator } from "@react-navigation/stack";
 import { useFonts } from "expo-font";
-import { useEffect } from "react";
+import * as SplashScreen from "expo-splash-screen";
+import React, { useEffect } from "react";
+import { AutocompleteDropdownContextProvider } from "react-native-autocomplete-dropdown";
+import "react-native-reanimated";
+import "./global.css";
+import { MainDrawerNavigator } from "./legacy/drawer/MainDrawerNavigator";
+import LoginForm from "./legacy/forms/forms/LoginForm";
+import SignupForm from "./legacy/forms/forms/SignupForm";
+import OTPView from "./legacy/views/OTPView";
+import LoginScreen from "./screens/auth/login";
+import OTPScreen from "./screens/auth/otp";
 import RegisterScreen from "./screens/auth/register";
+import StartPage from "./screens/onboarding";
+import TermsAndConditionsScreen from "./screens/onboarding/terms-and-conditions";
 
 const Stack = createStackNavigator();
 SplashScreen.preventAutoHideAsync();
@@ -74,21 +74,13 @@ export default function App() {
     <GluestackUIProvider mode="light">
       <AutocompleteDropdownContextProvider>
         <NavigationContainer>
-          <Stack.Navigator
-            initialRouteName="Onboarding"
-            screenOptions={{ headerShown: false }}
-          >
+          <Stack.Navigator initialRouteName="Onboarding" screenOptions={{ headerShown: false }}>
             <Stack.Screen name="Onboarding" component={StartPage} />
-            <Stack.Screen
-              name="TermsAndConditions"
-              component={TermsAndConditionsScreen}
-            />
+            <Stack.Screen name="TermsAndConditions" component={TermsAndConditionsScreen} />
             <Stack.Screen name="LoginScreen" component={LoginScreen} />
             <Stack.Screen name="RegisterScreen" component={RegisterScreen} />
-            <Stack.Screen
-              name="MainDrawerNavigator"
-              component={MainDrawerNavigator}
-            />
+            <Stack.Screen name="OTPScreen" component={OTPScreen} />
+            <Stack.Screen name="MainDrawerNavigator" component={MainDrawerNavigator} />
             <Stack.Screen name="OTPView" component={OTPView} />
             <Stack.Screen name="LoginForm" component={LoginForm} />
             <Stack.Screen name="SignupForm" component={SignupForm} />
