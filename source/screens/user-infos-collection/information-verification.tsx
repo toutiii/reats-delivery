@@ -77,7 +77,7 @@ const DocumentListItem: FC<DocumentListItemProps> = ({ title, status, onPress })
   );
 };
 
-const InformationVerificationScreen: FC = () => {
+const InformationVerificationScreen = () => {
   const navigation = useNavigation<StackNavigation>();
 
   return (

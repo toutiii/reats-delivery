@@ -27,7 +27,7 @@ interface UploadSectionProps {
 
 type CardSide = "front" | "back";
 
-const UploadDocumentsScreen: React.FC = () => {
+const UploadDocumentsScreen = () => {
   const navigation = useNavigation<StackNavigation>();
   const insets = useSafeAreaInsets();
 

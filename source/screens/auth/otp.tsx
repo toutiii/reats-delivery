@@ -18,7 +18,7 @@ type ResendStatus = "idle" | "sending" | "sent" | "failed";
 
 const RESEND_TIMEOUT: number = 60; // 60 seconds for resend timeout
 
-const OTPScreen: React.FC = () => {
+const OTPScreen = () => {
   const navigation = useNavigation<StackNavigation>();
   const [otp, setOtp] = useState<string>("");
   const [timeLeft, setTimeLeft] = useState<number>(RESEND_TIMEOUT);
@@ -174,8 +174,8 @@ const OTPScreen: React.FC = () => {
             <HStack className="justify-center space-x-2 mb-4">
               {[1, 2, 3].map((step) => (
                 <View key={`step-${step}`} className={`h-1 rounded-full ${step === 2
-                  ? "bg-primary-500 w-16"
-                  : "bg-gray-200 w-8"}`} />
+? "bg-primary-500 w-16"
+: "bg-gray-200 w-8"}`} />
               ))}
             </HStack>
 
@@ -223,15 +223,15 @@ const OTPScreen: React.FC = () => {
               <Animated.View entering={SlideInRight.duration(400)} className="items-center">
                 <HStack className="items-center my-2" space="xs">
                   <Feather name={verificationStatus === "success"
-                    ? "check-circle"
-                    : "alert-circle"} size={20} color={verificationStatus === "success"
-                    ? "#10B981"
-                    : "#EF4444"} />
+? "check-circle"
+: "alert-circle"} size={20} color={verificationStatus === "success"
+? "#10B981"
+: "#EF4444"} />
                   <Text className={`${verificationStatus === "success"
-                    ? "text-green-600"
-                    : "text-red-500"}`}>{verificationStatus === "success"
-                      ? "Code vérifié avec succès"
-                      : "Code incorrect, veuillez réessayer"}</Text>
+? "text-green-600"
+: "text-red-500"}`}>{verificationStatus === "success"
+? "Code vérifié avec succès"
+: "Code incorrect, veuillez réessayer"}</Text>
                 </HStack>
               </Animated.View>
             )}
@@ -260,36 +260,36 @@ const OTPScreen: React.FC = () => {
 
             {/* Resend Timer */}
             <Pressable onPress={handleResendOtp} disabled={timeLeft > 0 || isResending || verificationStatus === "success"} className={`items-center py-2 ${timeLeft === 0
-              ? "opacity-100"
-              : "opacity-70"}`}>
+? "opacity-100"
+: "opacity-70"}`}>
               {isResending
-                ? (
-                  <HStack space="sm" className="items-center">
-                    <ActivityIndicator size="small" color="#FF6347" />
-                    <Text size="md" className="font-medium">
+? (
+                <HStack space="sm" className="items-center">
+                  <ActivityIndicator size="small" color="#FF6347" />
+                  <Text size="md" className="font-medium">
                     Envoi en cours...
-                    </Text>
-                  </HStack>
-                )
-                : (
-                  <Text size="lg" className={`text-center font-bold ${timeLeft === 0
-                    ? "text-primary-500"
-                    : "text-gray-500"}`}>
-                    {timeLeft === 0
-                      ? "Renvoyer le code"
-                      : `Renvoyer dans ${formatTime(timeLeft)}`}
                   </Text>
-                )}
+                </HStack>
+              )
+: (
+                <Text size="lg" className={`text-center font-bold ${timeLeft === 0
+? "text-primary-500"
+: "text-gray-500"}`}>
+                  {timeLeft === 0
+? "Renvoyer le code"
+: `Renvoyer dans ${formatTime(timeLeft)}`}
+                </Text>
+              )}
             </Pressable>
 
             {/* Confirm Button */}
             <Animated.View style={[{ width: "100%" }, buttonAnimatedStyle]}>
               <Button size="xl" className={`my-4 w-full ${!isConfirmEnabled
-                ? "opacity-70"
-                : ""}`} onPress={handleVerify} disabled={!isConfirmEnabled}>
+? "opacity-70"
+: ""}`} onPress={handleVerify} disabled={!isConfirmEnabled}>
                 {isVerifying
-                  ? <ActivityIndicator size="small" color="white" />
-                  : <ButtonText size="lg">Vérifier</ButtonText>}
+? <ActivityIndicator size="small" color="white" />
+: <ButtonText size="lg">Vérifier</ButtonText>}
               </Button>
             </Animated.View>
 
