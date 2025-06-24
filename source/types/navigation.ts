@@ -12,6 +12,8 @@ export type RootStackParamList = {
   OTPScreen: undefined;
   DocumentsScreen: undefined;
   PersonalDocumentsScreen: undefined;
+  UploadDocumentsScreen: undefined;
+  InformationVerificationScreen: undefined;
   MainDrawerNavigator: undefined;
 };
 

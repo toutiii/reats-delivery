@@ -34,7 +34,7 @@ const PersonalDocumentsScreen = () => {
         {/* Documents List */}
         <VStack space="md" className="mb-6 px-6">
           {documents.map((doc) => (
-            <DocumentItem key={doc.id} title={doc.title} onPress={() => navigation.navigate("MainDrawerNavigator")} />
+            <DocumentItem key={doc.id} title={doc.title} onPress={() => navigation.navigate("UploadDocumentsScreen")} />
           ))}
         </VStack>
       </ThemedView>
@@ -62,16 +62,16 @@ const DocumentItem: FC<DocumentItemProps> = ({ title, onPress }) => {
         <Box
           className={`border border-gray-200 rounded-xl py-4 px-4
             ${pressed
-          ? "bg-gray-50"
-          : "bg-white"}`}
+? "bg-gray-50"
+: "bg-white"}`}
           style={{
             shadowColor: "#000",
             shadowOffset: { width: 0, height: 1 },
             shadowOpacity: 0.05,
             shadowRadius: 2,
             elevation: pressed
-              ? 0
-              : 1,
+? 0
+: 1,
           }}
         >
           <Box className="flex-row items-center justify-between">
