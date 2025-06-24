@@ -32,6 +32,7 @@ import OTPView from "./legacy/views/OTPView";
 import LoginScreen from "./screens/auth/login";
 import OTPScreen from "./screens/auth/otp";
 import RegisterScreen from "./screens/auth/register";
+import HomeScreen from "./screens/home";
 import StartPage from "./screens/onboarding";
 import TermsAndConditionsScreen from "./screens/onboarding/terms-and-conditions";
 import DocumentsScreen from "./screens/user-infos-collection";
@@ -89,6 +90,7 @@ export default function App() {
             <Stack.Screen name="UploadDocumentsScreen" component={UploadDocumentsScreen} />
             <Stack.Screen name="MainDrawerNavigator" component={MainDrawerNavigator} />
             <Stack.Screen name="InformationVerificationScreen" component={InformationVerificationScreen} />
+            <Stack.Screen name="HomeScreen" component={HomeScreen} />
             <Stack.Screen name="OTPView" component={OTPView} />
             <Stack.Screen name="LoginForm" component={LoginForm} />
             <Stack.Screen name="SignupForm" component={SignupForm} />

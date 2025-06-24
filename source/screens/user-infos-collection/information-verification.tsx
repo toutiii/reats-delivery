@@ -117,7 +117,7 @@ const InformationVerificationScreen = () => {
             </Text>
           </View>
 
-          <TouchableOpacity onPress={() => navigation.navigate("MainDrawerNavigator")}>
+          <TouchableOpacity onPress={() => navigation.navigate("HomeScreen")}>
             <Text>Dashboard</Text>
           </TouchableOpacity>
         </VStack>

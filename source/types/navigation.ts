@@ -14,6 +14,7 @@ export type RootStackParamList = {
   PersonalDocumentsScreen: undefined;
   UploadDocumentsScreen: undefined;
   InformationVerificationScreen: undefined;
+  HomeScreen: undefined;
   MainDrawerNavigator: undefined;
 };
 
