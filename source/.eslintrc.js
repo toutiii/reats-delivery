@@ -9,19 +9,8 @@ module.exports = {
       version: "detect",
     },
   },
-  extends: [
-    "eslint:recommended",
-    "plugin:react/recommended",
-    "plugin:react-hooks/recommended",
-  ],
-  ignorePatterns: [
-    "node_modules/",
-    "**/node_modules/**",
-    "dist/",
-    "build/",
-    "*.d.ts",
-    "**/components/ui/**",
-  ],
+  extends: ["eslint:recommended", "plugin:react/recommended", "plugin:react-hooks/recommended"],
+  ignorePatterns: ["node_modules/", "**/node_modules/**", "dist/", "build/", "*.d.ts", "**/components/ui/**"],
   overrides: [
     {
       env: {
@@ -47,7 +36,7 @@ module.exports = {
   },
   plugins: ["react"],
   rules: {
-    indent: ["error", 2],
+    indent: "off",
     "linebreak-style": ["error", "unix"],
     quotes: ["error", "double"],
     semi: ["error", "always"],

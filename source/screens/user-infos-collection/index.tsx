@@ -52,7 +52,7 @@ const DocumentsScreen = () => {
       </View>
 
       <Box className="px-6 mt-12">
-        <Button size="xl" onPress={() => navigation.navigate("MainDrawerNavigator")}>
+        <Button size="xl" onPress={() => navigation.navigate("InformationVerificationScreen")}>
           <ButtonText className="text-lg font-medium">Submit</ButtonText>
         </Button>
       </Box>
@@ -80,8 +80,8 @@ const DocumentMenuItem: FC<DocumentMenuItemProps> = ({ title, completed = false 
         <Box
           className={`bg-white rounded-xl p-4 shadow-sm border border-gray-100
                         ${pressed
-          ? "opacity-90"
-          : "opacity-100"}`}
+? "opacity-90"
+: "opacity-100"}`}
           style={{
             shadowColor: "#000",
             shadowOffset: { width: 0, height: 1 },
