@@ -32,9 +32,12 @@ import OTPView from "./legacy/views/OTPView";
 import LoginScreen from "./screens/auth/login";
 import OTPScreen from "./screens/auth/otp";
 import RegisterScreen from "./screens/auth/register";
+import DeliveryMapScreen from "./screens/delivery";
+import DeliveryConfirmation from "./screens/delivery/confirmation";
 import HomeScreen from "./screens/home";
 import StartPage from "./screens/onboarding";
 import TermsAndConditionsScreen from "./screens/onboarding/terms-and-conditions";
+import OrderDetailsScreen from "./screens/order-details";
 import DocumentsScreen from "./screens/user-infos-collection";
 import InformationVerificationScreen from "./screens/user-infos-collection/information-verification";
 import PersonalDocumentsScreen from "./screens/user-infos-collection/personal-documents";
@@ -91,6 +94,9 @@ export default function App() {
             <Stack.Screen name="MainDrawerNavigator" component={MainDrawerNavigator} />
             <Stack.Screen name="InformationVerificationScreen" component={InformationVerificationScreen} />
             <Stack.Screen name="HomeScreen" component={HomeScreen} />
+            <Stack.Screen name="OrderDetailsScreen" component={OrderDetailsScreen} />
+            <Stack.Screen name="DeliveryMapScreen" component={DeliveryMapScreen as React.ComponentType<{}>} />
+            <Stack.Screen name="DeliveryConfirmation" component={DeliveryConfirmation} />
             <Stack.Screen name="OTPView" component={OTPView} />
             <Stack.Screen name="LoginForm" component={LoginForm} />
             <Stack.Screen name="SignupForm" component={SignupForm} />

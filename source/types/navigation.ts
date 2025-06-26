@@ -15,6 +15,8 @@ export type RootStackParamList = {
   UploadDocumentsScreen: undefined;
   InformationVerificationScreen: undefined;
   HomeScreen: undefined;
+  OrderDetailsScreen: undefined;
+  DeliveryMapScreen: { id?: string };
   MainDrawerNavigator: undefined;
 };
 

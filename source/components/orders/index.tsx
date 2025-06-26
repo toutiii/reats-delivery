@@ -1,13 +1,17 @@
 import { VStack } from "@/components/ui/vstack";
+import { StackNavigation } from "@/types/navigation";
 import { Order } from "@/types/orders";
+import { useNavigation } from "@react-navigation/native";
 import React, { useState } from "react";
 import { ScrollView } from "react-native";
 import { Card } from "./card";
 
 const Orders = () => {
+  const navigation = useNavigation<StackNavigation>();
   const [_, setSelectedOrder] = useState<Order | null>(null);
   const viewOrderDetails = (order: Order): void => {
     setSelectedOrder(order);
+    navigation.navigate("OrderDetailsScreen");
   };
 
   return (
