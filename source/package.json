@@ -17,6 +17,8 @@
     ]
   },
   "dependencies": {
+    "@aws-sdk/client-secrets-manager": "^3.835.0",
+    "@azure/core-asynciterator-polyfill": "^1.0.2",
     "@expo-google-fonts/montserrat": "^0.4.1",
     "@expo/html-elements": "0.4.2",
     "@gluestack-ui/actionsheet": "^0.2.53",
@@ -70,6 +72,7 @@
     "react-native-dropdown-select-list": "2.0.5",
     "react-native-flatlist-slider": "^1.0.5",
     "react-native-gesture-handler": "~2.24.0",
+    "react-native-get-random-values": "^1.11.0",
     "react-native-linear-gradient": "^2.8.3",
     "react-native-maps": "1.20.1",
     "react-native-maps-directions": "^1.9.0",
@@ -83,6 +86,7 @@
     "react-native-screens": "~4.11.1",
     "react-native-svg": "15.11.2",
     "react-native-tab-view": "^3.0.1",
+    "react-native-url-polyfill": "^2.0.0",
     "react-native-vector-icons": "^10.0.3",
     "rn-content-loader": "^0.0.6",
     "tailwindcss": "^3.4.17",
@@ -91,7 +95,9 @@
   "devDependencies": {
     "@babel/core": "^7.27.4",
     "@babel/eslint-parser": "^7.27.5",
+    "@babel/node": "^7.27.1",
     "@babel/plugin-proposal-unicode-property-regex": "^7.16.7",
+    "@babel/plugin-transform-class-static-block": "^7.27.1",
     "@babel/preset-react": "^7.27.1",
     "@types/react": "~18.3.12",
     "@typescript-eslint/parser": "^8.34.0",
@@ -101,6 +107,7 @@
     "husky": "^9.0.10",
     "lint-staged": "^15.2.1",
     "prettier": "^3.2.5",
+    "ts-node": "^10.9.2",
     "typescript": "^5.3.3"
   },
   "private": true,
