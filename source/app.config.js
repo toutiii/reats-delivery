@@ -51,15 +51,15 @@ export default ({ config }) => {
         projectId: "6df1673a-3c4d-4188-b913-b619a786ee34",
       },
       ENV: process.env.ENV,
-      apiBaseUrl:
-        process.env.EXPO_PUBLIC_PRODUCTION_API_BASE_URL ??
-        process.env.EXPO_PUBLIC_STAGING_API_BASE_URL ??
-        process.env.EXPO_PUBLIC_DEVELOPMENT_API_BASE_URL,
-      apiKeyBackend:
-        process.env.PRODUCTION_API_KEY ??
-        process.env.STAGING_API_KEY ??
-        process.env.DEVELOPMENT_API_KEY,
+      apiBaseUrl: process.env.EXPO_PUBLIC_PRODUCTION_API_BASE_URL ?? process.env.EXPO_PUBLIC_STAGING_API_BASE_URL ?? process.env.EXPO_PUBLIC_DEVELOPMENT_API_BASE_URL,
+      apiKeyBackend: process.env.PRODUCTION_API_KEY ?? process.env.STAGING_API_KEY ?? process.env.DEVELOPMENT_API_KEY,
       appOriginHeader: process.env.EXPO_PUBLIC_APP_ORIGIN,
+      // Variables AWS pour Secrets Manager
+      AWS_REGION: process.env.EXPO_PUBLIC_AWS_REGION,
+      AWS_ACCESS_KEY_ID: process.env.EXPO_PUBLIC_AWS_ACCESS_KEY_ID,
+      AWS_SECRET_ACCESS_KEY: process.env.EXPO_PUBLIC_AWS_SECRET_ACCESS_KEY,
+      AWS_SECRET_NAME: process.env.EXPO_PUBLIC_AWS_SECRET_NAME,
+      AWS_GOOGLE_API_KEY_FIELD: process.env.EXPO_PUBLIC_AWS_GOOGLE_API_KEY_FIELD,
     },
     owner: "tout_it",
     updates: {
