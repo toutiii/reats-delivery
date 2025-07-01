@@ -1,4 +1,6 @@
+// Importer les polyfills en premier pour AWS et autres bibliothèques
 import { GluestackUIProvider } from "@/components/ui/gluestack-ui-provider";
+import { initializeGoogleMapsApiKey } from "@/env";
 import { Montserrat_100Thin } from "@expo-google-fonts/montserrat/100Thin";
 import { Montserrat_100Thin_Italic } from "@expo-google-fonts/montserrat/100Thin_Italic";
 import { Montserrat_200ExtraLight } from "@expo-google-fonts/montserrat/200ExtraLight";
@@ -29,6 +31,7 @@ import { MainDrawerNavigator } from "./legacy/drawer/MainDrawerNavigator";
 import LoginForm from "./legacy/forms/forms/LoginForm";
 import SignupForm from "./legacy/forms/forms/SignupForm";
 import OTPView from "./legacy/views/OTPView";
+import "./polyfills";
 import LoginScreen from "./screens/auth/login";
 import OTPScreen from "./screens/auth/otp";
 import RegisterScreen from "./screens/auth/register";
@@ -69,9 +72,29 @@ export default function App() {
   });
 
   useEffect(() => {
-    if (loaded) {
-      SplashScreen.hideAsync();
+    async function initialize() {
+      if (loaded) {
+        try {
+          console.log("Démarrage de l'initialisation de l'application...");
+
+          // Initialiser la clé Google Maps API et les identifiants AWS de façon sécurisée
+          await initializeGoogleMapsApiKey();
+
+          console.log("Initialisation terminée avec succès");
+
+          // Cacher l'écran de démarrage une fois tout chargé
+          await SplashScreen.hideAsync();
+        } catch (error) {
+          console.error("Erreur lors de l'initialisation:", error);
+
+          // Cacher l'écran de démarrage même en cas d'erreur
+          // Nous devrions ici montrer un message d'erreur à l'utilisateur si c'est critique
+          SplashScreen.hideAsync();
+        }
+      }
     }
+
+    initialize();
   }, [loaded]);
 
   if (!loaded) {
