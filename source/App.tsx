@@ -77,18 +77,13 @@ export default function App() {
         try {
           console.log("Démarrage de l'initialisation de l'application...");
 
-          // Initialiser la clé Google Maps API et les identifiants AWS de façon sécurisée
           await initializeGoogleMapsApiKey();
 
           console.log("Initialisation terminée avec succès");
 
-          // Cacher l'écran de démarrage une fois tout chargé
           await SplashScreen.hideAsync();
         } catch (error) {
           console.error("Erreur lors de l'initialisation:", error);
-
-          // Cacher l'écran de démarrage même en cas d'erreur
-          // Nous devrions ici montrer un message d'erreur à l'utilisateur si c'est critique
           SplashScreen.hideAsync();
         }
       }
