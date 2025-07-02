@@ -1,4 +1,5 @@
 import { GluestackUIProvider } from "@/components/ui/gluestack-ui-provider";
+import { initializeGoogleMapsApiKey } from "@/env";
 import { Montserrat_100Thin } from "@expo-google-fonts/montserrat/100Thin";
 import { Montserrat_100Thin_Italic } from "@expo-google-fonts/montserrat/100Thin_Italic";
 import { Montserrat_200ExtraLight } from "@expo-google-fonts/montserrat/200ExtraLight";
@@ -29,12 +30,16 @@ import { MainDrawerNavigator } from "./legacy/drawer/MainDrawerNavigator";
 import LoginForm from "./legacy/forms/forms/LoginForm";
 import SignupForm from "./legacy/forms/forms/SignupForm";
 import OTPView from "./legacy/views/OTPView";
+import "./polyfills";
 import LoginScreen from "./screens/auth/login";
 import OTPScreen from "./screens/auth/otp";
 import RegisterScreen from "./screens/auth/register";
+import DeliveryMapScreen from "./screens/delivery";
+import DeliveryConfirmation from "./screens/delivery/confirmation";
 import HomeScreen from "./screens/home";
 import StartPage from "./screens/onboarding";
 import TermsAndConditionsScreen from "./screens/onboarding/terms-and-conditions";
+import OrderDetailsScreen from "./screens/order-details";
 import DocumentsScreen from "./screens/user-infos-collection";
 import InformationVerificationScreen from "./screens/user-infos-collection/information-verification";
 import PersonalDocumentsScreen from "./screens/user-infos-collection/personal-documents";
@@ -66,9 +71,24 @@ export default function App() {
   });
 
   useEffect(() => {
-    if (loaded) {
-      SplashScreen.hideAsync();
+    async function initialize() {
+      if (loaded) {
+        try {
+          console.log("Démarrage de l'initialisation de l'application...");
+
+          await initializeGoogleMapsApiKey();
+
+          console.log("Initialisation terminée avec succès");
+
+          await SplashScreen.hideAsync();
+        } catch (error) {
+          console.error("Erreur lors de l'initialisation:", error);
+          SplashScreen.hideAsync();
+        }
+      }
     }
+
+    initialize();
   }, [loaded]);
 
   if (!loaded) {
@@ -91,6 +111,9 @@ export default function App() {
             <Stack.Screen name="MainDrawerNavigator" component={MainDrawerNavigator} />
             <Stack.Screen name="InformationVerificationScreen" component={InformationVerificationScreen} />
             <Stack.Screen name="HomeScreen" component={HomeScreen} />
+            <Stack.Screen name="OrderDetailsScreen" component={OrderDetailsScreen} />
+            <Stack.Screen name="DeliveryMapScreen" component={DeliveryMapScreen as React.ComponentType<{}>} />
+            <Stack.Screen name="DeliveryConfirmation" component={DeliveryConfirmation} />
             <Stack.Screen name="OTPView" component={OTPView} />
             <Stack.Screen name="LoginForm" component={LoginForm} />
             <Stack.Screen name="SignupForm" component={SignupForm} />

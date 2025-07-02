@@ -4,22 +4,11 @@ import { Center } from "@/components/ui/center";
 import { Heading } from "@/components/ui/heading";
 import { Text } from "@/components/ui/text";
 import { VStack } from "@/components/ui/vstack";
+import type { StackNavigation } from "@/types/navigation";
+import { useNavigation } from "@react-navigation/native";
 import React, { useEffect } from "react";
 import { Image, SafeAreaView, View } from "react-native";
-import Animated, {
-  Easing,
-  Extrapolate,
-  interpolate,
-  runOnJS,
-  useAnimatedStyle,
-  useSharedValue,
-  withDelay,
-  withSequence,
-  withSpring,
-  withTiming,
-} from "react-native-reanimated";
-import { useNavigation } from "@react-navigation/native";
-import type { StackNavigation } from "@/types/navigation";
+import Animated, { Easing, Extrapolate, interpolate, runOnJS, useAnimatedStyle, useSharedValue, withDelay, withSequence, withSpring, withTiming } from "react-native-reanimated";
 const AnimatedCenter = Animated.createAnimatedComponent(Center);
 const AnimatedHeading = Animated.createAnimatedComponent(Heading);
 const AnimatedText = Animated.createAnimatedComponent(Text);
@@ -60,12 +49,7 @@ const StartPage = () => {
       opacity: textOpacity.value,
       transform: [
         {
-          translateY: interpolate(
-            textTranslateY.value,
-            [0, 20],
-            [0, 15],
-            Extrapolate.CLAMP,
-          ),
+          translateY: interpolate(textTranslateY.value, [0, 20], [0, 15], Extrapolate.CLAMP),
         },
       ],
     };
@@ -88,8 +72,9 @@ const StartPage = () => {
         if (finished) {
           runOnJS(navigateToNextScreen)();
         }
-      }),
+      })
     );
+    // navigation.navigate("TermsAndConditions");
     navigation.navigate("TermsAndConditions");
   };
 
@@ -106,7 +91,7 @@ const StartPage = () => {
       withSpring(1, {
         damping: 15,
         stiffness: 100,
-      }),
+      })
     );
 
     textOpacity.value = withDelay(600, withTiming(1, { duration: 800 }));
@@ -115,7 +100,7 @@ const StartPage = () => {
       withTiming(0, {
         duration: 800,
         easing: Easing.out(Easing.cubic),
-      }),
+      })
     );
 
     buttonOpacity.value = withDelay(1000, withTiming(1, { duration: 600 }));
@@ -124,7 +109,7 @@ const StartPage = () => {
       withSpring(1, {
         damping: 14,
         stiffness: 80,
-      }),
+      })
     );
   }, []);
 
@@ -134,51 +119,27 @@ const StartPage = () => {
         <Box className="flex-1">
           <VStack className="flex-1 px-6 justify-center items-center">
             {/* Container de l'illustration avec animation */}
-            <AnimatedCenter
-              className="w-full h-[45%] mb-2"
-              style={imageAnimatedStyle}
-            >
-              <Image
-                source={require("../../assets/images/onboarding/shipping.png")}
-                className="w-[90%] h-[90%]"
-                resizeMode="contain"
-              />
+            <AnimatedCenter className="w-full h-[45%] mb-2" style={imageAnimatedStyle}>
+              <Image source={require("../../assets/images/onboarding/shipping.png")} className="w-[90%] h-[90%]" resizeMode="contain" />
             </AnimatedCenter>
 
             {/* Conteneur de texte avec animations */}
             <VStack className="items-center w-full mb-8 space-y-1">
-              <AnimatedHeading
-                className="text-2xl font-bold text-black text-center"
-                style={headingAnimatedStyle}
-              >
+              <AnimatedHeading className="text-2xl font-bold text-black text-center" style={headingAnimatedStyle}>
                 Explore now
               </AnimatedHeading>
-              <AnimatedText
-                className="text-2xl font-bold text-black text-center mb-4"
-                style={headingAnimatedStyle}
-              >
+              <AnimatedText className="text-2xl font-bold text-black text-center mb-4" style={headingAnimatedStyle}>
                 to experience the benefits
               </AnimatedText>
 
-              <AnimatedText
-                className="text-base text-gray-500 text-center leading-6 max-w-[90%]"
-                style={descriptionAnimatedStyle}
-              >
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-                eiusmod tempor incididunt ut labore
+              <AnimatedText className="text-base text-gray-500 text-center leading-6 max-w-[90%]" style={descriptionAnimatedStyle}>
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore
               </AnimatedText>
             </VStack>
 
             {/* Bouton Get Started avec animation */}
-            <AnimatedButton
-              className="w-full mt-5"
-              size="xl"
-              style={buttonAnimatedStyle}
-              onPress={handleGetStarted}
-            >
-              <ButtonText className="text-lg font-semibold text-white">
-                Get Started
-              </ButtonText>
+            <AnimatedButton className="w-full mt-5" size="xl" style={buttonAnimatedStyle} onPress={handleGetStarted}>
+              <ButtonText className="text-lg font-semibold text-white">Get Started</ButtonText>
             </AnimatedButton>
           </VStack>
         </Box>
