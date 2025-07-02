@@ -1,4 +1,3 @@
-// Importer les polyfills en premier pour AWS et autres bibliothèques
 import { GluestackUIProvider } from "@/components/ui/gluestack-ui-provider";
 import { initializeGoogleMapsApiKey } from "@/env";
 import { Montserrat_100Thin } from "@expo-google-fonts/montserrat/100Thin";
