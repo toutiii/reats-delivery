@@ -19,7 +19,6 @@ source/.DS_Store
 */yarn-error.log
 *.expo/*
 
-
 # Environment variables - local secrets
 *.env.local
 *.env.development.local
