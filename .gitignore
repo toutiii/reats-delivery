@@ -19,9 +19,6 @@ source/.DS_Store
 */yarn-error.log
 *.expo/*
 
-# AWS credentials configuration
-source/config/aws-config.ts
-
 # Environment variables - local secrets
 *.env.local
 *.env.development.local
