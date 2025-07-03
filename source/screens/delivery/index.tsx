@@ -3,12 +3,12 @@ import MapsDirections from "@/components/maps/direction";
 import Marker from "@/components/maps/marker";
 import { colorPrimary } from "@/constants/colors";
 import { RootStackParamList } from "@/types/navigation";
+import { MaterialIcons } from "@expo/vector-icons";
 import { RouteProp } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import * as Location from "expo-location";
 import React, { useEffect, useRef, useState } from "react";
 import { Dimensions, Platform, TouchableOpacity, useColorScheme, View } from "react-native";
-import { MaterialIcons } from "@expo/vector-icons";
 import MapView, { Circle, MapPressEvent, PROVIDER_DEFAULT, PROVIDER_GOOGLE } from "react-native-maps";
 import { MapDirectionsResponse } from "react-native-maps-directions";
 
