@@ -3,11 +3,12 @@ import MapsDirections from "@/components/maps/direction";
 import Marker from "@/components/maps/marker";
 import { colorPrimary } from "@/constants/colors";
 import { RootStackParamList } from "@/types/navigation";
+import { MaterialIcons } from "@expo/vector-icons";
 import { RouteProp } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import * as Location from "expo-location";
 import React, { useEffect, useRef, useState } from "react";
-import { Dimensions, Platform, useColorScheme, View } from "react-native";
+import { Dimensions, Platform, TouchableOpacity, useColorScheme, View } from "react-native";
 import MapView, { Circle, MapPressEvent, PROVIDER_DEFAULT, PROVIDER_GOOGLE } from "react-native-maps";
 import { MapDirectionsResponse } from "react-native-maps-directions";
 
@@ -34,7 +35,8 @@ const DeliveryMapScreen: React.FC<DeliveryMapScreenProps> = ({ route }) => {
     longitudeDelta: 0.0421,
   });
   const [mapDirectionsResponse, setMapDirectionsResponse] = useState<MapDirectionsResponse | null>(null);
-  const [selectedItem, setSelectedItem] = useState<{ latitude: number; longitude: number } | null>(null);
+  const [_selectedItem, setSelectedItem] = useState<{ latitude: number; longitude: number } | null>(null);
+  const [isPanelMinimized, setIsPanelMinimized] = useState(false);
 
   useEffect(() => {
     const getLocation = async () => {
@@ -73,8 +75,6 @@ const DeliveryMapScreen: React.FC<DeliveryMapScreenProps> = ({ route }) => {
       1000
     );
   };
-
-  console.log(mapDirectionsResponse);
 
   return (
     <View className="flex-1">
@@ -122,7 +122,14 @@ const DeliveryMapScreen: React.FC<DeliveryMapScreenProps> = ({ route }) => {
         />
       </MapView>
 
-      <DeliveryMapInfos mapDirectionsResponse={mapDirectionsResponse} />
+      <DeliveryMapInfos mapDirectionsResponse={mapDirectionsResponse} onCollapse={() => setIsPanelMinimized(true)} onExpand={() => setIsPanelMinimized(false)} isMinimized={isPanelMinimized} />
+
+      {/* Bouton flottant pour faire réapparaître le panneau lorsqu'il est masqué */}
+      {isPanelMinimized && (
+        <TouchableOpacity onPress={() => setIsPanelMinimized(false)} className="absolute bottom-6 right-6 bg-primary rounded-full p-3 shadow-md" style={{ backgroundColor: colorPrimary }}>
+          <MaterialIcons name="keyboard-arrow-up" size={24} color="white" />
+        </TouchableOpacity>
+      )}
     </View>
   );
 };

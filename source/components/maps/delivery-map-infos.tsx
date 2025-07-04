@@ -1,14 +1,18 @@
-import { Feather } from "@expo/vector-icons";
-import React, { useEffect, useState } from "react";
-import { Alert, Linking, TouchableOpacity, View } from "react-native";
+import { Feather, MaterialIcons } from "@expo/vector-icons";
+import React, { useCallback, useEffect, useState } from "react";
+import { Alert, Dimensions, Linking, TouchableOpacity, View } from "react-native";
+import { PanGestureHandler } from "react-native-gesture-handler";
 import { MapDirectionsResponse } from "react-native-maps-directions";
-import { Easing, interpolate, useAnimatedStyle, useSharedValue, withSequence, withSpring, withTiming } from "react-native-reanimated";
+import Animated, { Easing, interpolate, runOnJS, useAnimatedGestureHandler, useAnimatedStyle, useSharedValue, withSpring, withTiming } from "react-native-reanimated";
 import { Button, ButtonText } from "../ui/button";
 import { Text } from "../ui/text";
 import { VStack } from "../ui/vstack";
 
 type DeliveryMapInfosProps = {
   mapDirectionsResponse: MapDirectionsResponse | null;
+  onExpand?: () => void;
+  onCollapse?: () => void;
+  isMinimized?: boolean;
 };
 
 // Sample order data - in a real app, this would come from API or props
@@ -26,13 +30,38 @@ const orderDetails = {
   totalPrice: 23.98,
 };
 
-const DeliveryMapInfos = ({ mapDirectionsResponse }: DeliveryMapInfosProps) => {
+const DeliveryMapInfos = ({ mapDirectionsResponse, onExpand, onCollapse, isMinimized = false }: DeliveryMapInfosProps) => {
   const [showOrderDetails, setShowOrderDetails] = useState(false);
-
+  // Get screen dimensions
+  const { height: screenHeight } = Dimensions.get("window");
   // Animation values
   const slideUpAnimation = useSharedValue(300); // Start offscreen
   const detailsHeight = useSharedValue(0);
-  const buttonScale = useSharedValue(1);
+  const panelHeight = useSharedValue(isMinimized
+? 0
+: 1); // 1 = full height, 0 = minimized
+
+  // Animation for order details height
+  useEffect(() => {
+    detailsHeight.value = withTiming(showOrderDetails
+? 1
+: 0, { duration: 300, easing: Easing.bezier(0.25, 0.1, 0.25, 1) });
+  }, [showOrderDetails]);
+
+  // S'assurer que le panneau est visible ou minimisé selon la prop externe isMinimized
+  useEffect(() => {
+    panelHeight.value = withTiming(isMinimized
+? 0
+: 1, { duration: 300, easing: Easing.bezier(0.25, 0.1, 0.25, 1) });
+  }, [isMinimized]);
+
+  // Animation pour le slide-up initial du panneau
+  useEffect(() => {
+    slideUpAnimation.value = withSpring(0, {
+      damping: 15,
+      stiffness: 100,
+    });
+  }, []);
 
   // Extract distance and duration from mapDirectionsResponse
   const distanceToClient = mapDirectionsResponse?.distance
@@ -43,35 +72,60 @@ const DeliveryMapInfos = ({ mapDirectionsResponse }: DeliveryMapInfosProps) => {
 ? `${Math.ceil(mapDirectionsResponse.duration)} min`
 : "";
 
-  // Animation for panel slide-up when component mounts
-  useEffect(() => {
-    slideUpAnimation.value = withSpring(0, {
-      damping: 15,
-      stiffness: 100,
-    });
-  }, []);
-
-  // Animation for order details height
-  useEffect(() => {
-    detailsHeight.value = withTiming(showOrderDetails
+  // Gesture handler for swipe up/down
+  const gestureHandler = useAnimatedGestureHandler({
+    onStart: (_, ctx: { startY: number }) => {
+      ctx.startY = panelHeight.value;
+    },
+    onActive: (event, ctx) => {
+      const newValue = ctx.startY - event.translationY / screenHeight;
+      // Limit the range between 0 and 1
+      panelHeight.value = Math.max(0, Math.min(1, newValue));
+    },
+    onEnd: (event) => {
+      // If swipe is fast enough or panel position is closer to an edge, snap to that position
+      if (event.velocityY > 500 || panelHeight.value < 0.3) {
+        panelHeight.value = withSpring(0, { damping: 15 });
+        if (onCollapse) {
+          runOnJS(onCollapse)();
+        }
+      } else if (event.velocityY < -500 || panelHeight.value > 0.7) {
+        panelHeight.value = withSpring(1, { damping: 15 });
+        if (onExpand) {
+          runOnJS(onExpand)();
+        }
+      } else {
+        // Snap to the closest edge
+        const snapTo = panelHeight.value > 0.5
 ? 1
-: 0, { duration: 300, easing: Easing.bezier(0.25, 0.1, 0.25, 1) });
-  }, [showOrderDetails]);
+: 0;
+        panelHeight.value = withSpring(snapTo, { damping: 15 });
+        if (snapTo === 0 && onCollapse) {
+          runOnJS(onCollapse)();
+        } else if (snapTo === 1 && onExpand) {
+          runOnJS(onExpand)();
+        }
+      }
+    },
+  });
+
+  // Toggle panel visibility function
+  const togglePanelVisibility = useCallback(() => {
+    if (isMinimized) {
+      if (onExpand) onExpand();
+    } else {
+      if (onCollapse) onCollapse();
+    }
+  }, [isMinimized, onCollapse, onExpand]);
 
   // Animated styles
-  const containerStyle = useAnimatedStyle(() => ({
-    transform: [{ translateY: slideUpAnimation.value }],
-  }));
+  const containerStyle = useAnimatedStyle(() => {
+    const translateY = interpolate(panelHeight.value, [0, 1], [screenHeight - 60, slideUpAnimation.value]);
 
-  const detailsStyle = useAnimatedStyle(() => ({
-    opacity: detailsHeight.value,
-    maxHeight: interpolate(detailsHeight.value, [0, 1], [0, 1000]),
-    overflow: "hidden",
-  }));
-
-  const animateButtonPress = () => {
-    buttonScale.value = withSequence(withTiming(0.95, { duration: 100 }), withTiming(1, { duration: 100 }));
-  };
+    return {
+      transform: [{ translateY }],
+    };
+  });
 
   // Function to contact client
   const contactClient = (method: "phone" | "message") => {
@@ -109,82 +163,89 @@ const DeliveryMapInfos = ({ mapDirectionsResponse }: DeliveryMapInfosProps) => {
   };
 
   return (
-    <View className="flex-1  mt-auto bg-white rounded-t-3xl shadow-2xl absolute bottom-0 w-full m-h-96 pb-12">
-      <View className="items-center py-2">
-        <View className="w-16 h-1 bg-gray-300 rounded-full" />
-      </View>
+    <PanGestureHandler onGestureEvent={gestureHandler}>
+      <Animated.View style={containerStyle} className="flex-1 mt-auto bg-white rounded-t-3xl shadow-2xl absolute bottom-0 w-full pb-12">
+        <View className="items-center py-2 flex-row justify-center">
+          <View className="w-16 h-1 bg-gray-300 rounded-full" />
+        </View>
+        <TouchableOpacity onPress={togglePanelVisibility} className="absolute top-2 right-4 p-2 z-10">
+          <MaterialIcons name={isMinimized
+? "keyboard-arrow-up"
+: "keyboard-arrow-down"} size={24} color="#666" />
+        </TouchableOpacity>
 
-      <View className="p-4 border-b border-gray-200">
-        <Text className="text-2xl font-bold text-gray-900 mb-1">Livraison en cours</Text>
+        <View className="p-4 border-b border-gray-200">
+          <Text className="text-2xl font-bold text-gray-900 mb-1">Livraison en cours</Text>
 
-        <View className="flex-row justify-between">
-          <Text className="text-sm font-medium text-gray-500">
-            Arrivée estimée dans
-            <Text className="font-semibold text-green-600">{eta
+          <View className="flex-row justify-between">
+            <Text className="text-sm font-medium text-gray-500">
+              Arrivée estimée dans
+              <Text className="font-semibold text-green-600">{eta
 ? ` ${eta}`
 : " calcul en cours..."}</Text>
-          </Text>
+            </Text>
 
-          <Text className="text-sm font-medium text-gray-500">
-            Distance:
-            <Text className="font-semibold text-blue-600">{` ${distanceToClient}`}</Text>
-          </Text>
-        </View>
-      </View>
-
-      <View className="flex-row items-center p-4 border-b border-gray-200">
-        <View className="mr-auto">
-          <Text className="text-lg font-semibold text-gray-900 mb-1">Client</Text>
-
-          <Text className="text-sm text-gray-500">{orderDetails?.client.name || "Client"}</Text>
-
-          <Text className="text-xs text-gray-400 mt-1">{orderDetails?.client.address || "Adresse"}</Text>
-        </View>
-
-        <TouchableOpacity onPress={() => contactClient("phone")} className="flex-row items-center justify-center rounded-full py-2 px-4 border border-gray-200 bg-gray-100 ml-1">
-          <Feather color="#000" name="phone" size={19} />
-        </TouchableOpacity>
-
-        <TouchableOpacity onPress={() => contactClient("message")} className="flex-row items-center justify-center rounded-full py-2 px-4 border border-gray-200 bg-gray-100 ml-1">
-          <Feather color="#000" name="message-square" size={19} />
-        </TouchableOpacity>
-      </View>
-
-      {showOrderDetails && orderDetails?.items && (
-        <View className="p-4 border-b border-gray-200">
-          <Text className="text-lg font-semibold text-gray-900 mb-3">Détails de la commande</Text>
-
-          {orderDetails.items.map((item) => (
-            <View key={item.id} className="flex-row justify-between mb-2">
-              <Text className="text-gray-700">
-                {item.quantity > 1
-? `${item.quantity}x `
-: ""}
-                {item.name}
-              </Text>
-              <Text className="font-medium">{(item.price * item.quantity).toFixed(2)} €</Text>
-            </View>
-          ))}
-
-          <View className="flex-row justify-between mt-3 pt-3 border-t border-gray-200">
-            <Text className="font-bold text-gray-900">Total</Text>
-            <Text className="font-bold text-gray-900">{orderDetails.totalPrice.toFixed(2)} €</Text>
+            <Text className="text-sm font-medium text-gray-500">
+              Distance:
+              <Text className="font-semibold text-blue-600">{` ${distanceToClient}`}</Text>
+            </Text>
           </View>
         </View>
-      )}
 
-      <VStack className="px-6 mt-6" space="md">
-        <Button onPress={markAsDelivered}>
-          <ButtonText>Marquer comme livrée</ButtonText>
-        </Button>
+        <View className="flex-row items-center p-4 border-b border-gray-200">
+          <View className="mr-auto">
+            <Text className="text-lg font-semibold text-gray-900 mb-1">Client</Text>
 
-        <Button variant="outline" onPress={() => setShowOrderDetails(!showOrderDetails)}>
-          <ButtonText>{showOrderDetails
+            <Text className="text-sm text-gray-500">{orderDetails?.client.name || "Client"}</Text>
+
+            <Text className="text-xs text-gray-400 mt-1">{orderDetails?.client.address || "Adresse"}</Text>
+          </View>
+
+          <TouchableOpacity onPress={() => contactClient("phone")} className="flex-row items-center justify-center rounded-full py-2 px-4 border border-gray-200 bg-gray-100 ml-1">
+            <Feather color="#000" name="phone" size={19} />
+          </TouchableOpacity>
+
+          <TouchableOpacity onPress={() => contactClient("message")} className="flex-row items-center justify-center rounded-full py-2 px-4 border border-gray-200 bg-gray-100 ml-1">
+            <Feather color="#000" name="message-square" size={19} />
+          </TouchableOpacity>
+        </View>
+
+        {showOrderDetails && orderDetails?.items && (
+          <View className="p-4 border-b border-gray-200">
+            <Text className="text-lg font-semibold text-gray-900 mb-3">Détails de la commande</Text>
+
+            {orderDetails.items.map((item) => (
+              <View key={item.id} className="flex-row justify-between mb-2">
+                <Text className="text-gray-700">
+                  {item.quantity > 1
+? `${item.quantity}x `
+: ""}
+                  {item.name}
+                </Text>
+                <Text className="font-medium">{(item.price * item.quantity).toFixed(2)} €</Text>
+              </View>
+            ))}
+
+            <View className="flex-row justify-between mt-3 pt-3 border-t border-gray-200">
+              <Text className="font-bold text-gray-900">Total</Text>
+              <Text className="font-bold text-gray-900">{orderDetails.totalPrice.toFixed(2)} €</Text>
+            </View>
+          </View>
+        )}
+
+        <VStack className="px-6 mt-6" space="md">
+          <Button onPress={markAsDelivered}>
+            <ButtonText>Marquer comme livrée</ButtonText>
+          </Button>
+
+          <Button variant="outline" onPress={() => setShowOrderDetails(!showOrderDetails)}>
+            <ButtonText>{showOrderDetails
 ? "Masquer les détails"
 : "Voir les détails de la commande"}</ButtonText>
-        </Button>
-      </VStack>
-    </View>
+          </Button>
+        </VStack>
+      </Animated.View>
+    </PanGestureHandler>
   );
 };
 
