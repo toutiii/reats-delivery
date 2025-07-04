@@ -2,11 +2,19 @@ import { ThemedView } from "@/components/themed-view";
 import { Button, ButtonText } from "@/components/ui/button";
 import { Heading } from "@/components/ui/heading";
 import { Text } from "@/components/ui/text";
+import { StackNavigation } from "@/types/navigation";
 import { Feather } from "@expo/vector-icons";
+import { useNavigation } from "@react-navigation/native";
 import React from "react";
 import { SafeAreaView, View } from "react-native";
 
-const DeliveryConfirmation = () => {
+const DeliveryConfirmationScreen = () => {
+  const navigation = useNavigation<StackNavigation>();
+
+  const handleBack = () => {
+    navigation.navigate("HomeScreen");
+  };
+
   return (
     <ThemedView>
       <SafeAreaView className="flex-1">
@@ -18,7 +26,7 @@ const DeliveryConfirmation = () => {
           <Heading className="text-center text-2xl font-bold mb-3">Your application is submitted successfully</Heading>
 
           <Text className="text-center mb-8 px-2">Please wait and check your application status under My Application</Text>
-          <Button className="w-full" variant="outline" size="lg">
+          <Button className="w-full" variant="outline" size="lg" onPress={handleBack}>
             <ButtonText>Okay</ButtonText>
           </Button>
         </View>
@@ -27,4 +35,4 @@ const DeliveryConfirmation = () => {
   );
 };
 
-export default DeliveryConfirmation;
+export default DeliveryConfirmationScreen;

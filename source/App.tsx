@@ -35,7 +35,7 @@ import LoginScreen from "./screens/auth/login";
 import OTPScreen from "./screens/auth/otp";
 import RegisterScreen from "./screens/auth/register";
 import DeliveryMapScreen from "./screens/delivery";
-import DeliveryConfirmation from "./screens/delivery/confirmation";
+import DeliveryConfirmationScreen from "./screens/delivery/confirmation";
 import HomeScreen from "./screens/home";
 import StartPage from "./screens/onboarding";
 import TermsAndConditionsScreen from "./screens/onboarding/terms-and-conditions";
@@ -113,7 +113,7 @@ export default function App() {
             <Stack.Screen name="HomeScreen" component={HomeScreen} />
             <Stack.Screen name="OrderDetailsScreen" component={OrderDetailsScreen} />
             <Stack.Screen name="DeliveryMapScreen" component={DeliveryMapScreen as React.ComponentType<{}>} />
-            <Stack.Screen name="DeliveryConfirmation" component={DeliveryConfirmation} />
+            <Stack.Screen name="DeliveryConfirmationScreen" component={DeliveryConfirmationScreen} />
             <Stack.Screen name="OTPView" component={OTPView} />
             <Stack.Screen name="LoginForm" component={LoginForm} />
             <Stack.Screen name="SignupForm" component={SignupForm} />

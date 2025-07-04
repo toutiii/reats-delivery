@@ -8,7 +8,7 @@ import { RouteProp } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import * as Location from "expo-location";
 import React, { useEffect, useRef, useState } from "react";
-import { Dimensions, Platform, TouchableOpacity, useColorScheme, View } from "react-native";
+import { Dimensions, Platform, TouchableOpacity, View } from "react-native";
 import MapView, { Circle, MapPressEvent, PROVIDER_DEFAULT, PROVIDER_GOOGLE } from "react-native-maps";
 import { MapDirectionsResponse } from "react-native-maps-directions";
 
@@ -22,7 +22,6 @@ const DeliveryMapScreen: React.FC<DeliveryMapScreenProps> = ({ route }) => {
   const orderId = route.params?.id
 ? String(route.params.id)
 : "ORDER123";
-  const colorScheme = useColorScheme();
   const { height, width } = Dimensions.get("window");
   const ASPECT_RATIO = width / height;
   const LATITUDE_DELTA = 0.0421;

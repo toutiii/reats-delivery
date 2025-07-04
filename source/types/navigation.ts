@@ -18,6 +18,7 @@ export type RootStackParamList = {
   OrderDetailsScreen: undefined;
   DeliveryMapScreen: { id?: string };
   MainDrawerNavigator: undefined;
+  DeliveryConfirmationScreen: undefined;
 };
 
 // Type pour la navigation avec Stack
