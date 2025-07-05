@@ -5,7 +5,7 @@ module.exports = ({ config }) => {
     ...config,
     name: "source",
     slug: "source",
-    version: "0.2.0",
+    version: "0.3.0",
     orientation: "portrait",
     icon: "./assets/icon.png",
     userInterfaceStyle: "light",
