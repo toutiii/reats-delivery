@@ -25,4 +25,5 @@ source/.DS_Store
 *.env.test.local
 *.env.production.local
 .env.local
+source/.env
 source/.env.development.local
