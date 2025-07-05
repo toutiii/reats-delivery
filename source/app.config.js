@@ -31,7 +31,16 @@ module.exports = ({ config }) => {
       favicon: "./assets/favicon.png",
     },
     plugins: [
-      "expo-build-properties",
+      [
+        "expo-build-properties",
+        {
+          android: {
+            compileSdkVersion: 34,
+            targetSdkVersion: 34,
+            minSdkVersion: 24,
+          },
+        },
+      ],
       "expo-secure-store",
       "expo-font",
       [
