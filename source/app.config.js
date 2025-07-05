@@ -5,7 +5,7 @@ module.exports = ({ config }) => {
     ...config,
     name: "source",
     slug: "source",
-    version: "0.1.0",
+    version: "0.2.0",
     orientation: "portrait",
     icon: "./assets/icon.png",
     userInterfaceStyle: "light",
@@ -31,7 +31,16 @@ module.exports = ({ config }) => {
       favicon: "./assets/favicon.png",
     },
     plugins: [
-      "expo-build-properties",
+      [
+        "expo-build-properties",
+        {
+          android: {
+            compileSdkVersion: 34,
+            targetSdkVersion: 34,
+            minSdkVersion: 24,
+          },
+        },
+      ],
       "expo-secure-store",
       "expo-font",
       [
