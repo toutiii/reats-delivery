@@ -5,7 +5,7 @@ module.exports = ({ config }) => {
     ...config,
     name: "source",
     slug: "source",
-    version: "0.3.0",
+    version: "0.4.0",
     orientation: "portrait",
     icon: "./assets/icon.png",
     userInterfaceStyle: "light",
@@ -35,8 +35,8 @@ module.exports = ({ config }) => {
         "expo-build-properties",
         {
           android: {
-            compileSdkVersion: 34,
-            targetSdkVersion: 34,
+            compileSdkVersion: 35,
+            targetSdkVersion: 35,
             minSdkVersion: 24,
           },
         },
