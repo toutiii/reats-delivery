@@ -1,57 +1,36 @@
-name: Merge CI
+name: Manual Expo Build
 
 on:
-  push:
-    branches:
-      - main
-
-permissions:
-  contents: write  # Needed for tagging commits if needed
+  workflow_dispatch:
+    inputs:
+      platform:
+        description: 'Platform to build'
+        required: true
+        default: 'android'
+        type: choice
+        options:
+          - android
+          - ios
+          - both
+      build_type:
+        description: 'Type of deployment'
+        required: true
+        default: 'ota'
+        type: choice
+        options:
+          - ota
+          - build
 
 jobs:
-  detect_deployment_type:
-    name: Detect Deployment Type
-    runs-on: ubuntu-latest
-    outputs:
-      deployment_type: ${{ steps.extract_deployment_type.outputs.deployment_type }}
-
-    steps:
-      - name: Checkout Code
-        uses: actions/checkout@v4
-
-      - name: Extract Commit Message
-        id: extract_commit_message
-        run: |
-          COMMIT_MESSAGE=$(git log -1 --pretty=format:"%s")
-          echo "Commit message: $COMMIT_MESSAGE"
-          echo "commit_message=$COMMIT_MESSAGE" >> $GITHUB_ENV
-
-      - name: Determine Deployment Type
-        id: extract_deployment_type
-        run: |
-          if [[ "${{ env.commit_message }}" == "[OTA]"* ]]; then
-            echo "Detected OTA Update"
-            echo "deployment_type=ota" >> $GITHUB_ENV
-            echo "deployment_type=ota" >> $GITHUB_OUTPUT
-          elif [[ "${{ env.commit_message }}" == "[BUILD]"* ]]; then
-            echo "Detected Full Build"
-            echo "deployment_type=build" >> $GITHUB_ENV
-            echo "deployment_type=build" >> $GITHUB_OUTPUT
-          else
-            echo "No deployment required"
-            echo "deployment_type=none" >> $GITHUB_ENV
-            echo "deployment_type=none" >> $GITHUB_OUTPUT
-          fi
-
-  deploy_ota:
-    name: Deploy OTA Update
-    needs: detect_deployment_type
+  build:
+    name: Manual Expo Deploy
     runs-on: ubuntu-latest
     env:
-      ENV: "staging"
-      EXPO_PUBLIC_STAGING_API_BASE_URL: "https://api-staging.reats.net"
+      ENV: staging
+      EXPO_PUBLIC_STAGING_API_BASE_URL: https://api-staging.reats.net
       EXPO_PUBLIC_STAGING_API_KEY: ${{ secrets.EXPO_PUBLIC_STAGING_API_KEY }}
-    if: needs.detect_deployment_type.outputs.deployment_type == 'ota'
+      GOOGLE_SERVICE_ACCOUNT_JSON: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_JSON }}
+      EXPO_TOKEN: ${{ secrets.EXPO_STAGING_TOKEN }}
 
     steps:
       - name: Checkout code
@@ -74,100 +53,31 @@ jobs:
           eas-version: latest
           token: ${{ secrets.EXPO_STAGING_TOKEN }}
 
-      - name: Deploy OTA Update
+      - name: Run OTA update
+        if: ${{ github.event.inputs.build_type == 'ota' }}
         working-directory: source
         run: eas update --auto --branch staging
 
-  deploy_android:
-    name: Deploy Android Build
-    needs: detect_deployment_type
-    runs-on: ubuntu-latest
-    env:
-      ENV: "staging"
-      EXPO_PUBLIC_STAGING_API_BASE_URL: "https://api-staging.reats.net"
-      EXPO_PUBLIC_STAGING_API_KEY: ${{ secrets.EXPO_PUBLIC_STAGING_API_KEY }}
-      GOOGLE_SERVICE_ACCOUNT_JSON: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_JSON }}
-    if: needs.detect_deployment_type.outputs.deployment_type == 'build'
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Install jq
-        run: sudo apt-get update && sudo apt-get install -y jq
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: 18
-          cache: yarn
-          cache-dependency-path: source/yarn.lock
-
-      - name: Install dependencies
-        working-directory: source
-        run: yarn install --frozen-lockfile
-
-      - name: Setup Expo
-        uses: expo/expo-github-action@v8
-        with:
-          eas-version: latest
-          token: ${{ secrets.EXPO_STAGING_TOKEN }}
-
-      - name: Build Android App
+      - name: Build Android
+        if: ${{ github.event.inputs.build_type == 'build' && (github.event.inputs.platform == 'android' || github.event.inputs.platform == 'both') }}
         working-directory: source
         run: |
           eas build --platform android --profile preview --non-interactive --json > android_build.json
           echo "ANDROID_BUILD_ID=$(jq -r '.[0].id' android_build.json)" >> $GITHUB_ENV
 
-      - name: Submit Android App to Play Store (Preview)
+      - name: Submit Android App
+        if: ${{ github.event.inputs.build_type == 'build' && (github.event.inputs.platform == 'android' || github.event.inputs.platform == 'both') }}
         working-directory: source
-        env:
-          EXPO_TOKEN: ${{ secrets.EXPO_STAGING_TOKEN }}
-          GOOGLE_SERVICE_ACCOUNT_JSON: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_JSON }}
         run: eas submit --platform android --profile preview --non-interactive --id $ANDROID_BUILD_ID
 
-  deploy_ios:
-    name: Deploy iOS Build
-    needs: detect_deployment_type
-    runs-on: ubuntu-latest
-    env:
-      ENV: "staging"
-      EXPO_PUBLIC_STAGING_API_BASE_URL: "https://api-staging.reats.net"
-      EXPO_PUBLIC_STAGING_API_KEY: ${{ secrets.EXPO_PUBLIC_STAGING_API_KEY }}
-    if: needs.detect_deployment_type.outputs.deployment_type == 'build'
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Install jq
-        run: sudo apt-get update && sudo apt-get install -y jq
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: 18
-          cache: yarn
-          cache-dependency-path: source/yarn.lock
-
-      - name: Install dependencies
-        working-directory: source
-        run: yarn install --frozen-lockfile
-
-      - name: Setup Expo
-        uses: expo/expo-github-action@v8
-        with:
-          eas-version: latest
-          token: ${{ secrets.EXPO_STAGING_TOKEN }}
-
-      - name: Build iOS App
+      - name: Build iOS
+        if: ${{ github.event.inputs.build_type == 'build' && (github.event.inputs.platform == 'ios' || github.event.inputs.platform == 'both') }}
         working-directory: source
         run: |
           eas build --platform ios --profile testflight --non-interactive --json > ios_build.json
           echo "IOS_BUILD_ID=$(jq -r '.[0].id' ios_build.json)" >> $GITHUB_ENV
 
-      - name: Submit iOS App to TestFlight
+      - name: Submit iOS App
+        if: ${{ github.event.inputs.build_type == 'build' && (github.event.inputs.platform == 'ios' || github.event.inputs.platform == 'both') }}
         working-directory: source
-        env:
-          EXPO_TOKEN: ${{ secrets.EXPO_STAGING_TOKEN }}
         run: eas submit --platform ios --profile testflight --non-interactive --id $IOS_BUILD_ID
