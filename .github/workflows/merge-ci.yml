@@ -20,9 +20,6 @@ on:
         options:
           - ota
           - build
-      app_version:
-        description: 'Optional app version override'
-        required: false
 
 jobs:
   build:
