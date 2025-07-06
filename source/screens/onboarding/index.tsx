@@ -75,7 +75,7 @@ const StartPage = () => {
       })
     );
     // navigation.navigate("TermsAndConditions");
-    navigation.navigate("TermsAndConditions");
+    navigation.navigate("MainNavigator");
   };
 
   const navigateToNextScreen = () => {
