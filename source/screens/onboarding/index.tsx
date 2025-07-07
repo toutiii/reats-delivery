@@ -74,8 +74,8 @@ const StartPage = () => {
         }
       })
     );
-    // navigation.navigate("TermsAndConditions");
-    navigation.navigate("MainNavigator");
+    navigation.navigate("TermsAndConditions");
+    // navigation.navigate("MainNavigator");
   };
 
   const navigateToNextScreen = () => {

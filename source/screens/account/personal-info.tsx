@@ -99,7 +99,7 @@ const PersonalInfoScreen = () => {
                     <Text size="sm" className="text-gray-600 font-medium ml-1">
                       Prénom
                     </Text>
-                    <Input size="md" variant="rounded" className={modified.firstName
+                    <Input size="lg" variant="rounded" className={modified.firstName
 ? "border-blue-400"
 : ""}>
                       <InputField placeholder="Prénom" value={formData.firstName} onChangeText={(text) => handleChange("firstName", text)} />
@@ -111,7 +111,7 @@ const PersonalInfoScreen = () => {
                     <Text size="sm" className="text-gray-600 font-medium ml-1">
                       Nom
                     </Text>
-                    <Input size="md" variant="rounded" className={modified.lastName
+                    <Input size="lg" variant="rounded" className={modified.lastName
 ? "border-blue-400"
 : ""}>
                       <InputField placeholder="Nom" value={formData.lastName} onChangeText={(text) => handleChange("lastName", text)} />
@@ -123,7 +123,7 @@ const PersonalInfoScreen = () => {
                     <Text size="sm" className="text-gray-600 font-medium ml-1">
                       Email
                     </Text>
-                    <Input size="md" variant="rounded" className={modified.email
+                    <Input size="lg" variant="rounded" className={modified.email
 ? "border-blue-400"
 : ""}>
                       <InputField placeholder="Email" value={formData.email} onChangeText={(text) => handleChange("email", text)} keyboardType="email-address" />
@@ -135,7 +135,7 @@ const PersonalInfoScreen = () => {
                     <Text size="sm" className="text-gray-600 font-medium ml-1">
                       Téléphone
                     </Text>
-                    <Input size="md" variant="rounded" className={modified.phone
+                    <Input size="lg" variant="rounded" className={modified.phone
 ? "border-blue-400"
 : ""}>
                       <InputField placeholder="Téléphone" value={formData.phone} onChangeText={(text) => handleChange("phone", text)} keyboardType="phone-pad" />
@@ -145,27 +145,9 @@ const PersonalInfoScreen = () => {
               </Box>
 
               {/* Sécurité et mot de passe */}
-              <Box className="bg-white rounded-xl shadow-sm p-4 border border-gray-100">
+              {/* <Box className="bg-white rounded-xl shadow-sm p-4 border border-gray-100">
                 <VStack space="md">
                   <Text className="text-gray-800 font-semibold">Sécurité</Text>
-
-                  <TouchableOpacity>
-                    <HStack className="justify-between py-3" space="md">
-                      <HStack space="md">
-                        <Box className="bg-gray-50 rounded-full flex items-center justify-center w-9 h-9" style={{ alignItems: "center", justifyContent: "center" }}>
-                          <Feather name="lock" size={16} color="#4B5563" style={{ textAlign: "center", alignSelf: "center" }} />
-                        </Box>
-                        <VStack>
-                          <Text className="text-gray-800">Modifier le mot de passe</Text>
-                          <Text size="xs" className="text-gray-500">
-                            Dernier changement il y a 3 mois
-                          </Text>
-                        </VStack>
-                      </HStack>
-                      <Feather name="chevron-right" size={16} color="#9CA3AF" />
-                    </HStack>
-                  </TouchableOpacity>
-
                   <TouchableOpacity>
                     <HStack className="justify-between py-3" space="md">
                       <HStack space="md">
@@ -183,7 +165,7 @@ const PersonalInfoScreen = () => {
                     </HStack>
                   </TouchableOpacity>
                 </VStack>
-              </Box>
+              </Box> */}
 
               {/* Actions sur le compte */}
               <Box className="bg-white rounded-xl shadow-sm p-4 border border-gray-100">

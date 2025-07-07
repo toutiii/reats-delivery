@@ -165,7 +165,7 @@ const AccountScreen = () => {
           icon: "globe",
           label: "Langue",
           description: "Français (FR)",
-          action: () => console.log("Language"),
+          action: () => navigation.navigate("LanguageScreen"),
         },
       ],
     },
@@ -176,7 +176,7 @@ const AccountScreen = () => {
           icon: "help-circle",
           label: "Aide & Support",
           description: "Questions fréquentes et assistance",
-          action: () => console.log("Help"),
+          action: () => navigation.navigate("HelpSupportScreen"),
         },
         {
           icon: "file-text",

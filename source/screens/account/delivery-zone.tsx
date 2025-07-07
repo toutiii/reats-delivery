@@ -1,5 +1,4 @@
 import { ThemedView } from "@/components/themed-view";
-import { Badge } from "@/components/ui/badge";
 import { Box } from "@/components/ui/box";
 import { Button, ButtonText } from "@/components/ui/button";
 import { Checkbox, CheckboxIcon, CheckboxIndicator } from "@/components/ui/checkbox";
@@ -41,7 +40,7 @@ const DeliveryZoneScreen = () => {
       id: "zone2",
       name: "Paris (Ouest)",
       postalCode: "75016, 75017",
-      status: "active",
+      status: "inactive",
       selected: true,
       approvalDate: new Date(2023, 6, 20),
     },
@@ -94,18 +93,24 @@ const DeliveryZoneScreen = () => {
     }
   }, []);
 
-  // Pour sélectionner/désélectionner une zone
+  // Pour sélectionner une nouvelle zone de livraison
   const toggleZone = (id: string) => {
     // Ne permet pas de désélectionner une zone active ou en attente
     const zoneToToggle = zones.find((z) => z.id === id);
     if (zoneToToggle?.status === "active" || zoneToToggle?.status === "pending") {
-      Alert.alert("Action non autorisée", "Vous ne pouvez pas désélectionner une zone active ou en attente de validation. Veuillez contacter l'administration pour toute modification.", [{ text: "OK" }]);
+      Alert.alert("Zone déjà activée", "Cette zone est déjà active ou en attente de validation.", [{ text: "OK" }]);
       return;
     }
 
+    // Si on clique sur une zone déjà sélectionnée, on ne fait rien
+    if (zoneToToggle?.selected) {
+      return;
+    }
+
+    // Désélectionner toutes les zones inactives et sélectionner uniquement la nouvelle
     const updatedZones = zones.map((zone) => {
-      if (zone.id === id && zone.status === "inactive") {
-        return { ...zone, selected: !zone.selected };
+      if (zone.status === "inactive") {
+        return { ...zone, selected: zone.id === id };
       }
       return zone;
     });
@@ -185,42 +190,6 @@ const DeliveryZoneScreen = () => {
     Alert.alert(`Zone: ${zone.name}`, `${statusMessage}\n\nCodes postaux: ${zone.postalCode}\n${dateInfo}`, [{ text: "OK" }]);
   };
 
-  // Obtenir la couleur de fond selon le statut
-  const getStatusColor = (status: ZoneStatus): string => {
-    switch (status) {
-      case "active":
-        return "bg-green-100 text-green-700 border-green-200";
-      case "pending":
-        return "bg-yellow-100 text-yellow-700 border-yellow-200";
-      case "inactive":
-        return "bg-gray-100 text-gray-600 border-gray-200";
-    }
-  };
-
-  // Obtenir le libellé selon le statut
-  const getStatusLabel = (status: ZoneStatus): string => {
-    switch (status) {
-      case "active":
-        return "Active";
-      case "pending":
-        return "En attente";
-      case "inactive":
-        return "Inactive";
-    }
-  };
-
-  // Obtenir l'icône selon le statut
-  const getStatusIcon = (status: ZoneStatus): keyof typeof Feather.glyphMap => {
-    switch (status) {
-      case "active":
-        return "check-circle";
-      case "pending":
-        return "clock";
-      case "inactive":
-        return "circle";
-    }
-  };
-
   // Regroupement des zones par statut pour l'affichage
   const activeZones = zones.filter((zone) => zone.status === "active");
   const pendingZones = zones.filter((zone) => zone.status === "pending");
@@ -233,7 +202,7 @@ const DeliveryZoneScreen = () => {
           showsVerticalScrollIndicator={false}
           contentContainerStyle={{
             paddingBottom: isWeb
-? 32
+? 16
 : 100,
           }}
           className="flex-1"
@@ -294,7 +263,7 @@ const DeliveryZoneScreen = () => {
             )}
 
             {/* Zones en attente de validation */}
-            {pendingZones.length > 0 && (
+            {/* {pendingZones.length > 0 && (
               <VStack space="sm">
                 <Heading size="md" className="text-gray-700">
                   Zones en attente de validation
@@ -330,12 +299,12 @@ const DeliveryZoneScreen = () => {
                   </VStack>
                 </Box>
               </VStack>
-            )}
+            )} */}
 
             {/* Zones disponibles */}
             <VStack space="sm">
               <Heading size="md" className="text-gray-700">
-                Zones disponibles
+                Choisir une ville de livraison
               </Heading>
               <Box className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
                 <VStack>
@@ -370,10 +339,10 @@ const DeliveryZoneScreen = () => {
 
             {/* Bouton de soumission */}
             <Button size="lg" variant="solid" className="mt-4" isDisabled={!hasChanges || pendingZones.length > 0} onPress={submitZoneRequest}>
-              <ButtonText className="text-white font-medium">Soumettre ma demande de modification</ButtonText>
+              <ButtonText className="text-white font-medium">Demander l'accès à cette ville</ButtonText>
             </Button>
 
-            {pendingZones.length > 0 && <Text className="text-yellow-600 text-center text-sm mt-2">Vous avez déjà une demande en attente de validation</Text>}
+            {/* {pendingZones.length > 0 && <Text className="text-yellow-600 text-center text-sm mt-2">Vous avez déjà une demande en attente de validation</Text>} */}
 
             {/* Légende */}
             <Box className="bg-gray-50 rounded-xl p-4 border border-gray-100 mt-4">
@@ -386,17 +355,17 @@ const DeliveryZoneScreen = () => {
                     </Box>
                     <Text className="text-gray-700">Zone active - Vous pouvez livrer dans cette zone</Text>
                   </HStack>
-                  <HStack space="sm" className="items-center">
+                  {/* <HStack space="sm" className="items-center">
                     <Box className="bg-yellow-100 rounded-full p-1.5" style={{ alignItems: "center", justifyContent: "center" }}>
                       <Feather name="clock" size={14} color="#FBBF24" />
                     </Box>
                     <Text className="text-gray-700">Zone en attente - Validation en cours</Text>
-                  </HStack>
+                  </HStack> */}
                   <HStack space="sm" className="items-center">
                     <Box className="bg-gray-100 rounded-full p-1.5" style={{ alignItems: "center", justifyContent: "center" }}>
                       <Feather name="circle" size={14} color="#6B7280" />
                     </Box>
-                    <Text className="text-gray-700 flex-1">Zone inactive - Sélectionnez pour demander l'accès</Text>
+                    <Text className="text-gray-700 flex-1">Zone inactive - Sélectionnez pour demander l'accès à cette ville</Text>
                   </HStack>
                 </VStack>
               </VStack>

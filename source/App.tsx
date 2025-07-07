@@ -41,6 +41,8 @@ import StartPage from "./screens/onboarding";
 import TermsAndConditionsScreen from "./screens/onboarding/terms-and-conditions";
 // import OrderDetailsScreen from "./screens/order-details";
 import DeliveryZoneScreen from "./screens/account/delivery-zone";
+import HelpSupportScreen from "./screens/account/help-support";
+import LanguageScreen from "./screens/account/language";
 import PaymentMethodsScreen from "./screens/account/payment-methods";
 import PersonalInfoScreen from "./screens/account/personal-info";
 import DeliveryMapScreen from "./screens/delivery";
@@ -119,11 +121,11 @@ export default function App() {
             <Stack.Screen name="OrderDetailsScreen" component={OrderDetailsScreen} />
             <Stack.Screen name="DeliveryMapScreen" component={DeliveryMapScreen as React.ComponentType<{}>} />
             <Stack.Screen name="DeliveryConfirmation" component={DeliveryConfirmation} />
-            {/* <Stack.Screen name="HomeScreen" component={HomeScreen} />
-             */}
             <Stack.Screen name="PersonalInfoScreen" component={PersonalInfoScreen} />
             <Stack.Screen name="PaymentMethodsScreen" component={PaymentMethodsScreen} />
             <Stack.Screen name="DeliveryZoneScreen" component={DeliveryZoneScreen} />
+            <Stack.Screen name="HelpSupportScreen" component={HelpSupportScreen} />
+            <Stack.Screen name="LanguageScreen" component={LanguageScreen} />
             <Stack.Screen name="OTPView" component={OTPView} />
             <Stack.Screen name="LoginForm" component={LoginForm} />
             <Stack.Screen name="SignupForm" component={SignupForm} />

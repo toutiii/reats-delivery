@@ -22,6 +22,9 @@ export type RootStackParamList = {
   PersonalInfoScreen: undefined;
   PaymentMethodsScreen: undefined;
   DeliveryZoneScreen: undefined;
+  DeliveryConfirmation: undefined;
+  HelpSupportScreen: undefined;
+  LanguageScreen: undefined;
 };
 
 // Type pour la navigation avec Stack
