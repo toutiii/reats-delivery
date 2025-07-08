@@ -1198,7 +1198,7 @@
     pirates "^4.0.6"
     source-map-support "^0.5.16"
 
-"@babel/runtime@^7.20.0", "@babel/runtime@^7.21.0", "@babel/runtime@^7.25.0", "@babel/runtime@^7.8.7":
+"@babel/runtime@^7.20.0", "@babel/runtime@^7.21.0", "@babel/runtime@^7.25.0", "@babel/runtime@^7.6.2", "@babel/runtime@^7.8.7":
   version "7.27.3"
   resolved "https://registry.npmjs.org/@babel/runtime/-/runtime-7.27.3.tgz"
   integrity sha512-7EYtGezsdiDMyY80+65EzwiGmcJqpmcZCojSXaRgdrBaGtWTgDZKq69cPIVped6MkIM78cTQ2GOiEYjwOlG4xw==
@@ -1738,6 +1738,13 @@
   resolved "https://registry.npmjs.org/@gluestack-ui/alert/-/alert-0.1.16.tgz"
   integrity sha512-vE0litmicuKFJFp9TY3mRuZmyH/E24IdHlC0f3FZjfa+AzeOS+bZdKMRix2EYkvBGrA6uNffWUuHeXWQGMRVJQ==
 
+"@gluestack-ui/avatar@^0.1.18":
+  version "0.1.18"
+  resolved "https://registry.npmjs.org/@gluestack-ui/avatar/-/avatar-0.1.18.tgz"
+  integrity sha512-VA9XwtavYLYCWrjxHc2u9gRpV97cPRcr/6KJ4tLiMiQbiRL1b4zckiL+/F39fB6xjUOUQHl3Fjo/Yd8swa0MBg==
+  dependencies:
+    "@gluestack-ui/utils" "^0.1.14"
+
 "@gluestack-ui/button@^1.0.14":
   version "1.0.14"
   resolved "https://registry.npmjs.org/@gluestack-ui/button/-/button-1.0.14.tgz"
@@ -1746,6 +1753,25 @@
     "@gluestack-ui/utils" "0.1.15"
     "@react-native-aria/focus" "^0.2.9"
     "@react-native-aria/interactions" "0.2.16"
+
+"@gluestack-ui/checkbox@^0.1.39":
+  version "0.1.39"
+  resolved "https://registry.npmjs.org/@gluestack-ui/checkbox/-/checkbox-0.1.39.tgz"
+  integrity sha512-CPL9+g9qIFuGGQAQuFySATTxrqGMhIx/ASpBdl/YC50Ec/d7gMZlnKww3N1og3a6JqMG8yeWwbH+GH3z07XsfA==
+  dependencies:
+    "@gluestack-ui/form-control" "^0.1.19"
+    "@gluestack-ui/utils" "^0.1.15"
+    "@react-aria/visually-hidden" "^3.8.6"
+    "@react-native-aria/checkbox" "^0.2.10"
+    "@react-native-aria/focus" "^0.2.9"
+    "@react-native-aria/interactions" "0.2.16"
+    "@react-native-aria/utils" "0.2.12"
+    "@react-stately/checkbox" "^3.4.2"
+
+"@gluestack-ui/divider@^0.1.10":
+  version "0.1.10"
+  resolved "https://registry.npmjs.org/@gluestack-ui/divider/-/divider-0.1.10.tgz"
+  integrity sha512-/hZx1Rmy4Pgln9AwAprAEQcxYPEHjHSNF4xCUWlK/q0peyiMT5Nagt54VnxykVn5A0b2zg5QKP0pOqOF9xeE6w==
 
 "@gluestack-ui/form-control@^0.1.19":
   version "0.1.19"
@@ -1821,6 +1847,17 @@
   integrity sha512-mdK/M6RQafAYiHyJnDNjaE9+ttr9eg48f2InmO3rvcrjsdaLcu/vwHlwrO9N3xYcb3wb9z2+YZ4OIgtymFNTOw==
   dependencies:
     "@react-native-aria/focus" "^0.2.9"
+
+"@gluestack-ui/switch@^0.1.29":
+  version "0.1.29"
+  resolved "https://registry.npmjs.org/@gluestack-ui/switch/-/switch-0.1.29.tgz"
+  integrity sha512-swx0J20ULpN+pkHg8KioWibZETWE/6XvCBckmApNZf9RO2MiHHkNMw4Txne4u1z0OyLKGzBW1dbmkhLIOObaXg==
+  dependencies:
+    "@gluestack-ui/form-control" "^0.1.19"
+    "@gluestack-ui/utils" "^0.1.15"
+    "@react-native-aria/focus" "^0.2.9"
+    "@react-native-aria/interactions" "0.2.16"
+    "@react-stately/toggle" "^3.4.4"
 
 "@gluestack-ui/toast@^1.0.9":
   version "1.0.9"
@@ -2136,6 +2173,19 @@
   resolved "https://registry.npmjs.org/@pkgjs/parseargs/-/parseargs-0.11.0.tgz"
   integrity sha512-+1VkjdD0QBLPodGrJUeqarH8VAIvQODIbwh9XpP5Syisf7YoQgsJKPNFoqqLQlu+VQ/tVSshMR6loPMn8U+dPg==
 
+"@react-aria/checkbox@3.2.1":
+  version "3.2.1"
+  resolved "https://registry.npmjs.org/@react-aria/checkbox/-/checkbox-3.2.1.tgz"
+  integrity sha512-XnypnlVIfhB3CD7eSjSds8hNkzHgnhu0t48I1D0jYdL1O6tQC4UytPdIqlemRYBVHDloZkWerbjenpHnxhv8iA==
+  dependencies:
+    "@babel/runtime" "^7.6.2"
+    "@react-aria/label" "^3.1.1"
+    "@react-aria/toggle" "^3.1.1"
+    "@react-aria/utils" "^3.3.0"
+    "@react-stately/checkbox" "^3.0.1"
+    "@react-stately/toggle" "^3.2.1"
+    "@react-types/checkbox" "^3.2.1"
+
 "@react-aria/dialog@*":
   version "3.5.27"
   resolved "https://registry.npmjs.org/@react-aria/dialog/-/dialog-3.5.27.tgz"
@@ -2198,18 +2248,7 @@
     "@react-types/shared" "^3.29.1"
     "@swc/helpers" "^0.5.0"
 
-"@react-aria/interactions@^3.25.1", "@react-aria/interactions@^3.3.2":
-  version "3.25.1"
-  resolved "https://registry.npmjs.org/@react-aria/interactions/-/interactions-3.25.1.tgz"
-  integrity sha512-ntLrlgqkmZupbbjekz3fE/n3eQH2vhncx8gUp0+N+GttKWevx7jos11JUBjnJwb1RSOPgRUFcrluOqBp0VgcfQ==
-  dependencies:
-    "@react-aria/ssr" "^3.9.8"
-    "@react-aria/utils" "^3.29.0"
-    "@react-stately/flags" "^3.1.1"
-    "@react-types/shared" "^3.29.1"
-    "@swc/helpers" "^0.5.0"
-
-"@react-aria/interactions@^3.25.3":
+"@react-aria/interactions@^3.25.1", "@react-aria/interactions@^3.25.3", "@react-aria/interactions@^3.3.2":
   version "3.25.3"
   resolved "https://registry.npmjs.org/@react-aria/interactions/-/interactions-3.25.3.tgz"
   integrity sha512-J1bhlrNtjPS/fe5uJQ+0c7/jiXniwa4RQlP+Emjfc/iuqpW2RhbF9ou5vROcLzWIyaW8tVMZ468J68rAs/aZ5A==
@@ -2217,6 +2256,15 @@
     "@react-aria/ssr" "^3.9.9"
     "@react-aria/utils" "^3.29.1"
     "@react-stately/flags" "^3.1.2"
+    "@react-types/shared" "^3.30.0"
+    "@swc/helpers" "^0.5.0"
+
+"@react-aria/label@^3.1.1":
+  version "3.7.19"
+  resolved "https://registry.npmjs.org/@react-aria/label/-/label-3.7.19.tgz"
+  integrity sha512-ZJIj/BKf66q52idy24ErzX77vDGuyQn4neWtu51RRSk4npI3pJqEPsdkPCdo2dlBCo/Uc1pfuLGg2hY3N/ni9Q==
+  dependencies:
+    "@react-aria/utils" "^3.29.1"
     "@react-types/shared" "^3.30.0"
     "@swc/helpers" "^0.5.0"
 
@@ -2254,33 +2302,26 @@
     "@react-types/shared" "^3.29.1"
     "@swc/helpers" "^0.5.0"
 
-"@react-aria/ssr@^3.0.1", "@react-aria/ssr@^3.9.8":
-  version "3.9.8"
-  resolved "https://registry.npmjs.org/@react-aria/ssr/-/ssr-3.9.8.tgz"
-  integrity sha512-lQDE/c9uTfBSDOjaZUJS8xP2jCKVk4zjQeIlCH90xaLhHDgbpCdns3xvFpJJujfj3nI4Ll9K7A+ONUBDCASOuw==
-  dependencies:
-    "@swc/helpers" "^0.5.0"
-
-"@react-aria/ssr@^3.9.9":
+"@react-aria/ssr@^3.0.1", "@react-aria/ssr@^3.9.8", "@react-aria/ssr@^3.9.9":
   version "3.9.9"
   resolved "https://registry.npmjs.org/@react-aria/ssr/-/ssr-3.9.9.tgz"
   integrity sha512-2P5thfjfPy/np18e5wD4WPt8ydNXhij1jwA8oehxZTFqlgVMGXzcWKxTb4RtJrLFsqPO7RUQTiY8QJk0M4Vy2g==
   dependencies:
     "@swc/helpers" "^0.5.0"
 
-"@react-aria/utils@^3.29.0", "@react-aria/utils@^3.3.0", "@react-aria/utils@^3.6.0":
-  version "3.29.0"
-  resolved "https://registry.npmjs.org/@react-aria/utils/-/utils-3.29.0.tgz"
-  integrity sha512-jSOrZimCuT1iKNVlhjIxDkAhgF7HSp3pqyT6qjg/ZoA0wfqCi/okmrMPiWSAKBnkgX93N8GYTLT3CIEO6WZe9Q==
+"@react-aria/toggle@^3.1.1":
+  version "3.11.5"
+  resolved "https://registry.npmjs.org/@react-aria/toggle/-/toggle-3.11.5.tgz"
+  integrity sha512-8+Evk/JVMQ25PNhbnHUvsAK99DAjnCWMdSBNswJ1sWseKCYQzBXsNkkF6Dl/FlSkfDBFAaRHkX9JUz02wehb9A==
   dependencies:
-    "@react-aria/ssr" "^3.9.8"
-    "@react-stately/flags" "^3.1.1"
-    "@react-stately/utils" "^3.10.6"
-    "@react-types/shared" "^3.29.1"
+    "@react-aria/interactions" "^3.25.3"
+    "@react-aria/utils" "^3.29.1"
+    "@react-stately/toggle" "^3.8.5"
+    "@react-types/checkbox" "^3.9.5"
+    "@react-types/shared" "^3.30.0"
     "@swc/helpers" "^0.5.0"
-    clsx "^2.0.0"
 
-"@react-aria/utils@^3.29.1":
+"@react-aria/utils@^3.29.0", "@react-aria/utils@^3.29.1", "@react-aria/utils@^3.3.0", "@react-aria/utils@^3.6.0":
   version "3.29.1"
   resolved "https://registry.npmjs.org/@react-aria/utils/-/utils-3.29.1.tgz"
   integrity sha512-yXMFVJ73rbQ/yYE/49n5Uidjw7kh192WNN9PNQGV0Xoc7EJUlSOxqhnpHmYTyO0EotJ8fdM1fMH8durHjUSI8g==
@@ -2292,7 +2333,7 @@
     "@swc/helpers" "^0.5.0"
     clsx "^2.0.0"
 
-"@react-aria/visually-hidden@^3.8.23":
+"@react-aria/visually-hidden@^3.8.23", "@react-aria/visually-hidden@^3.8.6":
   version "3.8.23"
   resolved "https://registry.npmjs.org/@react-aria/visually-hidden/-/visually-hidden-3.8.23.tgz"
   integrity sha512-D37GHtAcxCck8BtCiGTNDniGqtldJuN0cRlW1PJ684zM4CdmkSPqKbt5IUKUfqheS9Vt7HxYsj1VREDW+0kaGA==
@@ -2311,6 +2352,17 @@
     "@react-aria/utils" "^3.29.1"
     "@react-types/shared" "^3.30.0"
     "@swc/helpers" "^0.5.0"
+
+"@react-native-aria/checkbox@^0.2.10":
+  version "0.2.10"
+  resolved "https://registry.npmjs.org/@react-native-aria/checkbox/-/checkbox-0.2.10.tgz"
+  integrity sha512-SpjAHmu+NmoztkHggtlBsygOapszjomjo8PtbGxP7rV+3b5iWhmrD2Ztf3Vc4tZMBl/GFslLA3NXp5h47T9Utg==
+  dependencies:
+    "@react-aria/checkbox" "3.2.1"
+    "@react-aria/utils" "^3.6.0"
+    "@react-native-aria/toggle" "^0.2.11"
+    "@react-native-aria/utils" "0.2.12"
+    "@react-stately/toggle" "^3.2.1"
 
 "@react-native-aria/dialog@^0.0.5":
   version "0.0.5"
@@ -2349,6 +2401,18 @@
     "@react-stately/overlays" "^3.1.1"
     "@react-types/overlays" "^3.4.0"
     dom-helpers "^5.0.0"
+
+"@react-native-aria/toggle@^0.2.11":
+  version "0.2.11"
+  resolved "https://registry.npmjs.org/@react-native-aria/toggle/-/toggle-0.2.11.tgz"
+  integrity sha512-oEmcHDp9dXJ8QM8BYILmvry9m1OB9prsIJJnmRjedSVMHRgeuH7CCPcJ1PUIsy56EvtAo6JbKvLTX5HUTQ/RHg==
+  dependencies:
+    "@react-aria/focus" "^3.2.3"
+    "@react-aria/utils" "^3.6.0"
+    "@react-native-aria/interactions" "0.2.16"
+    "@react-native-aria/utils" "0.2.12"
+    "@react-stately/toggle" "^3.2.1"
+    "@react-types/checkbox" "^3.2.1"
 
 "@react-native-aria/utils@0.2.12":
   version "0.2.12"
@@ -2580,11 +2644,15 @@
     color "^4.2.3"
     warn-once "^0.1.0"
 
-"@react-stately/flags@^3.1.1":
-  version "3.1.1"
-  resolved "https://registry.npmjs.org/@react-stately/flags/-/flags-3.1.1.tgz"
-  integrity sha512-XPR5gi5LfrPdhxZzdIlJDz/B5cBf63l4q6/AzNqVWFKgd0QqY5LvWJftXkklaIUpKSJkIKQb8dphuZXDtkWNqg==
+"@react-stately/checkbox@^3.0.1", "@react-stately/checkbox@^3.4.2":
+  version "3.6.15"
+  resolved "https://registry.npmjs.org/@react-stately/checkbox/-/checkbox-3.6.15.tgz"
+  integrity sha512-jt3Kzbk6heUMtAlCbUwnrEBknnzFhPBFMEZ00vff7VyhDXup7DJcJRxreloHepARZLIhLhC5QPyO5GS4YOHlvw==
   dependencies:
+    "@react-stately/form" "^3.1.5"
+    "@react-stately/utils" "^3.10.7"
+    "@react-types/checkbox" "^3.9.5"
+    "@react-types/shared" "^3.30.0"
     "@swc/helpers" "^0.5.0"
 
 "@react-stately/flags@^3.1.2":
@@ -2592,6 +2660,14 @@
   resolved "https://registry.npmjs.org/@react-stately/flags/-/flags-3.1.2.tgz"
   integrity sha512-2HjFcZx1MyQXoPqcBGALwWWmgFVUk2TuKVIQxCbRq7fPyWXIl6VHcakCLurdtYC2Iks7zizvz0Idv48MQ38DWg==
   dependencies:
+    "@swc/helpers" "^0.5.0"
+
+"@react-stately/form@^3.1.5":
+  version "3.1.5"
+  resolved "https://registry.npmjs.org/@react-stately/form/-/form-3.1.5.tgz"
+  integrity sha512-wOs0SVXFgNr1aIdywiNH1MhxrFlN5YxBr1k9y3Z7lX+pc/MGRJFTgfDDw5JDxvwLH9joJ9ciniCdWep9L/TqcQ==
+  dependencies:
+    "@react-types/shared" "^3.30.0"
     "@swc/helpers" "^0.5.0"
 
 "@react-stately/overlays@^3.1.1", "@react-stately/overlays@^3.6.16":
@@ -2612,14 +2688,17 @@
     "@react-types/overlays" "^3.8.16"
     "@swc/helpers" "^0.5.0"
 
-"@react-stately/utils@^3.10.6":
-  version "3.10.6"
-  resolved "https://registry.npmjs.org/@react-stately/utils/-/utils-3.10.6.tgz"
-  integrity sha512-O76ip4InfTTzAJrg8OaZxKU4vvjMDOpfA/PGNOytiXwBbkct2ZeZwaimJ8Bt9W1bj5VsZ81/o/tW4BacbdDOMA==
+"@react-stately/toggle@^3.2.1", "@react-stately/toggle@^3.4.4", "@react-stately/toggle@^3.8.5":
+  version "3.8.5"
+  resolved "https://registry.npmjs.org/@react-stately/toggle/-/toggle-3.8.5.tgz"
+  integrity sha512-BSvuTDVFzIKxpNg9Slf+RdGpva7kBO8xYaec2TW9m6Ag9AOmiDwUzzDAO0DRsc7ArSaLLFaQ/pdmmT6TxAUQIA==
   dependencies:
+    "@react-stately/utils" "^3.10.7"
+    "@react-types/checkbox" "^3.9.5"
+    "@react-types/shared" "^3.30.0"
     "@swc/helpers" "^0.5.0"
 
-"@react-stately/utils@^3.10.7":
+"@react-stately/utils@^3.10.6", "@react-stately/utils@^3.10.7":
   version "3.10.7"
   resolved "https://registry.npmjs.org/@react-stately/utils/-/utils-3.10.7.tgz"
   integrity sha512-cWvjGAocvy4abO9zbr6PW6taHgF24Mwy/LbQ4TC4Aq3tKdKDntxyD+sh7AkSRfJRT2ccMVaHVv2+FfHThd3PKQ==
@@ -2637,6 +2716,13 @@
   version "3.12.2"
   resolved "https://registry.npmjs.org/@react-types/button/-/button-3.12.2.tgz"
   integrity sha512-QLoSCX8E7NFIdkVMa65TPieve0rKeltfcIxiMtrphjfNn+83L0IHMcbhjf4r4W19c/zqGbw3E53Hx8mNukoTUw==
+  dependencies:
+    "@react-types/shared" "^3.30.0"
+
+"@react-types/checkbox@^3.2.1", "@react-types/checkbox@^3.9.5":
+  version "3.9.5"
+  resolved "https://registry.npmjs.org/@react-types/checkbox/-/checkbox-3.9.5.tgz"
+  integrity sha512-9y8zeGWT2xZ38/YC/rNd05pPV8W8vmqFygCpZFaa6dJeOsMgPU+rq+Ifh1G+34D/qGoZXQBzeCSCAKSNPaL7uw==
   dependencies:
     "@react-types/shared" "^3.30.0"
 
@@ -5223,7 +5309,7 @@ exponential-backoff@^3.1.1:
 
 fast-base64-decode@^1.0.0:
   version "1.0.0"
-  resolved "https://registry.yarnpkg.com/fast-base64-decode/-/fast-base64-decode-1.0.0.tgz#b434a0dd7d92b12b43f26819300d2dafb83ee418"
+  resolved "https://registry.npmjs.org/fast-base64-decode/-/fast-base64-decode-1.0.0.tgz"
   integrity sha512-qwaScUgUGBYeDNRnbc/KyllVU88Jk1pRHPStuF/lO7B0/RTRLj7U0lkdTAutlBblY08rwZDff6tNU9cjv6j//Q==
 
 fast-deep-equal@^3.1.1, fast-deep-equal@^3.1.3:
@@ -7796,7 +7882,7 @@ react-native-gesture-handler@~2.24.0:
 
 react-native-get-random-values@^1.11.0:
   version "1.11.0"
-  resolved "https://registry.yarnpkg.com/react-native-get-random-values/-/react-native-get-random-values-1.11.0.tgz#1ca70d1271f4b08af92958803b89dccbda78728d"
+  resolved "https://registry.npmjs.org/react-native-get-random-values/-/react-native-get-random-values-1.11.0.tgz"
   integrity sha512-4BTbDbRmS7iPdhYLRcz3PGFIpFJBwNZg9g42iwa2P6FOv9vZj/xJc678RZXnLNZzd0qd7Q3CCF6Yd+CU2eoXKQ==
   dependencies:
     fast-base64-decode "^1.0.0"

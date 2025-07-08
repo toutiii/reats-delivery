@@ -1,4 +1,6 @@
+import { StackNavigation } from "@/types/navigation";
 import { Feather, MaterialIcons } from "@expo/vector-icons";
+import { useNavigation } from "@react-navigation/native";
 import React, { useCallback, useEffect, useState } from "react";
 import { Alert, Dimensions, Linking, TouchableOpacity, View } from "react-native";
 import { PanGestureHandler } from "react-native-gesture-handler";
@@ -31,6 +33,7 @@ const orderDetails = {
 };
 
 const DeliveryMapInfos = ({ mapDirectionsResponse, onExpand, onCollapse, isMinimized = false }: DeliveryMapInfosProps) => {
+  const navigation = useNavigation<StackNavigation>();
   const [showOrderDetails, setShowOrderDetails] = useState(false);
   // Get screen dimensions
   const { height: screenHeight } = Dimensions.get("window");
@@ -156,7 +159,8 @@ const DeliveryMapInfos = ({ mapDirectionsResponse, onExpand, onCollapse, isMinim
         text: "Confirmer",
         onPress: () => {
           // Here you would call an API to update the order status
-          Alert.alert("Succès", "Commande marquée comme livrée");
+          // Alert.alert("Succès", "Commande marquée comme livrée");
+          navigation.navigate("DeliveryConfirmation");
         },
       },
     ]);

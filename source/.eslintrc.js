@@ -53,7 +53,7 @@ module.exports = {
     "no-tabs": 1,
     "no-confusing-arrow": 1,
     "multiline-ternary": 1,
-    "max-len": ["error", { code: 260 }],
+    "max-len": "off",
     "keyword-spacing": 1,
     "new-parens": 1,
     "lines-between-class-members": 1,
