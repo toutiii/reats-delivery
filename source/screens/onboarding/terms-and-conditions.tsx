@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import CustomBackground from "@/components/custom-background";
 import { ThemedView } from "@/components/themed-view";
 import { Box } from "@/components/ui/box";
 import { Button, ButtonText } from "@/components/ui/button";
@@ -6,12 +6,12 @@ import { HStack } from "@/components/ui/hstack";
 import { Pressable } from "@/components/ui/pressable";
 import { Text } from "@/components/ui/text";
 import { VStack } from "@/components/ui/vstack";
+import type { StackNavigation } from "@/types/navigation";
+import { useNavigation } from "@react-navigation/native";
 import { LinearGradient } from "expo-linear-gradient";
 import { StatusBar } from "expo-status-bar";
+import React, { useEffect, useRef, useState } from "react";
 import { Animated, Easing, Image, View } from "react-native";
-import CustomBackground from "@/components/custom-background";
-import { useNavigation } from "@react-navigation/native";
-import type { StackNavigation } from "@/types/navigation";
 
 const TermsAndConditionsScreen = () => {
   const navigation = useNavigation<StackNavigation>();
@@ -50,7 +50,7 @@ const TermsAndConditionsScreen = () => {
               easing: Easing.inOut(Easing.sin),
               useNativeDriver: true,
             }),
-          ]),
+          ])
         ),
         Animated.loop(
           Animated.sequence([
@@ -66,7 +66,7 @@ const TermsAndConditionsScreen = () => {
               easing: Easing.inOut(Easing.circle),
               useNativeDriver: true,
             }),
-          ]),
+          ])
         ),
         Animated.loop(
           Animated.sequence([
@@ -82,7 +82,7 @@ const TermsAndConditionsScreen = () => {
               easing: Easing.inOut(Easing.cubic),
               useNativeDriver: true,
             }),
-          ]),
+          ])
         ),
         Animated.loop(
           Animated.sequence([
@@ -98,7 +98,7 @@ const TermsAndConditionsScreen = () => {
               easing: Easing.inOut(Easing.quad),
               useNativeDriver: true,
             }),
-          ]),
+          ])
         ),
         Animated.loop(
           Animated.sequence([
@@ -114,7 +114,7 @@ const TermsAndConditionsScreen = () => {
               easing: Easing.inOut(Easing.ease),
               useNativeDriver: true,
             }),
-          ]),
+          ])
         ),
       ]).start();
     };
@@ -245,92 +245,40 @@ const TermsAndConditionsScreen = () => {
         <Box className="flex-1">
           <CustomBackground>
             {/* Background with proper curvature */}
-            <LinearGradient
-              colors={["#ffd1cc", "#ffc6c0"]}
-              className="absolute top-0 left-0 right-0 bottom-0"
-            />
+            <LinearGradient colors={["#ffd1cc", "#ffc6c0"]} className="absolute top-0 left-0 right-0 bottom-0" />
 
             {/* Animated dots in the background */}
-            <Animated.View
-              style={[
-                dot1Transform,
-                { position: "absolute", top: 144, left: 128 },
-              ]}
-            >
-              <Animated.View
-                className="w-2 h-2 bg-white rounded-full"
-                style={{ opacity: dot1Opacity }}
-              />
+            <Animated.View style={[dot1Transform, { position: "absolute", top: 144, left: 128 }]}>
+              <Animated.View className="w-2 h-2 bg-white rounded-full" style={{ opacity: dot1Opacity }} />
             </Animated.View>
 
-            <Animated.View
-              style={[
-                dot2Transform,
-                { position: "absolute", top: 208, left: 256 },
-              ]}
-            >
-              <Animated.View
-                className="w-2 h-2 bg-white rounded-full"
-                style={{ opacity: dot2Opacity }}
-              />
+            <Animated.View style={[dot2Transform, { position: "absolute", top: 208, left: 256 }]}>
+              <Animated.View className="w-2 h-2 bg-white rounded-full" style={{ opacity: dot2Opacity }} />
             </Animated.View>
 
-            <Animated.View
-              style={[
-                dot3Transform,
-                { position: "absolute", top: 64, right: 64 },
-              ]}
-            >
-              <Animated.View
-                className="w-2 h-2 bg-white rounded-full"
-                style={{ opacity: dot3Opacity }}
-              />
+            <Animated.View style={[dot3Transform, { position: "absolute", top: 64, right: 64 }]}>
+              <Animated.View className="w-2 h-2 bg-white rounded-full" style={{ opacity: dot3Opacity }} />
             </Animated.View>
 
-            <Animated.View
-              style={[
-                dot4Transform,
-                { position: "absolute", right: 40, top: 256 },
-              ]}
-            >
-              <Animated.View
-                className="w-2 h-2 bg-white rounded-full"
-                style={{ opacity: dot4Opacity }}
-              />
+            <Animated.View style={[dot4Transform, { position: "absolute", right: 40, top: 256 }]}>
+              <Animated.View className="w-2 h-2 bg-white rounded-full" style={{ opacity: dot4Opacity }} />
             </Animated.View>
 
-            <Animated.View
-              style={[
-                dot5Transform,
-                { position: "absolute", left: 40, top: 240 },
-              ]}
-            >
-              <Animated.View
-                className="w-2 h-2 bg-white rounded-full"
-                style={{ opacity: dot5Opacity }}
-              />
+            <Animated.View style={[dot5Transform, { position: "absolute", left: 40, top: 240 }]}>
+              <Animated.View className="w-2 h-2 bg-white rounded-full" style={{ opacity: dot5Opacity }} />
             </Animated.View>
 
             {/* Illustration */}
             <View className="justify-center items-center px-6 pt-40">
               <Box className="w-full aspect-square max-h-80">
-                <Image
-                  source={require("@/assets/images/onboarding/delivery-illustration.png")}
-                  alt="Delivery Partner"
-                  className="w-full h-full"
-                  resizeMode="contain"
-                />
+                <Image source={require("@/assets/images/onboarding/delivery-illustration.png")} alt="Delivery Partner" className="w-full h-full" resizeMode="contain" />
               </Box>
             </View>
 
             {/* Texts */}
             <VStack className="px-8 pt-4 pb-6">
-              <Text className="text-gray-800 text-lg font-semibold">
-                Be a EatFit Partner
-              </Text>
-              <Text className="text-3xl font-bold text-gray-900 mt-1">
-                Get a stable monthly income
-              </Text>
+              <Text className="text-gray-800 text-lg font-semibold">Be a EatFit Partner</Text>
+              <Text className="text-3xl font-bold text-gray-900 mt-1">Get a stable monthly income</Text>
             </VStack>
           </CustomBackground>
         </Box>
@@ -340,29 +288,19 @@ const TermsAndConditionsScreen = () => {
           {/* Terms Checkbox */}
           <HStack className="items-start mb-6" space="md">
             <Pressable onPress={toggleCheckbox} className="pt-1">
-              <Box
-                className={`h-5 w-5 border border-gray-300 rounded ${
-                  isChecked
-                    ? "bg-white"
-                    : "bg-white"
-                }`}
-              >
-                {isChecked && <Box className="h-3 w-3 bg-rose-400 m-auto" />}
-              </Box>
+              <Box className={`h-5 w-5 border border-gray-300 rounded ${isChecked
+? "bg-white"
+: "bg-white"}`}>{isChecked && <Box className="h-3 w-3 bg-rose-400 m-auto" />}</Box>
             </Pressable>
             <Text className="flex-1 text-gray-700">
-              By signing up I agree to the{" "}
-              <Text className="text-rose-400">Terms of use</Text> and{" "}
-              <Text className="text-rose-400">Privacy Policy</Text>.
+              By signing up I agree to the <Text className="text-rose-400">Terms of use</Text> and <Text className="text-rose-400">Privacy Policy</Text>.
             </Text>
           </HStack>
 
           {/* Continue Button */}
-          <Button
-            size="lg"
-            disabled={!isChecked}
-            onPress={() => navigation.navigate("LoginScreen")}
-          >
+          <Button size="lg" disabled={!isChecked} className={isChecked
+? ""
+: "bg-primary-200"} onPress={() => navigation.navigate("LoginScreen")}>
             <ButtonText className="">Continuer</ButtonText>
           </Button>
         </Box>
