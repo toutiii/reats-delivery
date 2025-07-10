@@ -31,22 +31,18 @@ import LoginForm from "./legacy/forms/forms/LoginForm";
 import SignupForm from "./legacy/forms/forms/SignupForm";
 import OTPView from "./legacy/views/OTPView";
 import "./polyfills";
-import LoginScreen from "./screens/auth/login";
-import OTPScreen from "./screens/auth/otp";
-import RegisterScreen from "./screens/auth/register";
-// import DeliveryMapScreen from "./screens/delivery";
-// import DeliveryConfirmation from "./screens/delivery/confirmation";
-// import HomeScreen from "./screens/home";
-import StartPage from "./screens/onboarding";
-import TermsAndConditionsScreen from "./screens/onboarding/terms-and-conditions";
-// import OrderDetailsScreen from "./screens/order-details";
 import DeliveryZoneScreen from "./screens/account/delivery-zone";
 import HelpSupportScreen from "./screens/account/help-support";
 import LanguageScreen from "./screens/account/language";
 import PaymentMethodsScreen from "./screens/account/payment-methods";
 import PersonalInfoScreen from "./screens/account/personal-info";
+import LoginScreen from "./screens/auth/login";
+import OTPScreen from "./screens/auth/otp";
+import RegisterScreen from "./screens/auth/register";
 import DeliveryMapScreen from "./screens/delivery";
 import DeliveryConfirmation from "./screens/delivery/confirmation";
+import StartPage from "./screens/onboarding";
+import TermsAndConditionsScreen from "./screens/onboarding/terms-and-conditions";
 import OrderDetailsScreen from "./screens/order-details";
 import DocumentsScreen from "./screens/user-infos-collection";
 import InformationVerificationScreen from "./screens/user-infos-collection/information-verification";
@@ -55,6 +51,25 @@ import UploadDocumentsScreen from "./screens/user-infos-collection/upload-docume
 
 const Stack = createStackNavigator();
 SplashScreen.preventAutoHideAsync();
+
+const commonHeaderOptions = {
+  headerStyle: {
+    backgroundColor: "#FF6347",
+  },
+  headerShown: true,
+  headerTintColor: "#fff",
+  headerTitleStyle: {
+    fontWeight: "bold" as const,
+  },
+  headerShadowVisible: false,
+  headerBackTitleVisible: false,
+};
+
+const createScreenOptions = (title: string, additionalOptions = {}) => ({
+  ...commonHeaderOptions,
+  title,
+  ...additionalOptions,
+});
 
 export default function App() {
   const [loaded] = useFonts({
@@ -110,22 +125,22 @@ export default function App() {
           <Stack.Navigator initialRouteName="Onboarding" screenOptions={{ headerShown: false }}>
             <Stack.Screen name="Onboarding" component={StartPage} />
             <Stack.Screen name="TermsAndConditions" component={TermsAndConditionsScreen} />
-            <Stack.Screen name="LoginScreen" component={LoginScreen} />
-            <Stack.Screen name="RegisterScreen" component={RegisterScreen} />
-            <Stack.Screen name="OTPScreen" component={OTPScreen} />
+            <Stack.Screen name="LoginScreen" component={LoginScreen} options={createScreenOptions("Connexion", { headerBackTitle: " " })} />
+            <Stack.Screen name="RegisterScreen" component={RegisterScreen} options={createScreenOptions("Créer un compte")} />
+            <Stack.Screen name="OTPScreen" component={OTPScreen} options={createScreenOptions("Code de vérification")} />
             <Stack.Screen name="DocumentsScreen" component={DocumentsScreen} />
-            <Stack.Screen name="PersonalDocumentsScreen" component={PersonalDocumentsScreen} />
-            <Stack.Screen name="UploadDocumentsScreen" component={UploadDocumentsScreen} />
+            <Stack.Screen name="PersonalDocumentsScreen" component={PersonalDocumentsScreen} options={createScreenOptions("Documents")} />
+            <Stack.Screen name="UploadDocumentsScreen" component={UploadDocumentsScreen} options={createScreenOptions("Upload documents")} />
             <Stack.Screen name="InformationVerificationScreen" component={InformationVerificationScreen} />
             <Stack.Screen name="MainNavigator" component={MainNavigator} />
-            <Stack.Screen name="OrderDetailsScreen" component={OrderDetailsScreen} />
+            <Stack.Screen name="OrderDetailsScreen" component={OrderDetailsScreen} options={createScreenOptions("Details de la commande")} />
             <Stack.Screen name="DeliveryMapScreen" component={DeliveryMapScreen as React.ComponentType<{}>} />
             <Stack.Screen name="DeliveryConfirmation" component={DeliveryConfirmation} />
-            <Stack.Screen name="PersonalInfoScreen" component={PersonalInfoScreen} />
-            <Stack.Screen name="PaymentMethodsScreen" component={PaymentMethodsScreen} />
-            <Stack.Screen name="DeliveryZoneScreen" component={DeliveryZoneScreen} />
-            <Stack.Screen name="HelpSupportScreen" component={HelpSupportScreen} />
-            <Stack.Screen name="LanguageScreen" component={LanguageScreen} />
+            <Stack.Screen name="PersonalInfoScreen" component={PersonalInfoScreen} options={createScreenOptions("Informations personnelles")} />
+            <Stack.Screen name="PaymentMethodsScreen" component={PaymentMethodsScreen} options={createScreenOptions("Méthodes de paiement")} />
+            <Stack.Screen name="DeliveryZoneScreen" component={DeliveryZoneScreen} options={createScreenOptions("Zone de livraison")} />
+            <Stack.Screen name="HelpSupportScreen" component={HelpSupportScreen} options={createScreenOptions("Support")} />
+            <Stack.Screen name="LanguageScreen" component={LanguageScreen} options={createScreenOptions("Langue")} />
             <Stack.Screen name="OTPView" component={OTPView} />
             <Stack.Screen name="LoginForm" component={LoginForm} />
             <Stack.Screen name="SignupForm" component={SignupForm} />
