@@ -21,21 +21,28 @@ export const Card = ({ order: _order, onViewDetails }: CardProps) => {
   const [isExpanded, setIsExpanded] = useState<boolean>(false);
 
   // Animations
-  const cardScale = useRef(new Animated.Value(0.98)).current;
+  const cardScale = useRef(new Animated.Value(0.97)).current;
   const fadeAnim = useRef(new Animated.Value(0)).current;
-  const slideAnim = useRef(new Animated.Value(10)).current;
+  const slideAnim = useRef(new Animated.Value(5)).current;
   const rotateAnim = useRef(new Animated.Value(0)).current;
   const viewButtonScale = useRef(new Animated.Value(1)).current;
   const expandButtonScale = useRef(new Animated.Value(1)).current;
 
   // Animation d'entrée au montage du composant
   useEffect(() => {
-    Animated.spring(cardScale, {
+    Animated.timing(cardScale, {
       toValue: 1,
       useNativeDriver: true,
-      friction: 8,
-      tension: 40,
-      velocity: 3,
+      duration: 250,
+      easing: Easing.out(Easing.ease),
+    }).start();
+
+    // Animation de fade-in progressive
+    Animated.timing(fadeAnim, {
+      toValue: 1,
+      duration: 300,
+      useNativeDriver: true,
+      easing: Easing.ease,
     }).start();
   }, []);
 
@@ -141,8 +148,16 @@ export const Card = ({ order: _order, onViewDetails }: CardProps) => {
   });
 
   return (
-    <Animated.View style={{ transform: [{ scale: cardScale }] }} className="mb-4" accessibilityLabel={`Carte de commande ${order.id}`} accessibilityState={{ expanded: isExpanded }}>
-      <View className={"bg-white rounded-xl overflow-hidden shadow-sm"}>
+    <Animated.View
+      style={{
+        transform: [{ scale: cardScale }],
+        opacity: fadeAnim,
+      }}
+      className="mb-4"
+      accessibilityLabel={`Carte de commande ${order.id}`}
+      accessibilityState={{ expanded: isExpanded }}
+    >
+      <View className="bg-white rounded-xl overflow-hidden shadow-sm border border-gray-100">
         <View className="px-4 pt-4 pb-4">
           <View className="flex-row justify-between items-center">
             {/* Numéro de commande */}
