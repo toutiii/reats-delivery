@@ -1,28 +1,7 @@
 import { Feather } from "@expo/vector-icons";
-import React, {
-  useCallback,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from "react";
-import {
-  ActivityIndicator,
-  Animated,
-  ScrollView,
-  TouchableOpacity,
-  View,
-} from "react-native";
-import {
-  FormControl,
-  FormControlError,
-  FormControlErrorIcon,
-  FormControlErrorText,
-  FormControlHelper,
-  FormControlHelperText,
-  FormControlLabel,
-  FormControlLabelText,
-} from "../../ui/form-control";
+import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { ActivityIndicator, Animated, ScrollView, TouchableOpacity, View } from "react-native";
+import { FormControl, FormControlError, FormControlErrorIcon, FormControlErrorText, FormControlHelper, FormControlHelperText, FormControlLabel, FormControlLabelText } from "../../ui/form-control";
 import { HStack } from "../../ui/hstack";
 import { AddIcon, AlertCircleIcon, CloseIcon, SearchIcon } from "../../ui/icon";
 import { Input, InputField, InputIcon, InputSlot } from "../../ui/input";
@@ -121,21 +100,19 @@ const InputMultiSelectCity: React.FC<InputMultiSelectCityProps> = ({
         backgroundColor: themeColor,
       },
     }),
-    [themeColor, accentColor, selectionColor],
+    [themeColor, accentColor, selectionColor]
   );
 
   // Calcul mémorisé des messages d'erreur
   const errorMessage_i18n = useMemo(
     () => ({
       maxLimit: `Vous ne pouvez pas sélectionner plus de ${maxSelections} villes`,
-      minLimit: `Veuillez sélectionner au moins ${minSelections} ville${
-        minSelections > 1
-          ? "s"
-          : ""
-      }`,
+      minLimit: `Veuillez sélectionner au moins ${minSelections} ville${minSelections > 1
+? "s"
+: ""}`,
       network: "Erreur de connexion, veuillez réessayer",
     }),
-    [maxSelections, minSelections],
+    [maxSelections, minSelections]
   );
 
   // Fonction de recherche des suggestions avec mémorisation
@@ -148,9 +125,7 @@ const InputMultiSelectCity: React.FC<InputMultiSelectCityProps> = ({
 
       setIsLoading(true);
       try {
-        const response = await fetch(
-          `https://geo.api.gouv.fr/communes?nom=${encodeURIComponent(query)}&fields=departement&boost=population&limit=5`,
-        );
+        const response = await fetch(`https://geo.api.gouv.fr/communes?nom=${encodeURIComponent(query)}&fields=departement&boost=population&limit=5`);
 
         if (!response.ok) {
           throw new Error("Erreur réseau");
@@ -159,20 +134,16 @@ const InputMultiSelectCity: React.FC<InputMultiSelectCityProps> = ({
         const data: City[] = await response.json();
 
         // Filtrer les villes déjà sélectionnées avec une Map pour optimiser les performances
-        const selectedCityCodes = new Set(
-          selectedCities.map((city) => city.code),
-        );
-        const filteredData = data.filter(
-          (city) => !selectedCityCodes.has(city.code),
-        );
+        const selectedCityCodes = new Set(selectedCities.map((city) => city.code));
+        const filteredData = data.filter((city) => !selectedCityCodes.has(city.code));
 
         setSuggestions(filteredData);
 
         // Animation des suggestions
         Animated.timing(animations.suggestionOpacity, {
           toValue: filteredData.length > 0
-            ? 1
-            : 0,
+? 1
+: 0,
           ...ANIMATION_CONFIG,
         }).start();
       } catch (error) {
@@ -183,7 +154,7 @@ const InputMultiSelectCity: React.FC<InputMultiSelectCityProps> = ({
         setIsLoading(false);
       }
     },
-    [selectedCities, animations.suggestionOpacity],
+    [selectedCities, animations.suggestionOpacity]
   );
 
   // Debounce pour éviter trop d'appels API
@@ -255,21 +226,13 @@ const InputMultiSelectCity: React.FC<InputMultiSelectCityProps> = ({
         onCitiesSelected(updatedCities);
       }
     },
-    [
-      selectedCities,
-      maxSelections,
-      animations.tagAppearAnimation,
-      startShakeAnimation,
-      onCitiesSelected,
-    ],
+    [selectedCities, maxSelections, animations.tagAppearAnimation, startShakeAnimation, onCitiesSelected]
   );
 
   // Suppression d'une ville sélectionnée
   const handleRemoveCity = useCallback(
     (cityCode: string): void => {
-      const updatedCities = selectedCities.filter(
-        (city) => city.code !== cityCode,
-      );
+      const updatedCities = selectedCities.filter((city) => city.code !== cityCode);
       setSelectedCities(updatedCities);
 
       // Callback pour le parent
@@ -286,7 +249,7 @@ const InputMultiSelectCity: React.FC<InputMultiSelectCityProps> = ({
         setErrorType("");
       }
     },
-    [selectedCities, minSelections, onCitiesSelected],
+    [selectedCities, minSelections, onCitiesSelected]
   );
 
   // Validation du formulaire
@@ -339,7 +302,7 @@ const InputMultiSelectCity: React.FC<InputMultiSelectCityProps> = ({
         setErrorType("");
       }
     },
-    [isInvalid, errorType],
+    [isInvalid, errorType]
   );
 
   // Gestion du focus et blur pour l'input
@@ -352,10 +315,7 @@ const InputMultiSelectCity: React.FC<InputMultiSelectCityProps> = ({
 
   // Affichage du message d'erreur en fonction du type
   const getErrorMessage = useCallback(() => {
-    return (
-      errorMessage_i18n[errorType as keyof typeof errorMessage_i18n] ||
-      errorMessage
-    );
+    return errorMessage_i18n[errorType as keyof typeof errorMessage_i18n] || errorMessage;
   }, [errorType, errorMessage_i18n, errorMessage]);
 
   // Rendu des villes sélectionnées - mémorisé pour éviter les re-rendus inutiles
@@ -376,21 +336,11 @@ const InputMultiSelectCity: React.FC<InputMultiSelectCityProps> = ({
         >
           {selectedCities.map((city) => (
             <View key={city.code}>
-              <HStack
-                className="items-center px-3 py-2 rounded-full"
-                style={styles.tagStyle}
-              >
-                <Text
-                  className="font-medium text-sm mr-1"
-                  style={styles.clearButtonStyle}
-                >
+              <HStack className="items-center px-3 py-2 rounded-full" style={styles.tagStyle}>
+                <Text className="font-medium text-sm mr-1" style={styles.clearButtonStyle}>
                   {city.nom}
                 </Text>
-                <TouchableOpacity
-                  onPress={() => handleRemoveCity(city.code)}
-                  className="w-5 h-5 rounded-full justify-center items-center"
-                  style={styles.clearIconContainerStyle}
-                >
+                <TouchableOpacity onPress={() => handleRemoveCity(city.code)} className="w-5 h-5 rounded-full justify-center items-center" style={styles.clearIconContainerStyle}>
                   <CloseIcon color="#FFFFFF" />
                 </TouchableOpacity>
               </HStack>
@@ -407,10 +357,7 @@ const InputMultiSelectCity: React.FC<InputMultiSelectCityProps> = ({
 
     return (
       <Animated.View style={{ opacity: animations.suggestionOpacity }}>
-        <VStack
-          className="w-full border border-gray-100 rounded-lg mt-2 mb-3 bg-white shadow-sm overflow-hidden"
-          style={{ elevation: 2 }}
-        >
+        <VStack className="w-full border border-gray-100 rounded-lg mt-2 mb-3 bg-white shadow-sm overflow-hidden" style={{ elevation: 2 }}>
           {suggestions.map((city, index) => (
             <TouchableOpacity
               key={city.code}
@@ -418,37 +365,29 @@ const InputMultiSelectCity: React.FC<InputMultiSelectCityProps> = ({
               className="w-full py-4 px-4"
               style={{
                 borderBottomWidth: index < suggestions.length - 1
-                  ? 1
-                  : 0,
+? 1
+: 0,
                 borderBottomColor: "#F3F4F6",
                 backgroundColor: index % 2 === 0
-                  ? "#FFFFFF"
-                  : "#FAFAFA",
+? "#FFFFFF"
+: "#FAFAFA",
               }}
               activeOpacity={0.7}
             >
               <HStack className="justify-between items-center">
                 <HStack className="items-center space-x-3">
                   <VStack className="space-y-1">
-                    <Text className="font-medium text-gray-800">
-                      {city.nom}
-                    </Text>
+                    <Text className="font-medium text-gray-800">{city.nom}</Text>
                     <Text className="text-xs text-gray-500">
                       {city.departement?.code} - {city.departement?.nom}
                     </Text>
                   </VStack>
                 </HStack>
                 <HStack className="items-center space-x-2">
-                  <Text
-                    className="text-xs font-medium"
-                    style={styles.addButtonStyle}
-                  >
+                  <Text className="text-xs font-medium" style={styles.addButtonStyle}>
                     Ajouter
                   </Text>
-                  <AddIcon
-                    color={themeColor}
-                    style={{ width: 20, height: 20 }}
-                  />
+                  <AddIcon color={themeColor} style={{ width: 20, height: 20 }} />
                 </HStack>
               </HStack>
             </TouchableOpacity>
@@ -456,13 +395,7 @@ const InputMultiSelectCity: React.FC<InputMultiSelectCityProps> = ({
         </VStack>
       </Animated.View>
     );
-  }, [
-    suggestions,
-    animations.suggestionOpacity,
-    handleSelectCity,
-    styles.addButtonStyle,
-    themeColor,
-  ]);
+  }, [suggestions, animations.suggestionOpacity, handleSelectCity, styles.addButtonStyle, themeColor]);
 
   return (
     <Animated.View
@@ -474,18 +407,12 @@ const InputMultiSelectCity: React.FC<InputMultiSelectCityProps> = ({
       <FormControl isInvalid={isInvalid} size="md">
         <FormControlLabel>
           <HStack className="justify-between items-center mb-1">
-            <FormControlLabelText
-              className="text-gray-800 font-semibold text-lg"
-              style={{ letterSpacing: -0.3 }}
-            >
+            <FormControlLabelText className="text-gray-800 font-semibold text-lg" style={{ letterSpacing: -0.3 }}>
               {label}
             </FormControlLabelText>
             {selectedCities.length > 0 && (
               <TouchableOpacity onPress={handleClearAll}>
-                <Text
-                  className="text-sm font-medium pl-1"
-                  style={styles.clearButtonStyle}
-                >
+                <Text className="text-sm font-medium pl-1" style={styles.clearButtonStyle}>
                   Tout effacer ({selectedCities.length})
                 </Text>
               </TouchableOpacity>
@@ -499,21 +426,11 @@ const InputMultiSelectCity: React.FC<InputMultiSelectCityProps> = ({
         {/* Input de recherche */}
         <Input variant="rounded" size="lg">
           <InputSlot className="pl-4">
-            <InputIcon as={SearchIcon} />
+            <InputIcon as={SearchIcon} fill="none" stroke="gray" />
           </InputSlot>
-          <InputField
-            type="text"
-            placeholder={
-              selectedCities.length > 0
-                ? "Ajouter une autre ville"
-                : placeholder
-            }
-            value={inputValue}
-            className="h-14 text-base font-medium px-2"
-            onChangeText={handleInputChange}
-            onFocus={() => {}}
-            onBlur={handleInputBlur}
-          />
+          <InputField type="text" placeholder={selectedCities.length > 0
+? "Ajouter une autre ville"
+: placeholder} value={inputValue} className="h-14 text-base font-medium px-2" onChangeText={handleInputChange} onFocus={() => {}} onBlur={handleInputBlur} />
           {inputValue !== "" && (
             <InputSlot onPress={() => setInputValue("")} className="pr-4">
               <InputIcon as={CloseIcon} className="text-gray-400" />
@@ -525,27 +442,16 @@ const InputMultiSelectCity: React.FC<InputMultiSelectCityProps> = ({
         {isLoading && (
           <FormControlHelper>
             <HStack className="items-center my-2 space-x-2">
-              <ActivityIndicator
-                size="small"
-                color={themeColor}
-                className="mr-2"
-              />
-              <FormControlHelperText className="text-gray-500 font-medium">
-                Chargement des suggestions...
-              </FormControlHelperText>
+              <ActivityIndicator size="small" color={themeColor} className="mr-2" />
+              <FormControlHelperText className="text-gray-500 font-medium">Chargement des suggestions...</FormControlHelperText>
             </HStack>
           </FormControlHelper>
         )}
 
         {/* Message d'aide */}
-        {!inputValue &&
-          !isLoading &&
-          !isInvalid &&
-          selectedCities.length === 0 && (
+        {!inputValue && !isLoading && !isInvalid && selectedCities.length === 0 && (
           <FormControlHelper>
-            <FormControlHelperText className="text-gray-500 font-light italic ml-1 mt-1">
-              {helperText}
-            </FormControlHelperText>
+            <FormControlHelperText className="text-gray-500 font-light italic ml-1 mt-1">{helperText}</FormControlHelperText>
           </FormControlHelper>
         )}
 
@@ -555,11 +461,11 @@ const InputMultiSelectCity: React.FC<InputMultiSelectCityProps> = ({
             <FormControlHelperText className="text-gray-500 font-medium ml-1 mt-1">
               {selectedCities.length} ville
               {selectedCities.length > 1
-                ? "s"
-                : ""} sélectionnée
+? "s"
+: ""} sélectionnée
               {selectedCities.length > 1
-                ? "s"
-                : ""}
+? "s"
+: ""}
               {maxSelections && ` (max: ${maxSelections})`}
             </FormControlHelperText>
           </FormControlHelper>
@@ -572,9 +478,7 @@ const InputMultiSelectCity: React.FC<InputMultiSelectCityProps> = ({
         {inputValue.length > 2 && !isLoading && suggestions.length === 0 && (
           <FormControlHelper>
             <HStack className="items-center my-2 p-3 bg-gray-50 rounded-lg">
-              <FormControlHelperText className="text-gray-500 font-medium">
-                Aucune ville trouvée pour "{inputValue}"
-              </FormControlHelperText>
+              <FormControlHelperText className="text-gray-500 font-medium">Aucune ville trouvée pour "{inputValue}"</FormControlHelperText>
             </HStack>
           </FormControlHelper>
         )}
@@ -583,14 +487,8 @@ const InputMultiSelectCity: React.FC<InputMultiSelectCityProps> = ({
         {isInvalid && (
           <FormControlError>
             <HStack className="items-center space-x-2 mt-2">
-              <FormControlErrorIcon
-                as={AlertCircleIcon}
-                style={styles.errorIconStyle}
-              />
-              <FormControlErrorText
-                className="font-medium"
-                style={{ color: "#EF4444" }}
-              >
+              <FormControlErrorIcon as={AlertCircleIcon} style={styles.errorIconStyle} />
+              <FormControlErrorText className="font-medium" style={{ color: "#EF4444" }}>
                 {getErrorMessage()}
               </FormControlErrorText>
             </HStack>
@@ -606,15 +504,8 @@ const InputMultiSelectCity: React.FC<InputMultiSelectCityProps> = ({
               </Text>
               {selectedCities.length >= minSelections && (
                 <HStack className="items-center space-x-1">
-                  <Feather
-                    name="check-circle"
-                    size={16}
-                    color={selectionColor}
-                  />
-                  <Text
-                    className="text-sm font-medium pl-1"
-                    style={styles.validSelectionStyle}
-                  >
+                  <Feather name="check-circle" size={16} color={selectionColor} />
+                  <Text className="text-sm font-medium pl-1" style={styles.validSelectionStyle}>
                     Sélection valide
                   </Text>
                 </HStack>
