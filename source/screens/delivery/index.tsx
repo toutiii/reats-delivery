@@ -1,3 +1,4 @@
+import LocationPermissionModal from "@/components/location/location-permission-modal";
 import DeliveryMapInfos from "@/components/maps/delivery-map-infos";
 import MapsDirections from "@/components/maps/direction";
 import Marker from "@/components/maps/marker";
@@ -8,7 +9,7 @@ import { RouteProp } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import * as Location from "expo-location";
 import React, { useEffect, useRef, useState } from "react";
-import { Dimensions, Platform, TouchableOpacity, useColorScheme, View } from "react-native";
+import { Dimensions, Platform, TouchableOpacity, View } from "react-native";
 import MapView, { Circle, MapPressEvent, PROVIDER_DEFAULT, PROVIDER_GOOGLE } from "react-native-maps";
 import { MapDirectionsResponse } from "react-native-maps-directions";
 
@@ -18,11 +19,10 @@ type DeliveryMapScreenProps = {
   route: RouteProp<RootStackParamList, "DeliveryMapScreen">;
 };
 
-const DeliveryMapScreen: React.FC<DeliveryMapScreenProps> = ({ route }) => {
-  const orderId = route.params?.id
+const DeliveryMapScreen: React.FC<DeliveryMapScreenProps> = ({ route, navigation }) => {
+  const _orderId = route.params?.id
 ? String(route.params.id)
 : "ORDER123";
-  const colorScheme = useColorScheme();
   const { height, width } = Dimensions.get("window");
   const ASPECT_RATIO = width / height;
   const LATITUDE_DELTA = 0.0421;
@@ -37,30 +37,50 @@ const DeliveryMapScreen: React.FC<DeliveryMapScreenProps> = ({ route }) => {
   const [mapDirectionsResponse, setMapDirectionsResponse] = useState<MapDirectionsResponse | null>(null);
   const [_selectedItem, setSelectedItem] = useState<{ latitude: number; longitude: number } | null>(null);
   const [isPanelMinimized, setIsPanelMinimized] = useState(false);
+  const [showPermissionModal, setShowPermissionModal] = useState(false);
+  const [_locationPermissionStatus, setLocationPermissionStatus] = useState<string | null>(null);
 
+  // Vérifier le statut de la permission de localisation au chargement
   useEffect(() => {
-    const getLocation = async () => {
+    const checkLocationPermission = async () => {
       try {
-        let { status } = await Location.requestForegroundPermissionsAsync();
-        if (status !== "granted") {
-          console.error("Permission to access location was denied");
-          return;
-        }
+        const { status } = await Location.getForegroundPermissionsAsync();
+        setLocationPermissionStatus(status);
 
-        let location = await Location.getCurrentPositionAsync({});
-        if (location) {
-          setInitialRegion((prevRegion) => ({
-            ...prevRegion,
-            latitude: location.coords.latitude,
-            longitude: location.coords.longitude,
-          }));
+        if (status !== "granted") {
+          // Afficher le modal de permission si la permission n'est pas accordée
+          setShowPermissionModal(true);
+        } else {
+          // Si la permission est déjà accordée, obtenir la position
+          getLocation();
         }
       } catch (error) {
-        console.error("Error fetching location: ", error);
+        console.error("Erreur lors de la vérification des permissions:", error);
+        setShowPermissionModal(true);
       }
     };
-    getLocation();
+
+    checkLocationPermission();
   }, []);
+
+  // Fonction pour obtenir la localisation actuelle
+  const getLocation = async () => {
+    try {
+      let location = await Location.getCurrentPositionAsync({
+        accuracy: Location.Accuracy.Balanced,
+      });
+
+      if (location) {
+        setInitialRegion((prevRegion) => ({
+          ...prevRegion,
+          latitude: location.coords.latitude,
+          longitude: location.coords.longitude,
+        }));
+      }
+    } catch (error) {
+      console.error("Erreur lors de l'obtention de la localisation:", error);
+    }
+  };
 
   const onLocationChange = async (region: MapPressEvent) => {
     const pstn = region.nativeEvent.coordinate;
@@ -76,8 +96,27 @@ const DeliveryMapScreen: React.FC<DeliveryMapScreenProps> = ({ route }) => {
     );
   };
 
+  // Gérer l'autorisation de localisation accordée
+  const handlePermissionGranted = () => {
+    setShowPermissionModal(false);
+    setLocationPermissionStatus("granted");
+    getLocation();
+  };
+
+  // Fermer le modal de permission
+  const handleClosePermissionModal = () => {
+    setShowPermissionModal(false);
+  };
+
   return (
     <View className="flex-1">
+      {/* Modal de permission de localisation */}
+      <LocationPermissionModal isVisible={showPermissionModal} onClose={handleClosePermissionModal} onPermissionGranted={handlePermissionGranted} />
+
+      {/* Bouton de retour */}
+      <TouchableOpacity onPress={() => navigation.goBack()} className="absolute top-24 left-4 z-10 bg-white rounded-full p-2 shadow-md" style={{ elevation: 5 }}>
+        <MaterialIcons name="arrow-back" size={28} color="#FF6347" />
+      </TouchableOpacity>
       <MapView
         provider={Platform.OS === "android"
 ? PROVIDER_GOOGLE
